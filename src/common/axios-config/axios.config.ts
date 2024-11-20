@@ -1,108 +1,105 @@
-import axios, { AxiosInstance, AxiosRequestHeaders, Method, AxiosResponse, AxiosError } from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
-type RequestParams = {
-  method: Method;
+type IRequest = {
+  method: string;
   url: string;
-  data?: Record<string, any> | null;
-  params?: Record<string, any> | null;
-  headers?: AxiosRequestHeaders | Record<string, string>;
+  params: Record<string, string | number> | null;
+  data: unknown | null;
+  headers: {};
 };
 
-const AxiosConfigApi = (() => {
-  const axiosInstance: AxiosInstance = axios.create({
-    baseURL: `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/${process.env.REACT_APP_GLOBAL_PREFIX}`,
+type IGetRequest = {
+  url: string;
+  params?: Record<string, string | number>;
+  headers?: {};
+};
+
+type IPostRequest = {
+  url: string;
+  data: unknown;
+  headers?: {};
+};
+
+type IPutRequest = {
+  url: string;
+  data: unknown;
+  headers?: {};
+};
+
+type IDeleteRequest = {
+  url: string;
+  headers?: {};
+};
+
+type IPatchRequest = {
+  url: string;
+  data: unknown;
+  headers?: {};
+};
+
+export class AxiosConfig {
+  private static _axiosInstance = axios.create({
+    baseURL: `${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_GLOBAL_PREFIX}`,
     headers: { 'Content-Type': 'application/json' },
     withCredentials: true,
   });
 
-  const request = async <T>({
+  private static async _request<T, D>({
     method,
     url,
-    data = null,
-    params = null,
-    headers = {},
-  }: RequestParams): Promise<AxiosResponse<T>> => {
+    params,
+    data,
+    headers,
+  }: IRequest): Promise<AxiosResponse<T, D> | null> {
     try {
-      return await axiosInstance.request<T>({ method, url, data, params, headers });
+      return await this._axiosInstance.request({ method, url, data, params, headers });
     } catch (error: unknown) {
       if (axios.isAxiosError(error)) {
-        const { message } = error.response?.data || {};
-
         switch (error.response?.status) {
           case 400:
-            alert(message);
             break;
           case 401:
-            alert('로그인이 필요합니다.');
+            break;
+          case 403:
             break;
           case 404:
-            alert('찾을 수 없는 요청입니다.');
             break;
           case 500:
-            alert('서버 오류입니다.');
             break;
           default:
-            alert(message || '알 수 없는 오류가 발생했습니다.');
             break;
         }
+
+        throw error;
+      } else {
+        return null;
       }
-
-      throw error;
     }
-  };
+  }
 
-  const get = async <T>(
-    url: string,
-    params?: Record<string, any>,
-    headers?: AxiosRequestHeaders,
-  ): Promise<AxiosResponse<T>> => {
-    return await request<T>({ method: 'get', url, params, headers });
-  };
+  /**
+   * T - Generic, Response Data Type
+   * D - Generic, Request Data Type
+   */
+  static async get<T, D>({ url, params = {}, headers = {} }: IGetRequest): Promise<AxiosResponse<T, D> | null> {
+    return await this._request<T, D>({ method: 'get', url, params, data: null, headers });
+  }
 
-  const post = async <T>(
-    url: string,
-    data?: Record<string, any>,
-    headers?: AxiosRequestHeaders,
-  ): Promise<AxiosResponse<T>> => {
-    return await request<T>({ method: 'post', url, data, headers });
-  };
+  static async post<T, D>({ url, data, headers = {} }: IPostRequest): Promise<AxiosResponse<T, D> | null> {
+    return await this._request({ method: 'post', url, params: null, data, headers });
+  }
 
-  const put = async <T>(
-    url: string,
-    data?: Record<string, any>,
-    headers?: AxiosRequestHeaders,
-  ): Promise<AxiosResponse<T>> => {
-    return await request<T>({ method: 'put', url, data, headers });
-  };
+  static async put<T, D>({ url, data, headers = {} }: IPutRequest): Promise<AxiosResponse<T, D> | null> {
+    return await this._request({ method: 'put', url, params: null, data, headers });
+  }
 
-  const del = async <T>(
-    url: string,
-    params?: Record<string, any>,
-    headers?: AxiosRequestHeaders,
-  ): Promise<AxiosResponse<T>> => {
-    return await request<T>({ method: 'delete', url, params, headers });
-  };
+  static async delete<T, D>({ url, headers = {} }: IDeleteRequest): Promise<AxiosResponse<T, D> | null> {
+    return await this._request({ method: 'delete', url, params: null, data: {}, headers });
+  }
 
-  const patch = async <T>(
-    url: string,
-    data?: Record<string, any>,
-    headers?: AxiosRequestHeaders,
-  ): Promise<AxiosResponse<T>> => {
-    return await request<T>({ method: 'patch', url, data, headers });
-  };
+  static async patch<T, D>({ url, data, headers = {} }: IPatchRequest): Promise<AxiosResponse<T, D> | null> {
+    return await this._request({ method: 'patch', url, params: null, data, headers });
+  }
 
-  const setAuthorizationHeader = (token: string): void => {
-    axiosInstance.defaults.headers.common['Authorization'] = `${token}`;
-  };
-
-  return {
-    get,
-    post,
-    put,
-    delete: del,
-    patch,
-    setAuthorizationHeader,
-  };
-})();
-
-export default AxiosConfigApi;
+  static async renewAccessToken() {}
+}
