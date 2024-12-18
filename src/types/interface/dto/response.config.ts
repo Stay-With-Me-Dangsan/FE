@@ -1,4 +1,4 @@
-import { ResponseCodeEnum } from '@/types/enum/dto';
+import { ResponseCodeEnum } from '../../enum/dto';
 
 export interface ResponseConfig<T> {
   message: string;
