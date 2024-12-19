@@ -6,16 +6,18 @@ import kakao from '../../../asset/images/sign-in-kakao.png';
 import naver from '../../../asset/images/sign-in-naver.png';
 import google from '../../../asset/images/sign-in-google.png';
 import { Text } from '../../../components/text';
+import {useNavigate} from "react-router-dom";
 
 export const SignIn = () => {
+  const navigate = useNavigate()
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const onSignInHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
 
-    console.log('email: ', email);
-    console.log('password: ', password);
+    navigate('/home')
   };
 
   return (
