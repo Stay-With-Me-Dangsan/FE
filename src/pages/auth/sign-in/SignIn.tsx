@@ -21,12 +21,12 @@ export const SignIn = () => {
   };
 
   return (
-    <div className="relative left-[50%] translate-x-[-50%] w-[1000px] h-[100vh] pt-16 pb-10 pl-8 pr-8 flex flex-col justify-between items-center border-l-[1px] border-r-[1px] border-[#CDCDCD]">
+    <div id="sign-wrap" className="relative left-[50%] translate-x-[-50%] w-[960px] h-[100vh] pl-[40px] pr-[40px] flex flex-col justify-between items-center border-l-[1px] border-r-[1px] border-[#CDCDCD]">
       <div className="mb-14">
         <img src={logo} alt="sign-in-logo" width={383} />
       </div>
 
-      <div className="w-full flex flex-col gap-10 mb-8">
+      <div className="w-full flex flex-col gap-10 mb-20">
         <div className="flex flex-col gap-4">
           <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일 주소" />
           <Input
@@ -41,7 +41,7 @@ export const SignIn = () => {
         </div>
       </div>
 
-      <div className="w-full flex flex-col items-center">
+      <div className="flex flex-col items-center">
         <div className="mb-10">
           <Text value="SNS계정으로 간편가입하기" color="gray" />
         </div>

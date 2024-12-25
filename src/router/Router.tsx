@@ -15,13 +15,13 @@ export const Router = () => {
         <Route path="/" element={<Navigate to={`/auth`} />} />
         <Route path="/auth" element={<SignIn />} />
 
-          <Route element={<Layout/>}>
-              <Route path="/home" element={<Home />}/>
-              <Route path="/map" element={<Map />}/>
-              <Route path="/board" element={<Board />}/>
-              <Route path="/mypage" element={<MyPage />}/>
-          </Route>
+        <Route element={<Layout/>}>
+          <Route path="/home" element={<Home />}/>
+          <Route path="/map" element={<Map />}/>
+          <Route path="/board" element={<Board />}/>
+          <Route path="/mypage" element={<MyPage />}/>
+        </Route>
       </Routes>
-    </BrowserRouter>
+    </BrowserRouter >
   );
 };
