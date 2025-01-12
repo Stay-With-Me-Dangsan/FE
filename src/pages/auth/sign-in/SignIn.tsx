@@ -7,6 +7,7 @@ import naver from '../../../asset/images/sign-in-naver.png';
 import google from '../../../asset/images/sign-in-google.png';
 import { Text } from '../../../components/text';
 import { useNavigate } from 'react-router-dom';
+import useAuthMutation from '../../../hooks/auth/mutaion/useAuthMutation';
 
 export const SignIn = () => {
   const navigate = useNavigate();
@@ -14,9 +15,12 @@ export const SignIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const { onSignInMutation } = useAuthMutation();
+
   const onSignInHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
 
+    // onSignInMutation.mutate({ email, password });
     navigate('/home');
   };
 
