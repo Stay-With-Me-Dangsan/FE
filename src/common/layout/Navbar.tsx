@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom';
-import { NavbarBoard, NavbarHome, NavbarMap, NavbarMyPage } from '../../asset/svg/navbar';
+import { NavbarBoard, NavbarHome, NavbarMap, NavbarMyPage } from '../../asset/svg';
 import { memo, useCallback, useState } from 'react';
 
 const Navbar = () => {
