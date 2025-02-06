@@ -13,7 +13,6 @@ module.exports = {
           text: '#989898',
         },
         input: {
-          border: '#CDCDCD',
           text: '#989898',
         },
       },
