@@ -11,7 +11,9 @@ export default function useAuthMutation() {
     onSuccess: (res) => {
       navigate('/home');
     },
-    onError: (err) => {},
+    onError: (err) => {
+      console.error(err);
+    },
   });
 
   return {

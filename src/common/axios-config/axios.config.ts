@@ -1,4 +1,4 @@
-import axios, { AxiosInstance } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { ResponseConfig } from '../../types/interface/dto';
 
 // interface IRequest {
@@ -9,52 +9,67 @@ import { ResponseConfig } from '../../types/interface/dto';
 //   headers: {};
 // }
 
-interface IGetRequest {
+interface IGetRequest<D> {
   url: string;
-  params?: Record<string, string | number>;
-  headers?: {};
+  params?: D;
+  headers?: AxiosRequestConfig['headers'];
 }
 
-interface IPostRequest {
+interface IPostRequest<D> {
   url: string;
-  data: unknown;
-  headers?: {};
+  data: D;
+  headers?: AxiosRequestConfig['headers'];
 }
 
-interface IPutRequest {
+interface IPutRequest<D> {
   url: string;
-  data: unknown;
-  headers?: {};
+  data: D;
+  headers?: AxiosRequestConfig['headers'];
 }
 
-interface IDeleteRequest {
+interface IDeleteRequest<D> {
   url: string;
-  headers?: {};
+  data?: D;
+  headers?: AxiosRequestConfig['headers'];
 }
 
-interface IPatchRequest {
+interface IPatchRequest<D> {
   url: string;
-  data: unknown;
+  data: D;
   headers?: {};
 }
 
 export class AxiosConfig {
-  private readonly axiosInstance: AxiosInstance;
+  private readonly _axiosInstance: AxiosInstance;
 
   constructor() {
-    this.axiosInstance = axios.create({
-      baseURL: `${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_GLOBAL_PREFIX}`,
+    this._axiosInstance = axios.create({
+      baseURL: `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/${process.env.REACT_APP_API_URL_PREFIX}`,
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
     });
 
-    this.axiosInstance.interceptors.request.use();
+    this._axiosInstance.interceptors.request.use(
+      (config) => {
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      },
+    );
 
-    this.axiosInstance.interceptors.response.use();
+    this._axiosInstance.interceptors.response.use(
+      (response) => {
+        return response;
+      },
+      (error) => {
+        return Promise.reject(error);
+      },
+    );
   }
 
   // private static _axiosInstance = axios.create({
-  //   baseURL: `${process.env.NEXT_PUBLIC_API_URL}:${process.env.NEXT_PUBLIC_API_PORT}/${process.env.NEXT_PUBLIC_GLOBAL_PREFIX}`,
+  //   baseURL: `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/${process.env.REACT_APP_GLOBAL_PREFIX}`,
   //   headers: { 'Content-Type': 'application/json' },
   //   withCredentials: true,
   // });
@@ -118,23 +133,23 @@ export class AxiosConfig {
 
   // static async renewAccessToken() {}
 
-  protected async get<T, D>({ url, params = {}, headers = {} }: IGetRequest) {
-    return await this.axiosInstance.get<ResponseConfig<T>>(url, { params, headers });
+  protected async get<T, D>({ url, params, headers }: IGetRequest<D>) {
+    return await this._axiosInstance.get<ResponseConfig<T>>(url, { params, headers });
   }
 
-  protected async post<T, D>({ url, data, headers = {} }: IPostRequest) {
-    return await this.axiosInstance.post<ResponseConfig<T>>(url, data, { headers });
+  protected async post<T, D>({ url, data, headers }: IPostRequest<D>) {
+    return await this._axiosInstance.post<ResponseConfig<T>>(url, data, { headers });
   }
 
-  protected async put<T, D>({ url, data, headers = {} }: IPostRequest) {
-    return await this.axiosInstance.put<ResponseConfig<T>>(url, data, { headers });
+  protected async put<T, D>({ url, data, headers }: IPostRequest<D>) {
+    return await this._axiosInstance.put<ResponseConfig<T>>(url, data, { headers });
   }
 
-  protected async patch<T, D>({ url, data, headers = {} }: IPostRequest) {
-    return await this.axiosInstance.patch<ResponseConfig<T>>(url, data, { headers });
+  protected async delete<T, D>({ url, data, headers }: IDeleteRequest<D>) {
+    return await this._axiosInstance.delete<ResponseConfig<T>>(url, { data, headers });
   }
 
-  protected async delete<T, D>({ url, headers = {} }: IDeleteRequest) {
-    return await this.axiosInstance.delete<ResponseConfig<T>>(url, { headers });
+  protected async patch<T, D>({ url, data, headers }: IPostRequest<D>) {
+    return await this._axiosInstance.patch<ResponseConfig<T>>(url, data, { headers });
   }
 }
