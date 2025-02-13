@@ -5,7 +5,14 @@ import { Modal } from './components/modal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 function App() {
-  const queryClient = new QueryClient();
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+        retry: 0,
+      },
+    },
+  });
 
   return (
     <>

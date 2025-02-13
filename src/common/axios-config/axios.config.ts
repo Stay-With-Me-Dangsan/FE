@@ -1,14 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { ResponseConfig } from '../../types/interface/dto';
 
-// interface IRequest {
-//   method: string;
-//   url: string;
-//   params: Record<string, string | number> | null;
-//   data: unknown | null;
-//   headers: {};
-// }
-
 interface IGetRequest<D> {
   url: string;
   params?: D;
@@ -68,70 +60,10 @@ export class AxiosConfig {
     );
   }
 
-  // private static _axiosInstance = axios.create({
-  //   baseURL: `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/${process.env.REACT_APP_GLOBAL_PREFIX}`,
-  //   headers: { 'Content-Type': 'application/json' },
-  //   withCredentials: true,
-  // });
-
-  // private static async _request<T, D>({
-  //   method,
-  //   url,
-  //   params,
-  //   data,
-  //   headers,
-  // }: IRequest): Promise<AxiosResponse<T, D> | null> {
-  //   try {
-  //     return await this._request({ method, url, data, params, headers });
-  //   } catch (error: unknown) {
-  //     if (axios.isAxiosError(error)) {
-  //       switch (error.response?.status) {
-  //         case 400:
-  //           break;
-  //         case 401:
-  //           break;
-  //         case 403:
-  //           break;
-  //         case 404:
-  //           break;
-  //         case 500:
-  //           break;
-  //         default:
-  //           break;
-  //       }
-  //
-  //       throw error;
-  //     } else {
-  //       return null;
-  //     }
-  //   }
-  // }
-
   /**
    * T - Generic, Response Data Type
    * D - Generic, Request Data Type
    */
-  // static async get<T, D>({ url, params = {}, headers = {} }: IGetRequest): Promise<AxiosResponse<T, D> | null> {
-  //   return await this._request<T, D>({ method: 'get', url, params, data: null, headers });
-  // }
-
-  // static async post<T, D>({ url, data, headers = {} }: IPostRequest): Promise<AxiosResponse<T, D> | null> {
-  //   return await this._request({ method: 'post', url, params: null, data, headers });
-  // }
-
-  // static async put<T, D>({ url, data, headers = {} }: IPutRequest): Promise<AxiosResponse<T, D> | null> {
-  //   return await this._request({ method: 'put', url, params: null, data, headers });
-  // }
-
-  // static async delete<T, D>({ url, headers = {} }: IDeleteRequest): Promise<AxiosResponse<T, D> | null> {
-  //   return await this._request({ method: 'delete', url, params: null, data: {}, headers });
-  // }
-
-  // static async patch<T, D>({ url, data, headers = {} }: IPatchRequest): Promise<AxiosResponse<T, D> | null> {
-  //   return await this._request({ method: 'patch', url, params: null, data, headers });
-  // }
-
-  // static async renewAccessToken() {}
 
   protected async get<T, D>({ url, params, headers }: IGetRequest<D>) {
     return await this._axiosInstance.get<ResponseConfig<T>>(url, { params, headers });
@@ -141,7 +73,7 @@ export class AxiosConfig {
     return await this._axiosInstance.post<ResponseConfig<T>>(url, data, { headers });
   }
 
-  protected async put<T, D>({ url, data, headers }: IPostRequest<D>) {
+  protected async put<T, D>({ url, data, headers }: IPutRequest<D>) {
     return await this._axiosInstance.put<ResponseConfig<T>>(url, data, { headers });
   }
 
@@ -149,7 +81,7 @@ export class AxiosConfig {
     return await this._axiosInstance.delete<ResponseConfig<T>>(url, { data, headers });
   }
 
-  protected async patch<T, D>({ url, data, headers }: IPostRequest<D>) {
+  protected async patch<T, D>({ url, data, headers }: IPatchRequest<D>) {
     return await this._axiosInstance.patch<ResponseConfig<T>>(url, data, { headers });
   }
 }
