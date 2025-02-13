@@ -5,10 +5,7 @@ class HouseApi extends AxiosConfig {
   private readonly _baseURL = '/house';
 
   async getHouseGetMain(dto: HouseGetMainReqDto) {
-    return await this.get<HouseGetMainRes, HouseGetMainReqDto>({
-      url: `${this._baseURL}/getMain`,
-      params: dto,
-    });
+    return await this.get<HouseGetMainRes, HouseGetMainReqDto>({ url: `${this._baseURL}/getMain`, params: dto });
   }
 }
 
