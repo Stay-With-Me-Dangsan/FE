@@ -7,9 +7,13 @@ class AuthApi extends AxiosConfig {
   async postSignIn(dto: SignInRequestDto) {
     console.log('dto', dto);
 
-    return await this.post<SignInResponseDto, SignInRequestDto>({
-      url: `${this._baseURL}/sign-in`,
-      data: dto,
+    // return await this.post<SignInResponseDto, SignInRequestDto>({
+    //   url: `${this._baseURL}/sign-in`,
+    //   data: dto,
+    // });
+
+    return await this.get<SignInResponseDto, SignInRequestDto>({
+      url: `/house/getMain?houseMainId=5`,
     });
   }
 }

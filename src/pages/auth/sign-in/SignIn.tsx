@@ -20,8 +20,8 @@ export const SignIn = () => {
   const onSignInHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
 
-    // onSignInMutation.mutate({ email, password });
-    navigate('/home');
+    onSignInMutation.mutate({ email, password });
+    // navigate('/home');
   };
 
   return (
