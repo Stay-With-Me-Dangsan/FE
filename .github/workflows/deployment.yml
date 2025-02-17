@@ -25,10 +25,6 @@ jobs:
         run: |
           export CI=false
           npm run build
-
-      - name: Deploy to EC2
-        run: |
-          scp -r ./build/* ec2-user@43.202.67.155:/var/www/html/
       
       - name: Deploy to EC2
         env:
