@@ -20,7 +20,7 @@ const Navbar = () => {
   return (
     <div className="navbar">
       <NavbarHome color={pathname === '/home' ? '#9470DC' : '#989898'} onClick={onClickHandler} />
-      <NavbarMap color={pathname === '/house' ? '#9470DC' : '#989898'} onClick={onClickHandler} />
+      <NavbarMap color={pathname === '/map' ? '#9470DC' : '#989898'} onClick={onClickHandler} />
       <NavbarBoard color={pathname === '/board' ? '#9470DC' : '#989898'} onClick={onClickHandler} />
       <NavbarMyPage color={pathname === '/mypage' ? '#9470DC' : '#989898'} onClick={onClickHandler} />
     </div>

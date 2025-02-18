@@ -13,9 +13,6 @@ export const Modal = ({ children }: IModalProps) => {
   return ReactDOM.createPortal(
     <div className="modal-overlay" onClick={closeModal}>
       <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-        <button className="modal-close" onClick={closeModal}>
-          ×
-        </button>
         {children}
       </div>
     </div>,
