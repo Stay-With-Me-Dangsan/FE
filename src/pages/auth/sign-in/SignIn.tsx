@@ -24,10 +24,30 @@ export const SignIn = () => {
     navigate('/home');
   };
 
+  const onClickHandler = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
+    e.stopPropagation();
+
+    const id = e.currentTarget.id;
+
+    switch (id) {
+      case 'find-id':
+        navigate('/auth/find-id');
+        break;
+      case 'find-password':
+        navigate('/auth/find-password');
+        break;
+      case 'sign-in':
+        navigate('/auth/sign-up');
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
-    <div className="h-[100vh] flex justify-center items-center overflow-y-hidden">
+    <div className="h-[100vh] flex justify-center items-center overflow-y-hidden" style={{ border: '1px solid red' }}>
       <div className="w-[20px] h-full bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]" />
-      <div className="relative w-[960px] h-full px-[40px] py-[50px] flex flex-col items-center overflow-y-auto">
+      <div className="h-full px-[40px] flex flex-col items-center">
         <div className="mb-14">
           <img src={logo} alt="sign-in-logo" width={383} />
         </div>
@@ -59,11 +79,11 @@ export const SignIn = () => {
           </div>
 
           <div className="flex gap-10">
-            <Text value="아이디 찾기" color="gray" />
+            <Text value="아이디 찾기" color="gray" id="find-id" onClick={onClickHandler} />
             <Text value="|" color="gray" />
-            <Text value="비밀번호 찾기" color="gray" />
+            <Text value="비밀번호 찾기" color="gray" id="find-password" onClick={onClickHandler} />
             <Text value="|" color="gray" />
-            <Text value="회원가입" color="gray" />
+            <Text value="회원가입" color="gray" id="sign-in" onClick={onClickHandler} />
           </div>
         </div>
       </div>

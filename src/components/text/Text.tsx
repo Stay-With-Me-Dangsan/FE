@@ -3,9 +3,13 @@ import { useCallback } from 'react';
 interface IProps {
   value: string;
   color: 'gray' | 'black';
+  id?: string;
+  onClick?: (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => void;
 }
 
-export const Text = ({ value, color }: IProps) => {
+export const Text = (props: IProps) => {
+  const { value, color, id, onClick } = props;
+
   const textColor = useCallback(() => {
     switch (color) {
       case 'gray':
@@ -17,5 +21,12 @@ export const Text = ({ value, color }: IProps) => {
     }
   }, []);
 
-  return <p className={`${textColor()} font-normal text-xl`}>{value}</p>;
+  return (
+    <p
+      className={`${textColor()} ${onClick && 'cursor-pointer'} font-normal text-xl whitespace-normal`}
+      id={id}
+      onClick={(event) => onClick && onClick(event)}>
+      {value}
+    </p>
+  );
 };

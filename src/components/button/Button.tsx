@@ -4,10 +4,12 @@ interface IProps {
   disabled?: boolean;
 }
 
-export const Button = ({ text, onClick, disabled }: IProps) => {
+export const Button = (props: IProps) => {
+  const { text, onClick, disabled } = props;
+
   return (
     <button
-      className="w-full pt-[24px] pb-[24px] pr-[20px] pl-[20px] font-medium text-2xl text-active-text border-none bg-active-bg disabled:bg-disabled-bg disabled:text-disabled-text rounded-xl"
+      className="w-full py-[24px] px-[20px] font-medium text-2xl text-active-text border-none bg-active-bg disabled:bg-disabled-bg disabled:text-disabled-text rounded-xl"
       onClick={onClick}
       disabled={disabled}>
       {text}

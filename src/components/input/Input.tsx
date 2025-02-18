@@ -4,9 +4,12 @@ interface IProps {
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   borderColor?: 'gray' | 'purple';
+  children?: React.ReactNode;
 }
 
-export const Input = ({ type, value, onChange, placeholder, borderColor }: IProps) => {
+export const Input = (props: IProps) => {
+  const { type, value, onChange, placeholder, borderColor, children } = props;
+
   const border_color = () => {
     switch (borderColor) {
       case 'gray':
@@ -20,7 +23,7 @@ export const Input = ({ type, value, onChange, placeholder, borderColor }: IProp
 
   return (
     <input
-      className="w-full py-[24px] px-[20px] font-normal text-2xl border-[1px] rounded-xl"
+      className="w-full py-[24px] px-[20px] font-normal text-2xl border-[1px] rounded-xl cursor-pointer"
       style={{ borderColor: border_color() }}
       type={type}
       value={value}
