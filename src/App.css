@@ -75,7 +75,7 @@
   }
   .navbar {
     width: 100vw;
-    height: 82px;
+    height: 62px;
   }
 }
 
@@ -86,7 +86,7 @@
   }
   .navbar {
     width: calc(100vw - 160px);
-    height: 108px;
+    height: 80px;
   }
 }
 

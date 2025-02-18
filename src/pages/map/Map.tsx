@@ -2,8 +2,8 @@ import { Maps, Search } from './components';
 import { useEffect, useState } from 'react';
 
 export const Map = () => {
-  const [latitude, setLatitude] = useState<number | null>(null); //위도
-  const [longitude, setLongitude] = useState<number | null>(null); //경도
+  const [latitude, setLatitude] = useState<number | null>(37.553836); //위도
+  const [longitude, setLongitude] = useState<number | null>(126.969652); //경도
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
