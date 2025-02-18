@@ -1,9 +1,11 @@
 import { useState } from 'react';
-import { Button } from '../../../components/button';
+import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 
 const filterList = ['보증금', '월세', '공간유형', '계약기간', '성별'];
 
-export const SearchFilter = () => {
+export const MapSearchFilter = () => {
+  const { width } = useDeviceLayout();
+
   const [selectedFilter, setSelectedFilter] = useState(() =>
     filterList.map((el, idx) => ({ id: idx, name: el, selected: false })),
   );
@@ -13,7 +15,7 @@ export const SearchFilter = () => {
       {selectedFilter.map((el) => (
         <button
           key={el.id}
-          className={`${el.selected ? 'bg-[#9470DC] text-white' : 'bg-[#F0F0F0] text-black'} px-[8px] py-[10px] rounded-[8px] whitespace-nowrap`}
+          className={`${el.selected ? 'bg-[#9470DC] text-white' : 'bg-[#F0F0F0] text-black'} ${width < 768 ? 'px-[6px] py-[4px]' : 'px-[8px] py-[10px]'} rounded-[8px] whitespace-nowrap`}
           onClick={() => {
             setSelectedFilter((prev) =>
               prev.map((filter) => (filter.id === el.id ? { ...filter, selected: !filter.selected } : filter)),

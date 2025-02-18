@@ -1,6 +1,6 @@
 import { Input } from '../../../components/input';
 
-export const SearchBar = () => {
+export const MapSearchBar = () => {
   return (
     <Input
       type="text"

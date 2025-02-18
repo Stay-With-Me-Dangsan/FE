@@ -1,4 +1,4 @@
 export * from './Maps';
-export * from './Search';
-export * from './SearchBar';
-export * from './SearchFilter';
+export * from './MapSearch';
+export * from './MapSearchBar';
+export * from './MapSearchFilter';

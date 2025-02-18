@@ -8,9 +8,12 @@ import google from '../../../asset/images/sign-in-google.png';
 import { Text } from '../../../components/text';
 import { useNavigate } from 'react-router-dom';
 import useAuthMutation from '../../../hooks/auth/mutaion/useAuthMutation';
+import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 
 export const SignIn = () => {
   const navigate = useNavigate();
+
+  const { width } = useDeviceLayout();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -72,10 +75,10 @@ export const SignIn = () => {
             <Text value="SNS계정으로 간편가입하기" color="gray" />
           </div>
 
-          <div className="w-full flex justify-center gap-5 mb-20">
-            <img src={kakao} alt="kakao" width={80} />
-            <img src={naver} alt="naver" width={80} />
-            <img src={google} alt="google" width={80} />
+          <div className={`${width < 768 ? 'h-[48px] gap-8' : 'h-[80px] gap-5'} w-full flex justify-center mb-20`}>
+            <img src={kakao} alt="kakao" width={width < 768 ? 48 : 80} />
+            <img src={naver} alt="naver" width={width < 768 ? 48 : 80} />
+            <img src={google} alt="google" width={width < 768 ? 48 : 80} />
           </div>
 
           <div className="flex gap-4 max-lg:mb-10">

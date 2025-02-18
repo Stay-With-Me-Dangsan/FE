@@ -1,5 +1,4 @@
 import { useCallback } from 'react';
-import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 
 interface IProps {
   value: string;
@@ -10,8 +9,6 @@ interface IProps {
 
 export const Text = (props: IProps) => {
   const { value, color, id, onClick } = props;
-
-  const { width } = useDeviceLayout();
 
   const textColor = useCallback(() => {
     switch (color) {
