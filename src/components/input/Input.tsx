@@ -23,7 +23,7 @@ export const Input = (props: IProps) => {
 
   return (
     <input
-      className="w-full py-[24px] px-[20px] font-normal text-2xl border-[1px] rounded-xl cursor-pointer"
+      className="w-full py-[24px] px-[20px] font-normal text-2xl border-[1px] rounded-xl cursor-pointer max-lg:py-[18px] max-lg:px-[16px]"
       style={{ borderColor: border_color() }}
       type={type}
       value={value}
