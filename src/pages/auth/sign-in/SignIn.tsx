@@ -45,7 +45,7 @@ export const SignIn = () => {
   };
 
   return (
-    <div className="h-[100vh] flex justify-center items-center overflow-y-hidden" style={{ border: '1px solid red' }}>
+    <div className="h-[100vh] flex justify-center items-center overflow-x-hidden overflow-y-auto">
       <div className="w-[20px] h-full bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]" />
       <div className="h-full px-[40px] flex flex-col items-center">
         <div className="mb-14">
@@ -72,17 +72,15 @@ export const SignIn = () => {
             <Text value="SNS계정으로 간편가입하기" color="gray" />
           </div>
 
-          <div className="w-full flex justify-center gap-20 mb-20">
+          <div className="w-full flex justify-center gap-5 mb-20">
             <img src={kakao} alt="kakao" width={80} />
             <img src={naver} alt="naver" width={80} />
             <img src={google} alt="google" width={80} />
           </div>
 
-          <div className="flex gap-10">
+          <div className="flex gap-4 max-lg:mb-10">
             <Text value="아이디 찾기" color="gray" id="find-id" onClick={onClickHandler} />
-            <Text value="|" color="gray" />
             <Text value="비밀번호 찾기" color="gray" id="find-password" onClick={onClickHandler} />
-            <Text value="|" color="gray" />
             <Text value="회원가입" color="gray" id="sign-in" onClick={onClickHandler} />
           </div>
         </div>

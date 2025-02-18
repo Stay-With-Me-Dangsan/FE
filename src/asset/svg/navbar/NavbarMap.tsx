@@ -3,7 +3,7 @@ import { ISvgNavbarProps } from './interface';
 export const NavbarMap = ({ color, onClick }: ISvgNavbarProps) => {
   return (
     <svg
-      width="36"
+      width="95"
       height="68"
       viewBox="0 0 36 68"
       fill="none"
