@@ -23,7 +23,7 @@ export const Text = (props: IProps) => {
 
   return (
     <p
-      className={`${textColor()} ${onClick && 'cursor-pointer'} font-normal text-xl whitespace-nowrap`}
+      className={`${textColor()} ${onClick && 'cursor-pointer'} font-normal whitespace-nowrap`}
       id={id}
       onClick={(event) => onClick && onClick(event)}>
       {value}
