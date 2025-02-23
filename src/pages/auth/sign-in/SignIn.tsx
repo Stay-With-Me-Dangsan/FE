@@ -9,11 +9,14 @@ import { Text } from '../../../components/text';
 import { useNavigate } from 'react-router-dom';
 import useAuthMutation from '../../../hooks/auth/mutaion/useAuthMutation';
 import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
+import { AuthLayout } from '../_components';
+import { Image } from '../../../components/image';
+import { Margin } from '../../../components/margin';
 
 export const SignIn = () => {
   const navigate = useNavigate();
 
-  const { width } = useDeviceLayout();
+  const { isMobile } = useDeviceLayout();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -39,7 +42,7 @@ export const SignIn = () => {
       case 'find-password':
         navigate('/auth/find-password');
         break;
-      case 'sign-in':
+      case 'sign-up':
         navigate('/auth/sign-up');
         break;
       default:
@@ -48,47 +51,44 @@ export const SignIn = () => {
   };
 
   return (
-    <div className="h-[100vh] flex justify-center items-center overflow-x-hidden overflow-y-auto">
-      <div className="w-[20px] h-full bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]" />
-      <div className="h-full px-[40px] flex flex-col items-center">
-        <div className="mb-14">
-          <img src={logo} alt="sign-in-logo" width={383} />
+    <>
+      <AuthLayout>
+        <Image src={logo} alt="sign-in-logo" width={383} />
+
+        <Margin direction="bottom" size={14} />
+
+        <div className="w-full flex flex-col gap-4">
+          <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일 주소" />
+          <Input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            placeholder="비밀번호"
+          />
         </div>
 
-        <div className="w-full flex flex-col gap-10 mb-20">
-          <div className="flex flex-col gap-4">
-            <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일 주소" />
-            <Input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="비밀번호"
-            />
-          </div>
-          <div>
-            <Button text="입장하기" onClick={(e) => onSignInHandler(e)} />
-          </div>
+        <Margin direction="bottom" size={14} />
+
+        <div className="w-full">
+          <Button text="입장하기" onClick={(e) => onSignInHandler(e)} color="purple" />
         </div>
 
-        <div className="flex flex-col items-center">
-          <div className="mb-10">
-            <Text value="SNS계정으로 간편가입하기" color="gray" />
-          </div>
+        <Margin direction="bottom" size={14} />
 
-          <div className={`${width < 768 ? 'h-[48px] gap-8' : 'h-[80px] gap-5'} w-full flex justify-center mb-20`}>
-            <img src={kakao} alt="kakao" width={width < 768 ? 48 : 80} />
-            <img src={naver} alt="naver" width={width < 768 ? 48 : 80} />
-            <img src={google} alt="google" width={width < 768 ? 48 : 80} />
-          </div>
-
-          <div className="flex gap-4 max-lg:mb-10">
-            <Text value="아이디 찾기" color="gray" id="find-id" onClick={onClickHandler} />
-            <Text value="비밀번호 찾기" color="gray" id="find-password" onClick={onClickHandler} />
-            <Text value="회원가입" color="gray" id="sign-in" onClick={onClickHandler} />
-          </div>
+        <div className={`${isMobile ? 'gap-8' : 'gap-10'} w-full flex justify-center`}>
+          <Image src={kakao} alt="kakao" width={isMobile ? 48 : 60} />
+          <Image src={naver} alt="naver" width={isMobile ? 48 : 60} />
+          <Image src={google} alt="google" width={isMobile ? 48 : 60} />
         </div>
-      </div>
-      <div className="w-[20px] h-full bg-gradient-to-l from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]" />
-    </div>
+
+        <Margin direction="bottom" size={14} />
+
+        <div className="w-full flex justify-center gap-10">
+          <Text value="아이디 찾기" color="gray" id="find-id" onClick={onClickHandler} />
+          <Text value="비밀번호 찾기" color="gray" id="find-password" onClick={onClickHandler} />
+          <Text value="회원가입" color="gray" id="sign-up" onClick={onClickHandler} />
+        </div>
+      </AuthLayout>
+    </>
   );
 };

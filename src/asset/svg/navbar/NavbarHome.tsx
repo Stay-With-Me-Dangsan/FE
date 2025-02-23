@@ -2,12 +2,12 @@ import { ISvgNavbarProps } from './interface';
 import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 
 export const NavbarHome = ({ color, onClick }: ISvgNavbarProps) => {
-  const { width } = useDeviceLayout();
+  const { isMobile } = useDeviceLayout();
 
   return (
     <svg
-      width={width < 768 ? '60' : '90'}
-      height={width < 768 ? '52' : '68'}
+      width={isMobile ? '60' : '90'}
+      height={isMobile ? '52' : '68'}
       viewBox="0 0 33 68"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

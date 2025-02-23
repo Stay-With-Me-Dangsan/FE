@@ -17,5 +17,5 @@ export const useDeviceLayout = () => {
     };
   }, []);
 
-  return { width, height };
+  return { isMobile: width < 768 };
 };

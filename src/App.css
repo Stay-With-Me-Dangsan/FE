@@ -8,6 +8,20 @@
   margin: 0;
 }
 
+input, button {
+  cursor: pointer;
+}
+
+input {
+  border-width: 1px;
+  border-radius: 0.75rem
+}
+
+button {
+  border: none;
+  border-radius: 0.75rem;
+}
+
 *::-webkit-scrollbar{
   display: none;
 }
