@@ -1,5 +1,6 @@
 import { AxiosConfig } from '../../common/axios-config';
-import { HouseGetMainReqDto, HouseGetMainRes } from '../../types/interface/dto';
+import { HouseGetMainReqDto } from '../../types/interface/house/req';
+import { HouseGetMainRes } from '../../types/interface/house/res';
 
 class HouseApi extends AxiosConfig {
   private readonly _baseURL = '/house';
