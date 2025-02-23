@@ -16,7 +16,16 @@ export default function useAuthMutation() {
     },
   });
 
+  const onSignUpMutation = useMutation({
+    mutationFn: () => AuthApi.postSignUp(),
+    onSuccess: () => {},
+    onError: (err) => {
+      console.error(err);
+    },
+  });
+
   return {
     onSignInMutation,
+    onSignUpMutation,
   };
 }

@@ -11,6 +11,8 @@ class AuthApi extends AxiosConfig {
       data: dto,
     });
   }
+
+  async postSignUp() {}
 }
 
 export default new AuthApi();

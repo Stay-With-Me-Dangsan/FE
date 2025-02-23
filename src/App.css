@@ -66,10 +66,11 @@ button {
   display: flex;
   flex-direction: column;
   position: relative;
+  border: 1px solid blue;
 }
 
 .layout > .outlet {
-  min-height: calc(100vh - 108px);
+  width: 100%;
   overflow: auto;
   overflow-x: hidden;
   z-index: 40;
@@ -90,30 +91,28 @@ button {
   .layout {
     width: 100vw;
   }
+  .outlet{
+    height: calc(100vh - 62px);
+  }
   .navbar {
     width: 100vw;
     height: 62px;
   }
 }
 
-@media all and (min-width: 768px) and (max-width: 1023px) {
+@media screen and (min-width: 768px) {
   .layout {
-    width: calc(100vw - 160px);
-    margin: 0 80px;
-  }
-  .navbar {
-    width: calc(100vw - 160px);
-    height: 80px;
-  }
-}
-
-@media screen and (min-width: 1024px) {
-  .layout {
-    width: 960px;
+    max-width: 960px;
+    padding: 0 1rem;
     margin: 0 auto;
   }
+  .outlet{
+    height: calc(100vh - 108px);
+  }
   .navbar {
-    width: 960px;
+    width: 100vw;
+    max-width: 960px;
     height: 108px;
+    padding: 0 1rem;
   }
 }

@@ -35,7 +35,7 @@ export const Maps = (props: IProps) => {
 
   return (
     <Map
-      className="w-full h-full"
+      className="h-full"
       center={{ lat: latitude, lng: longitude }}
       level={zoomLevel}
       onClick={(target, mouseEvent) => onMapClickHandler(target, mouseEvent)}

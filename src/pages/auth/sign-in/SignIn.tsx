@@ -37,7 +37,7 @@ export const SignIn = () => {
 
     switch (id) {
       case 'find-id':
-        navigate('/auth/find-id');
+        navigate('/auth/find-email');
         break;
       case 'find-password':
         navigate('/auth/find-password');

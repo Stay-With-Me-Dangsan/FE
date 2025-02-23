@@ -7,7 +7,7 @@ export const Map = () => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
 
   return (
-    <div className="h-[9000px] bg-green-50">
+    <div className="h-full bg-green-50" style={{ border: '1px solid red' }}>
       <MapSearch />
       <Maps {...{ latitude, setLatitude, longitude, setLongitude }} />
     </div>
