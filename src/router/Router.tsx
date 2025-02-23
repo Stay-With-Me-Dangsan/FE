@@ -2,7 +2,7 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { FindEmail, FindPassword, SignIn, SignUp } from '../pages/auth';
 import { Layout } from '../common/layout';
 import { Home } from '../pages/home';
-import { Map } from '../pages/map';
+import { Map, MapDetail } from '../pages/map';
 import { Board } from '../pages/board';
 import { MyPage } from '../pages/my-page';
 
@@ -21,6 +21,7 @@ export const Router = () => {
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/map" element={<Map />} />
+          <Route path="/map/detail/:id" element={<MapDetail />} />
           <Route path="/board" element={<Board />} />
           <Route path="/mypage" element={<MyPage />} />
         </Route>

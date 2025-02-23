@@ -1,15 +1,16 @@
 import { Map, useKakaoLoader, MapMarker } from 'react-kakao-maps-sdk';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 
 interface IProps {
   latitude: number;
   setLatitude: React.Dispatch<React.SetStateAction<number>>;
   longitude: number;
   setLongitude: React.Dispatch<React.SetStateAction<number>>;
+  setIsOpened: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const Maps = (props: IProps) => {
-  const { longitude, setLongitude, latitude, setLatitude } = props;
+  const { longitude, setLongitude, latitude, setLatitude, setIsOpened } = props;
 
   const [zoomLevel, setZoomLevel] = useState<number>(3);
 
@@ -19,6 +20,8 @@ export const Maps = (props: IProps) => {
     console.log('getCenter', target.getCenter());
 
     console.log('mouseEvent', mouseEvent);
+
+    setIsOpened((prev) => !prev);
   };
 
   const onMapZoomChangedHandler = (target: kakao.maps.Map) => {

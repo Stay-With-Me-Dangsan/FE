@@ -1,4 +1,4 @@
-import { Maps, MapSearch } from './components';
+import { MapList, Maps, MapSearch } from './components';
 import { useState } from 'react';
 
 export const Map = () => {
@@ -7,9 +7,10 @@ export const Map = () => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
 
   return (
-    <div className="h-full bg-green-50" style={{ border: '1px solid red' }}>
+    <div className="h-full bg-green-50 relative">
       <MapSearch />
-      <Maps {...{ latitude, setLatitude, longitude, setLongitude }} />
+      <Maps {...{ latitude, setLatitude, longitude, setLongitude, setIsOpened }} />
+      {isOpened && <MapList />}
     </div>
   );
 };
