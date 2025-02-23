@@ -12,23 +12,22 @@ interface IProps {
 export const Input = (props: IProps) => {
   const { type, value, onChange, placeholder, borderColor, children } = props;
 
-  const { width } = useDeviceLayout();
+  const { isMobile } = useDeviceLayout();
 
   const border_color = () => {
     switch (borderColor) {
       case 'gray':
-        return '#CDCDCD';
+        return 'border border-gray-300';
       case 'purple':
-        return '#9470DC';
+        return 'border border-[#9470DC]';
       default:
-        return '#CDCDCD';
+        return 'border border-gray-300';
     }
   };
 
   return (
     <input
-      className={`${width < 768 ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} w-full  font-normal  border-[1px] rounded-xl cursor-pointer`}
-      style={{ borderColor: border_color() }}
+      className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${border_color()} w-full`}
       type={type}
       value={value}
       onChange={onChange}
