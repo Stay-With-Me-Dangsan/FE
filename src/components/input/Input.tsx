@@ -1,16 +1,19 @@
 import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 
 interface IProps {
-  type: 'text' | 'email' | 'password';
+  type: 'text' | 'email' | 'password' | 'date' | 'datetime-local';
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  className?: string;
+  name?: string;
   placeholder?: string;
   borderColor?: 'gray' | 'purple';
+  optional?: boolean;
   children?: React.ReactNode;
 }
 
 export const Input = (props: IProps) => {
-  const { type, value, onChange, placeholder, borderColor, children } = props;
+  const { type, value, onChange, className, name, placeholder, borderColor, optional = false, children } = props;
 
   const { isMobile } = useDeviceLayout();
 
@@ -27,11 +30,12 @@ export const Input = (props: IProps) => {
 
   return (
     <input
-      className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${border_color()} w-full`}
+      name={name}
+      className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${border_color()} ${className} w-full`}
       type={type}
       value={value}
       onChange={onChange}
-      placeholder={placeholder}
+      placeholder={`${optional ? '[선택]' : ''} ${placeholder}`}
     />
   );
 };

@@ -9,7 +9,7 @@ interface IProps {
 }
 
 export const Button = (props: IProps) => {
-  const { text, onClick, color, disabled, children } = props;
+  const { text, onClick, color = 'gray', disabled, children } = props;
 
   const { isMobile } = useDeviceLayout();
 
@@ -29,7 +29,7 @@ export const Button = (props: IProps) => {
       className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${style()} w-full`}
       onClick={onClick}
       disabled={disabled}>
-      {text}
+      <p className="whitespace-nowrap">{text}</p>
     </button>
   );
 };
