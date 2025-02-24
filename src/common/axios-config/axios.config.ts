@@ -1,5 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { IResConfig } from '../../types/interface/res.config';
+import { getDefaultStore } from 'jotai';
+import { jwtStore } from '../../store';
 
 interface IGetReq<D> {
   url: string;
@@ -43,6 +45,13 @@ export class AxiosConfig {
 
     this._axiosInstance.interceptors.request.use(
       (config) => {
+        const store = getDefaultStore();
+        const token = store.get(jwtStore.getJwt);
+
+        if (token && config.headers) {
+          config.headers.set('Authorization', `Bearer ${token}`);
+        }
+
         return config;
       },
       (error) => {
