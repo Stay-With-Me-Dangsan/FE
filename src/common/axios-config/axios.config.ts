@@ -67,7 +67,14 @@ export class AxiosConfig {
         const originalRequest = error.config;
         const store = getDefaultStore();
 
-        if (error.response?.status === 401) {
+        if (error.response?.status === 302) {
+          const { redirect } = error.response.data;
+
+          window.location.href = redirect;
+        } else if (error.response?.status === 400) {
+          const { message } = error.response.data;
+          alert(message);
+        } else if (error.response?.status === 401) {
           try {
             const refreshResponse = await axios.post(
               `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/auth/refresh`,
