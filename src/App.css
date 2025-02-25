@@ -112,7 +112,7 @@ button {
 @media screen and (min-width: 768px) {
   .layout {
     max-width: 960px;
-    padding: 0 1rem;
+
     margin: 0 auto;
   }
   .outlet{
@@ -122,6 +122,6 @@ button {
     width: 100vw;
     max-width: 960px;
     height: 108px;
-    padding: 0 1rem;
+
   }
 }
