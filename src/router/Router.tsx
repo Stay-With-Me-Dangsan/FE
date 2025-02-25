@@ -3,7 +3,7 @@ import { FindEmail, FindPassword, SignIn, SignUp } from '../pages/auth';
 import { Layout } from '../common/layout';
 import { Home } from '../pages/home';
 import { Map, MapDetail } from '../pages/map';
-import { Board } from '../pages/board';
+import { Board, BoardDetail } from '../pages/board';
 import { MyPage } from '../pages/my-page';
 
 export const Router = () => {
@@ -23,6 +23,8 @@ export const Router = () => {
           <Route path="/map" element={<Map />} />
           <Route path="/map/detail/:id" element={<MapDetail />} />
           <Route path="/board" element={<Board />} />
+          <Route path="/board/detail" element={<BoardDetail />} />
+          <Route path="/board/detail/:id" element={<BoardDetail />} />
           <Route path="/mypage" element={<MyPage />} />
         </Route>
       </Routes>
