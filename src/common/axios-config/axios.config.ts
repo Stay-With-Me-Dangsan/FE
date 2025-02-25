@@ -1,5 +1,10 @@
+<<<<<<< Updated upstream
 import axios, { AxiosInstance } from 'axios';
 import { ResponseConfig } from '../../types/interface/dto';
+=======
+import axios, { AxiosInstance, AxiosResponse, AxiosError, AxiosRequestConfig } from 'axios';
+import { IResConfig } from '../../types/interface/res.config';
+>>>>>>> Stashed changes
 
 // interface IRequest {
 //   method: string;
@@ -39,7 +44,12 @@ interface IPatchRequest {
 }
 
 export class AxiosConfig {
+<<<<<<< Updated upstream
   private readonly axiosInstance: AxiosInstance;
+=======
+  private static instance: AxiosConfig;
+  private readonly _axiosInstance: AxiosInstance;
+>>>>>>> Stashed changes
 
   constructor() {
     this.axiosInstance = axios.create({
@@ -48,6 +58,7 @@ export class AxiosConfig {
       withCredentials: true,
     });
 
+<<<<<<< Updated upstream
     this.axiosInstance.interceptors.request.use();
 
     this.axiosInstance.interceptors.response.use();
@@ -120,6 +131,66 @@ export class AxiosConfig {
 
   protected async get<T, D>({ url, params = {}, headers = {} }: IGetRequest) {
     return await this.axiosInstance.get<ResponseConfig<T>>(url, { params, headers });
+=======
+    this._axiosInstance.interceptors.request.use(
+      (config) => {
+        //로그인시 Header에 토큰 자동추가
+        const token = localStorage.getItem('accessToken');
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
+        }
+        return config;
+      },
+      (error) => {
+        return Promise.reject(error);
+      },
+    );
+
+    this._axiosInstance.interceptors.response.use(
+      (response: AxiosResponse) => response,
+      async (error: AxiosError) => {
+        if (!error.config) {
+          return Promise.reject(error);
+        }
+
+        if (error.response?.status === 401) {
+          try {
+            // 1️. Access Token이 만료되었으므로 Refresh Token으로 새 토큰 요청
+            const refreshResponse = await this._axiosInstance.post('/user/refresh');
+
+            const newAccessToken = refreshResponse.data.accessToken;
+            localStorage.setItem('accessToken', newAccessToken);
+
+            // 2️ 원래 요청을 새로운 Access Token으로 재시도
+            error.config.headers = error.config.headers || {}; // ✅ headers가 undefined일 경우 초기화
+            error.config.headers.Authorization = `Bearer ${newAccessToken}`;
+            return this._axiosInstance.request(error.config);
+          } catch (refreshError) {
+            console.error('토큰 갱신 실패, 재로그인 필요');
+            localStorage.removeItem('accessToken');
+            window.location.href = '/'; // 로그인 페이지로 이동
+          }
+        }
+        return Promise.reject(error);
+      },
+    );
+  }
+
+  public static getInstance(): AxiosConfig {
+    if (!AxiosConfig.instance) {
+      AxiosConfig.instance = new AxiosConfig();
+    }
+    return AxiosConfig.instance;
+  }
+
+  // AxiosInstance 반환
+  getAxiosInstance(): AxiosInstance {
+    return this._axiosInstance;
+  }
+
+  protected async get<T, D>({ url, params, headers }: IGetReq<D>) {
+    return await this._axiosInstance.get<IResConfig<T>>(url, { params, headers });
+>>>>>>> Stashed changes
   }
 
   protected async post<T, D>({ url, data, headers = {} }: IPostRequest) {
@@ -138,3 +209,6 @@ export class AxiosConfig {
     return await this.axiosInstance.delete<ResponseConfig<T>>(url, { headers });
   }
 }
+
+const axiosInstance = new AxiosConfig().getAxiosInstance();
+export default axiosInstance;
