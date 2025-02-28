@@ -1,9 +1,9 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
 import AuthApi from '../../../api-url/auth/auth.api';
-import { ISignInReq } from '../../../types/interface/auth/req';
 import { useSetAtom } from 'jotai';
 import { jwtStore } from '../../../store';
+import { ISignInDto } from '../../../types/dto/auth';
 
 export default function useAuthMutation() {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ export default function useAuthMutation() {
   const setJwtToken = useSetAtom(jwtStore.setJwt);
 
   const onSignInMutation = useMutation({
-    mutationFn: (dto: ISignInReq) => AuthApi.postSignIn(dto),
+    mutationFn: (dto: ISignInDto) => AuthApi.postSignIn(dto),
     onSuccess: (res) => {
       const { accessToken } = res.data.data;
 

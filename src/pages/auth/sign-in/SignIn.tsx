@@ -11,7 +11,7 @@ import useAuthMutation from '../../../hooks/auth/mutaion/useAuthMutation';
 import { AuthLayout } from '../_components';
 import { Image } from '../../../components/image';
 import { Margin } from '../../../components/margin';
-import { ImageTypeEnum } from '../../../types/enum';
+import { ImageTypeEnum } from '../../../constant/enum';
 
 export const SignIn = () => {
   const navigate = useNavigate();

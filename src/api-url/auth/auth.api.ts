@@ -1,12 +1,12 @@
 import { AxiosConfig } from '../../common/axios-config';
-import { ISignInReq } from '../../types/interface/auth/req';
-import { ISignInRes } from '../../types/interface/auth/res';
+import { ISignInRes } from '../../types/res/auth';
+import { ISignInDto } from '../../types/dto/auth';
 
 class AuthApi extends AxiosConfig {
   private readonly _baseURL = '/auth';
 
-  async postSignIn(dto: ISignInReq) {
-    return await this.post<ISignInRes, ISignInReq>({
+  async postSignIn(dto: ISignInDto) {
+    return await this.post<ISignInRes, ISignInDto>({
       url: `${this._baseURL}/sign-in`,
       data: dto,
     });

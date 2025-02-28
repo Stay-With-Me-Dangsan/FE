@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useDeviceLayout } from '../../hooks/useDeviceLayout';
-import { BoardButton } from '../../asset/svg/button/BoardButton';
+import { BoardButton } from '../../asset/svg';
 
 export const Board = () => {
   const navigate = useNavigate();

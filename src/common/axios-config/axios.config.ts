@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
-import { IResConfig } from '../../types/interface/res.config';
+import { IResConfig } from '../../types/res.config';
 import { getDefaultStore } from 'jotai';
 import { jwtStore } from '../../store';
 

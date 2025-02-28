@@ -1,4 +1,4 @@
-import { ResCodeEnum } from '../enum/res-code.enum';
+import { ResCodeEnum } from '../constant/enum/res-code.enum';
 
 export interface IResConfig<T> {
   message: string;

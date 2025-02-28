@@ -1,12 +1,12 @@
 import { AxiosConfig } from '../../common/axios-config';
-import { HouseGetMainReqDto } from '../../types/interface/house/req';
-import { HouseGetMainRes } from '../../types/interface/house/res';
+import { HouseGetMainRes } from '../../types/res/board';
+import { HouseGetMainDto } from '../../types/dto/board';
 
 class HouseApi extends AxiosConfig {
   private readonly _baseURL = '/house';
 
-  async getHouseGetMain(dto: HouseGetMainReqDto) {
-    return await this.get<HouseGetMainRes, HouseGetMainReqDto>({ url: `${this._baseURL}/getMain`, params: dto });
+  async getHouseGetMain(dto: HouseGetMainDto) {
+    return await this.get<HouseGetMainRes, HouseGetMainDto>({ url: `${this._baseURL}/getMain`, params: dto });
   }
 }
 
