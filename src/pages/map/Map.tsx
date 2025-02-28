@@ -7,7 +7,7 @@ export const Map = () => {
   const [isOpened, setIsOpened] = useState<boolean>(false);
 
   return (
-    <div>
+    <div className="h-full">
       <MapSearch />
       <Maps {...{ latitude, setLatitude, longitude, setLongitude, setIsOpened }} />
       {isOpened && <MapList />}
