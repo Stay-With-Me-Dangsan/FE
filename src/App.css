@@ -74,9 +74,11 @@ button {
   top: 0;
   padding: 0 20px;
   display: flex;
+  justify-content: space-between;
   align-items: center;
   background-color: white;
   z-index: 40;
+  border-bottom: 1px solid black;
 }
 
 .layout > .header:before {
@@ -93,7 +95,6 @@ button {
   overflow-x: hidden;
   overflow-y: auto;
   z-index: 20;
-  padding-bottom: 20px;
 }
 
 .layout > .navbar {
@@ -105,6 +106,7 @@ button {
   align-items: center;
   background-color: white;
   z-index: 40;
+  border-top: 1px solid black;
 }
 
 .layout > .navbar:before {
@@ -119,50 +121,51 @@ button {
 
 @media all and (max-width: 767px) {
   .layout {
-    width: 100vw;
   }
   .header{
-    height: 40px;
+    height: 4rem;
   }
   .outlet {
-    margin-top: 40px;
-    max-height: calc(100vh - 100px);
+    margin-top: 4rem;
+    min-height: calc(100vh - 9rem);
+    max-height: calc(100vh - 9rem);
   }
   .navbar {
-    height: 60px;
+    height: 5rem
   }
 }
 
 @media all and (min-width: 768px) and (max-width: 1023px) {
   .layout {
-    width: calc(100vw - 160px);
-    margin: 0 80px;
+    margin: 0 5rem;
   }
   .header{
-    height: 50px;
+    height: 4.5rem;
   }
   .outlet {
-    margin-top: 50px;
-    max-height: calc(100vh - 130px);
+    margin-top: 4.5rem;
+    min-height: calc(100vh - 10rem);
+    max-height: calc(100vh - 10rem);
   }
   .navbar {
-    height: 80px;
+    height: 5.5rem;
   }
 }
 
 @media screen and (min-width: 1024px) {
   .layout {
-    width: 960px;
+    max-width: 960px;
     margin: 0 auto;
   }
   .header{
-    height: 60px;
+    height: 5rem;
   }
   .outlet {
-    margin-top: 60px;
-    max-height: calc(100vh - 160px);
+    margin-top:  5rem;
+    min-height: calc(100vh - 11rem);
+    max-height: calc(100vh - 11rem);
   }
   .navbar {
-    height: 100px;
+    height: 6rem;
   }
 }

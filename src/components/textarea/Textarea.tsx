@@ -59,7 +59,7 @@ export const Textarea = (props: IProps) => {
     <textarea
       ref={textareaRef}
       name={name}
-      className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${border_color()} ${className} w-full max-h-[60vh] rounded-2xl resize-none`}
+      className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${border_color()} ${className} w-full max-h-[60vh] rounded-2xl resize-none`}
       value={value}
       onChange={handleInput}
       placeholder={`${optional ? '[선택] ' : ''}${placeholder}`}

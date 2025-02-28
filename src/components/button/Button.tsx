@@ -26,9 +26,10 @@ export const Button = (props: IProps) => {
 
   return (
     <button
-      className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${style()} w-full`}
+      className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${style()} w-full`}
       onClick={(event) => onClick(event)}
-      disabled={disabled}>
+      disabled={disabled}
+      name={text}>
       <p className="whitespace-nowrap">{text}</p>
     </button>
   );

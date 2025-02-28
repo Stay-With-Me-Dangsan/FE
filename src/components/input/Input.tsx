@@ -45,7 +45,7 @@ export const Input = (props: IProps) => {
     <input
       ref={ref}
       name={name}
-      className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${border_color()} ${className} w-full`}
+      className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${border_color()} ${className} w-full`}
       type={type}
       value={value}
       onChange={onChange}
