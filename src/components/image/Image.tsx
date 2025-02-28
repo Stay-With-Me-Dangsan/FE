@@ -5,10 +5,11 @@ interface IProps {
   src: string;
   type: ImageTypeEnum;
   alt: string;
+  onClick?: (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => void;
 }
 
 export const Image = (props: IProps) => {
-  const { src, type, alt } = props;
+  const { src, type, alt, onClick } = props;
 
   const { isMobile } = useDeviceLayout();
 
@@ -24,10 +25,21 @@ export const Image = (props: IProps) => {
         return isMobile ? 80 : 100;
       case ImageTypeEnum.SMALL:
         return isMobile ? 60 : 80;
+      case ImageTypeEnum.THUMBNAIL:
+        return isMobile ? 40 : 50;
       default:
         return isMobile ? 80 : 100;
     }
   };
 
-  return <img src={src} alt={alt} width={image_type()} height={image_type()} />;
+  return (
+    <img
+      className={`${onClick ? 'cursor-pointer' : ''} ${type === ImageTypeEnum.THUMBNAIL ? 'rounded-3xl' : ''}`}
+      src={src}
+      alt={alt}
+      width={image_type()}
+      height={image_type()}
+      onClick={(event) => onClick && onClick(event)}
+    />
+  );
 };

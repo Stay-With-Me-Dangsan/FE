@@ -2,7 +2,7 @@ import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 
 interface IProps {
   text: string;
-  onClick: React.MouseEventHandler<HTMLButtonElement>;
+  onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   color?: 'gray' | 'purple';
   disabled?: boolean;
   children?: React.ReactNode;
@@ -27,7 +27,7 @@ export const Button = (props: IProps) => {
   return (
     <button
       className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${style()} w-full`}
-      onClick={onClick}
+      onClick={(event) => onClick(event)}
       disabled={disabled}>
       <p className="whitespace-nowrap">{text}</p>
     </button>

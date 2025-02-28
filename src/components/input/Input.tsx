@@ -7,14 +7,27 @@ interface IProps {
   className?: string;
   name?: string;
   placeholder?: string;
+  disabled?: boolean;
   borderColor?: 'gray' | 'purple';
   optional?: boolean;
+  ref?: React.RefObject<HTMLInputElement>;
   children?: React.ReactNode;
 }
 
 export const Input = (props: IProps) => {
-  const { type, value, onChange, className, name, placeholder, borderColor, optional = false, children } = props;
-
+  const {
+    type,
+    value,
+    onChange,
+    className,
+    name,
+    placeholder = '',
+    disabled,
+    borderColor,
+    optional = false,
+    ref,
+    children,
+  } = props;
   const { isMobile } = useDeviceLayout();
 
   const border_color = () => {
@@ -30,12 +43,14 @@ export const Input = (props: IProps) => {
 
   return (
     <input
+      ref={ref}
       name={name}
       className={`${isMobile ? 'py-[12px] px-[16px]' : 'py-[24px] px-[20px]'} ${border_color()} ${className} w-full`}
       type={type}
       value={value}
       onChange={onChange}
-      placeholder={`${optional ? '[선택]' : ''} ${placeholder}`}
+      placeholder={`${optional ? '[선택] ' : ''}${placeholder}`}
+      disabled={disabled}
     />
   );
 };

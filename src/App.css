@@ -90,12 +90,10 @@ button {
 }
 
 .layout > .outlet {
-  /*min-height: calc(100vh - 108px);*/
-  min-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   z-index: 20;
-
+  padding-bottom: 20px;
 }
 
 .layout > .navbar {
@@ -128,9 +126,10 @@ button {
   }
   .outlet {
     margin-top: 40px;
+    max-height: calc(100vh - 100px);
   }
   .navbar {
-    height: 62px;
+    height: 60px;
   }
 }
 
@@ -144,6 +143,7 @@ button {
   }
   .outlet {
     margin-top: 50px;
+    max-height: calc(100vh - 130px);
   }
   .navbar {
     height: 80px;
@@ -160,8 +160,9 @@ button {
   }
   .outlet {
     margin-top: 60px;
+    max-height: calc(100vh - 160px);
   }
   .navbar {
-    height: 108px;
+    height: 100px;
   }
 }
