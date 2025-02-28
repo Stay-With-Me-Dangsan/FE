@@ -13,7 +13,7 @@ export const MapSearch = () => {
 
   return (
     <div
-      className={`${isMobile ? 'h-[120px] px-[28px] py-[10px]' : 'h-[190px] px-[40px] py-[28px]'} bg-white flex flex-col gap-2`}>
+      className={`${isMobile ? 'h-[120px] px-[28px] py-[10px]' : 'h-[190px] px-[40px] py-[28px]'} flex flex-col gap-2`}>
       <Input
         type="text"
         value=""

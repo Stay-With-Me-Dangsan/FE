@@ -1,1 +1,1 @@
-export * from './house.req.dto';
+export * from './house.dto';
