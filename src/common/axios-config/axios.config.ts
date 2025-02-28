@@ -23,7 +23,7 @@ interface IPutReq<D> {
 
 interface IDeleteReq<D> {
   url: string;
-  data?: D;
+  params?: D;
   headers?: AxiosRequestConfig['headers'];
 }
 
@@ -110,8 +110,8 @@ export class AxiosConfig {
     return await this._axiosInstance.put<IResConfig<T>>(url, data, { headers });
   }
 
-  protected async delete<T, D>({ url, data, headers }: IDeleteReq<D>) {
-    return await this._axiosInstance.delete<IResConfig<T>>(url, { data, headers });
+  protected async delete<T, D>({ url, params, headers }: IDeleteReq<D>) {
+    return await this._axiosInstance.delete<IResConfig<T>>(url, { params, headers });
   }
 
   protected async patch<T, D>({ url, data, headers }: IPatchReq<D>) {
