@@ -1,7 +1,10 @@
-import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
-import { ISvgBoardButtonProps } from './interface';
+import { useDeviceLayout } from '../../hooks/useDeviceLayout';
+import { ISvgProps } from './interface';
 
-export const BoardButton = ({ color, onClick }: ISvgBoardButtonProps) => {
+interface IProps extends ISvgProps {}
+
+export const BoardRegisterButton = (props: IProps) => {
+  const { color, onClick } = props;
   const { isMobile } = useDeviceLayout();
 
   return (

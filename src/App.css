@@ -72,7 +72,7 @@ button {
   width: 100%;
   position: absolute;
   top: 0;
-  padding: 0 20px;
+  padding: 0 1.2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -86,14 +86,21 @@ button {
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 4px;
-  background: linear-gradient(to top, #FFFFFF, #F5F5F5, #F1F1F1);
+  height: 0.4rem;
+  /*background: linear-gradient(to top, #FFFFFF, #F5F5F5, #F1F1F1);*/
 }
 
 .layout > .outlet {
   overflow-x: hidden;
   overflow-y: auto;
+  background-color: #f0f0f0;
+  padding: 0.2rem 0;
   z-index: 20;
+}
+
+.layout > .outlet > div {
+  padding: 1rem;;
+  background-color: white;
 }
 
 .layout > .navbar {
@@ -113,8 +120,8 @@ button {
   top: 0;
   left: 0;
   width: 100%;
-  height: 4px;
-  background: linear-gradient(to bottom, #FFFFFF, #F5F5F5, #F1F1F1);
+  height: 0.4rem;
+  /*background: linear-gradient(to bottom, #FFFFFF, #F5F5F5, #F1F1F1);*/
 }
 
 @media all and (max-width: 767px) {
@@ -125,11 +132,11 @@ button {
   }
   .outlet {
     margin-top: 4rem;
-    min-height: calc(100vh - 9rem);
-    max-height: calc(100vh - 9rem);
+    min-height: calc(100vh - 8rem);
+    max-height: calc(100vh - 8rem);
   }
   .navbar {
-    height: 5rem
+    height: 4rem
   }
 }
 
@@ -142,11 +149,11 @@ button {
   }
   .outlet {
     margin-top: 4.5rem;
-    min-height: calc(100vh - 10rem);
-    max-height: calc(100vh - 10rem);
+    min-height: calc(100vh - 9rem);
+    max-height: calc(100vh - 9rem);
   }
   .navbar {
-    height: 5.5rem;
+    height: 4.5rem;
   }
 }
 
@@ -160,10 +167,10 @@ button {
   }
   .outlet {
     margin-top:  5rem;
-    min-height: calc(100vh - 11rem);
-    max-height: calc(100vh - 11rem);
+    min-height: calc(100vh - 10rem);
+    max-height: calc(100vh - 10rem);
   }
   .navbar {
-    height: 6rem;
+    height: 5rem;
   }
 }

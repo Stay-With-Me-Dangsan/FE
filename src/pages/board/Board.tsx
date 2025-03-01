@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useDeviceLayout } from '../../hooks/useDeviceLayout';
-import { BoardButton } from '../../asset/svg';
+import { BoardRegisterButton } from '../../asset/svg';
 
 export const Board = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ export const Board = () => {
     <div className="">
       게시판
       <div className={`${isMobile ? 'bottom-24' : 'bottom-36'} absolute right-10`}>
-        <BoardButton color="#9470DC" onClick={onClickHandler} />
+        <BoardRegisterButton color="#9470DC" onClick={onClickHandler} />
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import { useDeviceLayout } from '../../hooks/useDeviceLayout';
+import { ConfirmSvg } from '../../asset/svg';
 
 interface IProps {
   type: 'text' | 'email' | 'password' | 'date' | 'datetime-local';
@@ -11,6 +12,8 @@ interface IProps {
   borderColor?: 'gray' | 'purple';
   optional?: boolean;
   ref?: React.RefObject<HTMLInputElement>;
+  isConfirm?: boolean;
+  onClick?: (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
   children?: React.ReactNode;
 }
 
@@ -19,15 +22,18 @@ export const Input = (props: IProps) => {
     type,
     value,
     onChange,
-    className,
     name,
     placeholder = '',
     disabled,
     borderColor,
     optional = false,
     ref,
+    className,
+    isConfirm,
+    onClick,
     children,
   } = props;
+
   const { isMobile } = useDeviceLayout();
 
   const border_color = () => {
@@ -42,15 +48,18 @@ export const Input = (props: IProps) => {
   };
 
   return (
-    <input
-      ref={ref}
-      name={name}
-      className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${border_color()} ${className} w-full`}
-      type={type}
-      value={value}
-      onChange={onChange}
-      placeholder={`${optional ? '[선택] ' : ''}${placeholder}`}
-      disabled={disabled}
-    />
+    <div className="relative flex items-center">
+      <input
+        ref={ref}
+        name={name}
+        className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${border_color()} ${isConfirm ? 'pr-10' : ''} ${className} w-full`}
+        type={type}
+        value={value}
+        onChange={onChange}
+        placeholder={`${optional ? '[선택] ' : ''}${placeholder}`}
+        disabled={disabled}
+      />
+      {isConfirm && <ConfirmSvg className="absolute right-2" color="#989898" onClick={onClick} />}
+    </div>
   );
 };
