@@ -14,9 +14,9 @@ export const Board = () => {
   };
 
   return (
-    <div className="">
+    <div>
       게시판
-      <div className={`${isMobile ? 'bottom-24' : 'bottom-36'} absolute right-10`}>
+      <div className={`${isMobile ? 'bottom-24' : 'bottom-36'} absolute right-4`}>
         <BoardRegisterButton color="#9470DC" onClick={onClickHandler} />
       </div>
     </div>
