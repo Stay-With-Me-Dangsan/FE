@@ -12,8 +12,7 @@ export const MapSearch = () => {
   );
 
   return (
-    <div
-      className={`${isMobile ? 'h-[120px] px-[28px] py-[10px]' : 'h-[190px] px-[40px] py-[28px]'} flex flex-col gap-2`}>
+    <div className={`${isMobile ? 'h-28' : 'h-36'} flex flex-col gap-2`}>
       <Input
         type="text"
         value=""
@@ -22,7 +21,7 @@ export const MapSearch = () => {
         placeholder="주소 검색으로 쉐어하우스를 알아봐요!"
       />
 
-      <div className="h-1/2 flex items-center gap-4">
+      <div className="flex items-center gap-4">
         {selectedFilter.map((el) => (
           <button
             key={el.id}
