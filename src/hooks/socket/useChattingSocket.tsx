@@ -10,9 +10,6 @@ export const useChattingSocket = () => {
       return;
     }
 
-    console.log('1.',process.env.REACT_APP_SOCKET_URL);
-    console.log('2.',process.env.REACT_APP_API_PORT);
-
     const socketInstance = new WebSocket(
         `${process.env.REACT_APP_SOCKET_URL}:${process.env.REACT_APP_API_PORT}/ws/chat?roomId=${roomId}`,
     );
