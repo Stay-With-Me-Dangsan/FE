@@ -14,6 +14,9 @@ export const useChattingSocket = () => {
         `${process.env.REACT_APP_SOCKET_URL}:${process.env.REACT_APP_API_PORT}/ws/chat?roomId=${roomId}`,
     );
 
+    console.log('1.',process.env.REACT_APP_SOCKET_URL);
+    console.log('2.',process.env.REACT_APP_API_PORT);
+
     socketInstance.onopen = () => {
       console.log('web socket 연결 완료');
     };
