@@ -1,9 +1,8 @@
-import { io, Socket } from 'socket.io-client';
 import { useEffect, useState } from 'react';
 
 export const useChattingSocket = () => {
   const [roomId, setRoomId] = useState<string | null>(null);
-  const [socket, setSocket] = useState<Socket | null>(null);
+  const [socket, setSocket] = useState<WebSocket | null>(null);
 
   useEffect(() => {
     if (!roomId) {
@@ -11,18 +10,21 @@ export const useChattingSocket = () => {
       return;
     }
 
-    const socketInstance = io(
-      `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/ws/chat?roomId=${roomId}`,
+    const socketInstance = new WebSocket(
+        `${process.env.REACT_APP_SOCKET_URL}:${process.env.REACT_APP_API_PORT}/ws/chat?roomId=${roomId}`,
     );
+
+    socketInstance.onopen = () => {
+      console.log('web socket 연결 완료');
+    };
 
     setSocket(socketInstance);
 
     return () => {
-      socketInstance.disconnect();
+      console.log('web socket 연결 종료');
+      socketInstance.close();
     };
   }, [roomId]);
-
-  console.log('socket', socket);
 
   return { socket, setRoomId };
 };
