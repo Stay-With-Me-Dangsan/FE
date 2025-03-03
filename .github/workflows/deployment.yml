@@ -21,11 +21,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build React App
-        run: |
-          export CI=false
-          npm run build
-
       - name: Deploy .env file to EC2
         run: |
           echo "Uploading .env file to EC2"
@@ -38,6 +33,11 @@ jobs:
           ssh-keyscan -H ${{ secrets.EC2_PUBLIC_IP }} >> $HOME/.ssh/known_hosts
           scp -i $HOME/.ssh/stay-with-me-dangsan.pem .env ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/var/www/html/.env
           
+      - name: Build React App
+        run: |
+          export CI=false
+          npm run build
+
       - name: Deploy to EC2
         run: |
           echo "EC2 Public IP: ${{ secrets.EC2_PUBLIC_IP }}"
