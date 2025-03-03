@@ -25,6 +25,12 @@ jobs:
         run: |
           export CI=false
           npm run build
+
+      - name: Deploy .env file to EC2
+        run: |
+          echo "Uploading .env file to EC2"
+          echo "${{ secrets.ENV_FILE_CONTENT }}" > .env
+          scp -i $HOME/.ssh/stay-with-me-dangsan.pem .env ec2-user@${{ secrets.EC2_PUBLIC_IP }}:/var/www/html/.env
           
       - name: Deploy to EC2
         run: |
