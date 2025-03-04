@@ -5,13 +5,13 @@ interface IProps {
   type: 'text' | 'email' | 'password' | 'date' | 'datetime-local';
   value: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  className?: string;
   name?: string;
   placeholder?: string;
   disabled?: boolean;
   borderColor?: 'gray' | 'purple';
   optional?: boolean;
   ref?: React.RefObject<HTMLInputElement>;
+  className?: string;
   isConfirm?: boolean;
   onClick?: (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
   children?: React.ReactNode;
@@ -52,7 +52,7 @@ export const Input = (props: IProps) => {
       <input
         ref={ref}
         name={name}
-        className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${border_color()} ${isConfirm ? 'pr-10' : ''} ${className} w-full`}
+        className={` w-full ${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${border_color()} ${isConfirm ? 'pr-10' : ''} ${className}`}
         type={type}
         value={value}
         onChange={onChange}

@@ -5,11 +5,12 @@ interface IProps {
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   color?: 'gray' | 'purple';
   disabled?: boolean;
+  className?: string;
   children?: React.ReactNode;
 }
 
 export const Button = (props: IProps) => {
-  const { text, onClick, color = 'gray', disabled, children } = props;
+  const { text, onClick, color = 'gray', disabled, className, children } = props;
 
   const { isMobile } = useDeviceLayout();
 
@@ -26,7 +27,7 @@ export const Button = (props: IProps) => {
 
   return (
     <button
-      className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${style()} w-full`}
+      className={`w-full ${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${style()} ${className} ${children}`}
       onClick={(event) => onClick(event)}
       disabled={disabled}
       name={text}>

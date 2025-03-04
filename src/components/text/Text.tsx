@@ -1,15 +1,18 @@
-import { useCallback } from 'react';
+import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 
 interface IProps {
   value: string;
-  color: 'gray' | 'black';
+  color: 'gray' | 'black' | 'red';
   id?: string;
   size?: 'small' | 'middle' | 'large';
   onClick?: (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => void;
+  className?: string;
 }
 
 export const Text = (props: IProps) => {
-  const { value, color, id, size = 'middle', onClick } = props;
+  const { value, color, id, size = 'middle', onClick, className } = props;
+
+  const { isMobile } = useDeviceLayout();
 
   const textColor = () => {
     switch (color) {
@@ -17,6 +20,8 @@ export const Text = (props: IProps) => {
         return 'text-[#989898]';
       case 'black':
         return 'text-black';
+      case 'red':
+        return 'text-red-400';
       default:
         return 'text-black';
     }
@@ -31,13 +36,13 @@ export const Text = (props: IProps) => {
       case 'large':
         return 'text-xl';
       default:
-        return 'text';
+        return isMobile ? 'text-sm' : 'text-base';
     }
   };
 
   return (
     <p
-      className={`${textColor()} ${textSize()} ${onClick && 'cursor-pointer'} font-normal whitespace-nowrap`}
+      className={`${textColor()} ${textSize()} ${onClick && 'cursor-pointer'} ${className}`}
       id={id}
       onClick={(event) => onClick && onClick(event)}>
       {value}
