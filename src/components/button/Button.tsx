@@ -6,28 +6,21 @@ interface IProps {
   color?: 'gray' | 'purple';
   disabled?: boolean;
   className?: string;
-  children?: React.ReactNode;
 }
 
+const buttonColor = {
+  gray: 'bg-gray-300 text-white hover:bg-gray-400',
+  purple: 'bg-[#9470DC] text-white hover:bg-[#9470DC]',
+};
+
 export const Button = (props: IProps) => {
-  const { text, onClick, color = 'gray', disabled, className, children } = props;
+  const { text, onClick, color = 'gray', disabled, className } = props;
 
   const { isMobile } = useDeviceLayout();
 
-  const style = () => {
-    switch (color) {
-      case 'gray':
-        return 'bg-gray-300 text-white hover:bg-gray-400';
-      case 'purple':
-        return 'bg-[#9470DC] text-white hover:bg-[#9470DC]';
-      default:
-        return 'bg-gray-300 text-white';
-    }
-  };
-
   return (
     <button
-      className={`w-full ${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${style()} ${className} ${children}`}
+      className={`w-full ${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${buttonColor[color]} ${className}`}
       onClick={(event) => onClick(event)}
       disabled={disabled}
       name={text}>

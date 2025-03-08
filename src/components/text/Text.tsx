@@ -4,47 +4,34 @@ interface IProps {
   value: string;
   color: 'gray' | 'black' | 'red';
   id?: string;
-  size?: 'small' | 'middle' | 'large';
+  size?: 'small' | 'base' | 'large';
   onClick?: (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => void;
   className?: string;
 }
 
+const textColor = {
+  gray: 'text-[#989898]',
+  black: 'text-black',
+  red: 'text-red-400',
+};
+
+const textSize = {
+  small: 'text-sm',
+  base: 'text-base',
+  large: 'text-xl',
+};
+
 export const Text = (props: IProps) => {
-  const { value, color, id, size = 'middle', onClick, className } = props;
+  const { value, color, id, size = 'base', onClick, className } = props;
 
   const { isMobile } = useDeviceLayout();
 
-  const textColor = () => {
-    switch (color) {
-      case 'gray':
-        return 'text-[#989898]';
-      case 'black':
-        return 'text-black';
-      case 'red':
-        return 'text-red-400';
-      default:
-        return 'text-black';
-    }
-  };
-
-  const textSize = () => {
-    switch (size) {
-      case 'small':
-        return 'text-sm';
-      case 'middle':
-        return 'text-base';
-      case 'large':
-        return 'text-xl';
-      default:
-        return isMobile ? 'text-sm' : 'text-base';
-    }
-  };
-
   return (
     <p
-      className={`${textColor()} ${textSize()} ${onClick && 'cursor-pointer'} ${className}`}
+      className={`${textColor[color]} ${textSize[size]} ${onClick && 'cursor-pointer'} ${className}`}
       id={id}
-      onClick={(event) => onClick && onClick(event)}>
+      onClick={(event) => onClick && onClick(event)}
+      style={{ wordBreak: 'break-word' }}>
       {value}
     </p>
   );
