@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useAtomValue } from 'jotai';
 import { Input } from '../../../components/input';
 import { Button } from '../../../components/button';
 import logo from '../../../asset/images/sign-in-logo.png';
@@ -15,7 +16,6 @@ import { ImageTypeEnum } from '../../../constant/enum';
 
 export const SignIn = () => {
   const navigate = useNavigate();
-
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -24,9 +24,13 @@ export const SignIn = () => {
   const onSignInHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
 
-    // onSignInMutation.mutate({ email, password });
-    navigate('/home');
+    onSignInMutation.mutate({ email, password });
   };
+
+  const naverState = Math.random().toString(36).substring(2, 13);
+  const KAKAO_AUTH_URL = `${process.env.KAKAO_REDIRECT_URL}`;
+  const NAVER_AUTH_URL = `${process.env.NAVER_REDIRECT_URL}&state=${naverState}`;
+  const GOOGLE_AUTH_URL = `${process.env.GOOGLE_REDIRECT_URL}`;
 
   const onClickHandler = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
     e.stopPropagation();
@@ -35,13 +39,13 @@ export const SignIn = () => {
 
     switch (id) {
       case 'find-id':
-        navigate('/auth/find-email');
+        navigate('/auth/findEmail');
         break;
       case 'find-password':
-        navigate('/auth/find-password');
+        navigate('/auth/findPassword');
         break;
       case 'sign-up':
-        navigate('/auth/sign-up');
+        navigate('/auth/signUp');
         break;
       default:
         break;
@@ -73,9 +77,11 @@ export const SignIn = () => {
 
         <Margin direction="bottom" size={14} />
 
-        <div className="w-full flex justify-center">
+        <div className="w-full flex justify-center gap-20">
           <Image src={kakao} type={ImageTypeEnum.SMALL} alt="kakao" />
+
           <Image src={naver} type={ImageTypeEnum.SMALL} alt="naver" />
+
           <Image src={google} type={ImageTypeEnum.SMALL} alt="google" />
         </div>
 

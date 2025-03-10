@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { IResConfig } from '../../types/res.config';
 import { getDefaultStore } from 'jotai';
-import { jwtStore } from '../../store';
+import { jwtAtom, jwtStore } from '../../store';
 
 interface IGetReq<D> {
   url: string;
@@ -46,7 +46,7 @@ export class AxiosConfig {
     this._axiosInstance.interceptors.request.use(
       (config) => {
         const store = getDefaultStore();
-        const token = store.get(jwtStore.getJwt);
+        const token = store.get(jwtAtom);
 
         if (token && config.headers) {
           config.headers.set('Authorization', `Bearer ${token}`);
@@ -77,14 +77,14 @@ export class AxiosConfig {
         } else if (error.response?.status === 401) {
           try {
             const refreshResponse = await axios.post(
-              `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/auth/refresh`,
+              `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/user/refresh`,
               {},
               { withCredentials: true },
             );
 
             const newAccessToken = refreshResponse.data.data.accessToken;
 
-            store.set(jwtStore.getJwt, newAccessToken);
+            store.set(jwtAtom, newAccessToken);
 
             originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
             return this._axiosInstance(originalRequest);

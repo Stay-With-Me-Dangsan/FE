@@ -4,7 +4,7 @@ import { Layout } from '../common/layout';
 import { Home } from '../pages/home';
 import { Map, MapDetail } from '../pages/map';
 import { Board, BoardDetail } from '../pages/board';
-import { MyPage } from '../pages/my-page';
+import { MyPage, MyPageNL, MyPageEdit } from '../pages/my-page';
 
 export const Router = () => {
   // const _BASE_URL = process.env.PUBLIC_URL;
@@ -14,9 +14,9 @@ export const Router = () => {
       <Routes>
         <Route path="/" element={<Navigate to={`/auth`} />} />
         <Route path="/auth" element={<SignIn />} />
-        <Route path="/auth/sign-up" element={<SignUp />} />
-        <Route path="/auth/find-email" element={<FindEmail />} />
-        <Route path="/auth/find-password" element={<FindPassword />} />
+        <Route path="/auth/signUp" element={<SignUp />} />
+        <Route path="/auth/findEmail" element={<FindEmail />} />
+        <Route path="/auth/findPassword" element={<FindPassword />} />
 
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
@@ -26,6 +26,8 @@ export const Router = () => {
           <Route path="/board/detail" element={<BoardDetail />} />
           <Route path="/board/detail/:id" element={<BoardDetail />} />
           <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypageNl" element={<MyPageNL />} />
+          <Route path="/mypage/edit" element={<MyPageEdit />} />
         </Route>
       </Routes>
     </BrowserRouter>
