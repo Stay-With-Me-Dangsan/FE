@@ -12,12 +12,12 @@ export const MapSearch = () => {
   );
 
   return (
-    <div className={`${isMobile ? 'h-28' : 'h-36'} flex flex-col gap-2`}>
+    <div className={`${isMobile ? 'h-28' : 'h-32'} flex flex-col justify-center gap-2`}>
       <Input
         type="text"
         value=""
         onChange={(e) => {}}
-        borderColor="purple"
+        color="purple"
         placeholder="주소 검색으로 쉐어하우스를 알아봐요!"
       />
 

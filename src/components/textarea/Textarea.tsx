@@ -8,37 +8,21 @@ interface IProps {
   name?: string;
   placeholder?: string;
   disabled?: boolean;
-  borderColor?: 'gray' | 'green';
+  color?: 'gray' | 'green';
   optional?: boolean;
   children?: React.ReactNode;
 }
 
+const borderColor = {
+  gray: 'border border-gray-300',
+  green: 'border border-green-400',
+};
+
 export const Textarea = (props: IProps) => {
-  const {
-    value,
-    onChange,
-    className,
-    name,
-    placeholder = '',
-    disabled,
-    borderColor,
-    optional = false,
-    children,
-  } = props;
+  const { value, onChange, className, name, placeholder = '', disabled, color = 'gray', optional = false } = props;
 
   const { isMobile } = useDeviceLayout();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const border_color = () => {
-    switch (borderColor) {
-      case 'gray':
-        return 'border border-gray-300';
-      case 'green':
-        return 'border border-green-400';
-      default:
-        return 'border border-gray-300';
-    }
-  };
 
   const handleInput = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     if (textareaRef.current) {
@@ -59,7 +43,7 @@ export const Textarea = (props: IProps) => {
     <textarea
       ref={textareaRef}
       name={name}
-      className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${border_color()} ${className} w-full max-h-[60vh] rounded-2xl resize-none`}
+      className={`${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${borderColor[color]} ${className} w-full max-h-[60vh] rounded-2xl resize-none`}
       value={value}
       onChange={handleInput}
       placeholder={`${optional ? '[선택] ' : ''}${placeholder}`}

@@ -8,14 +8,17 @@ interface IProps {
   name?: string;
   placeholder?: string;
   disabled?: boolean;
-  borderColor?: 'gray' | 'purple';
+  color?: 'gray' | 'purple';
   optional?: boolean;
-  ref?: React.RefObject<HTMLInputElement>;
   className?: string;
   isConfirm?: boolean;
   onClick?: (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
-  children?: React.ReactNode;
 }
+
+const borderColor = {
+  gray: 'border border-gray-300',
+  purple: 'border border-[#9470DC]',
+};
 
 export const Input = (props: IProps) => {
   const {
@@ -25,34 +28,20 @@ export const Input = (props: IProps) => {
     name,
     placeholder = '',
     disabled,
-    borderColor,
+    color = 'gray',
     optional = false,
-    ref,
     className,
     isConfirm,
     onClick,
-    children,
   } = props;
 
   const { isMobile } = useDeviceLayout();
 
-  const border_color = () => {
-    switch (borderColor) {
-      case 'gray':
-        return 'border border-gray-300';
-      case 'purple':
-        return 'border border-[#9470DC]';
-      default:
-        return 'border border-gray-300';
-    }
-  };
-
   return (
     <div className="relative flex items-center">
       <input
-        ref={ref}
         name={name}
-        className={` w-full ${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${border_color()} ${isConfirm ? 'pr-10' : ''} ${className}`}
+        className={` w-full ${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${borderColor[color]} ${isConfirm ? 'pr-10' : ''} ${className}`}
         type={type}
         value={value}
         onChange={onChange}
