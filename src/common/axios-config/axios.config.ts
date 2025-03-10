@@ -38,7 +38,7 @@ export class AxiosConfig {
 
   constructor() {
     this._axiosInstance = axios.create({
-      baseURL: `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}`,
+      baseURL: `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}`,
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
     });
