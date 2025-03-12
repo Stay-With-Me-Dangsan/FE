@@ -60,7 +60,7 @@ class AuthApi extends AxiosConfig {
   async postFindPw(email: string) {
     return await this.post({
       url: `${this._baseURL}/findPw`,
-      data: email,
+      data: { email },
     });
   }
 
@@ -88,6 +88,17 @@ class AuthApi extends AxiosConfig {
     return await this.patch<IUpdatePwRes, IPatchPwDto>({
       url: `${this._baseURL}/updatePw`,
       data: dto,
+    });
+  }
+
+  async postLogOut() {
+    return await this.post({
+      url: `${this._baseURL}/logout`,
+      data: null,
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // ✅ JWT 추가
+        'Content-Type': 'application/json',
+      },
     });
   }
 }

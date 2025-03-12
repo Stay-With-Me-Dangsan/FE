@@ -14,7 +14,7 @@ export const MyPageNL = () => {
           <p className="text-3xl text-purple-300 font-bold ">마이페이지 </p>
         </div>
 
-        <div className="w-[960px] h-2 bg-[#f0f0f0] mt-2" />
+        <div className="w-full h-2 bg-[#f0f0f0] mt-2" />
         <div className="w-full px-10">
           <div className="w-full h-[208px] flex justify-between items-center py-5">
             <div className="flex items-center  h-[116px] space-x-4">

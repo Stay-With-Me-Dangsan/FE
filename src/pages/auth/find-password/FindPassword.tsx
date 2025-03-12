@@ -5,23 +5,34 @@ import { Link, useNavigate } from 'react-router-dom';
 import { AuthButton } from '../../../components/button';
 import logo from '../../../asset/images/logo.png';
 import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
+import useAuthMutation from '../../../hooks/auth/mutaion/useAuthMutation';
 
 export const FindPassword = () => {
   const [email, setEmail] = useState('');
-  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email); // 이메일 유효성 체크 상태
-  const [errorMessage, setErrorMessage] = useState<string>(''); // 오류 메시지를 저장할 상태
+  const [errorMessage, setErrorMessage] = useState<string>('');
+  const isValidEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const navigate = useNavigate();
   const { isMobile } = useDeviceLayout();
+  const { onFindPwMutation } = useAuthMutation();
 
   const onFindPw = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
+
     if (!isValidEmail) {
       setErrorMessage('올바른 이메일을 입력해주세요.');
       return;
     }
-    setErrorMessage('');
-    alert('클릭!');
+    onFindPwMutation.mutate(email, {
+      onSuccess: (res) => {
+        alert('임시 비밀번호가 이메일로 전송되었습니다!');
+        navigate('/');
+      },
+      onError: (err) => {
+        setErrorMessage('비밀번호 찾기 요청이 실패했습니다. 다시 시도해주세요.');
+      },
+    });
   };
+
   return (
     <AuthLayout>
       <div className="relative w-full h-full px-[40px] py-[50px] flex flex-col items-center overflow-y-auto">
@@ -55,7 +66,7 @@ export const FindPassword = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="가입시 사용한 이메일 아이디"
-                isValid={isValidEmail}
+                isValid={/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)}
               />
               {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
             </div>

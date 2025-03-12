@@ -13,18 +13,36 @@ import { AuthLayout } from '../_components';
 import { Image } from '../../../components/image';
 import { Margin } from '../../../components/margin';
 import { ImageTypeEnum } from '../../../constant/enum';
+import { useAtom } from 'jotai';
+import { jwtStore, userIdStore } from '../../../store/auth';
 
 export const SignIn = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const [, setUserId] = useAtom(userIdStore);
+  const [, setJwt] = useAtom(jwtStore);
   const { onSignInMutation } = useAuthMutation();
 
   const onSignInHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
 
-    onSignInMutation.mutate({ email, password });
+    onSignInMutation.mutate(
+      { email, password },
+      {
+        onSuccess: (res) => {
+          const data = res.data?.data?.user;
+
+          setJwt(data.accessToken);
+          setUserId(data.userId);
+          navigate('/home');
+        },
+        onError: (err) => {
+          console.error(err);
+          alert('로그인 실패입니다');
+        },
+      },
+    );
   };
 
   const naverState = Math.random().toString(36).substring(2, 13);

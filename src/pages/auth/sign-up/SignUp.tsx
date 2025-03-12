@@ -39,9 +39,15 @@ export const SignUp: React.FC = () => {
       setErrorMessage('이메일을 입력해 주세요.');
       return;
     }
-    (async () => {
-      await sendEmailMutation.mutate(email);
-    })();
+
+    sendEmailMutation.mutate(email, {
+      onSuccess: (res) => {
+        alert('인증번호가 이메일로 전송되었습니다.');
+      },
+      onError: (err) => {
+        console.error(err);
+      },
+    });
   };
 
   // 이메일 인증 코드 확인
@@ -58,10 +64,24 @@ export const SignUp: React.FC = () => {
       return;
     }
 
-    (async () => {
-      await verifyCodeMutation.mutate({ email, code });
-      setIsVerified(true);
-    })();
+    verifyCodeMutation.mutate(
+      { email, code },
+      {
+        onSuccess: (res) => {
+          const isValid = res.data?.data;
+          if (isValid) {
+            alert('이메일 인증이 완료되었습니다.');
+          } else {
+            alert('인증 코드가 올바르지 않습니다.');
+          }
+        },
+        onError: (err) => {
+          console.error(err);
+          alert('인증에 실패했습니다.');
+        },
+      },
+    );
+    setIsVerified(true);
   };
 
   /** 회원가입 요청 */

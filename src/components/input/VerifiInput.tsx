@@ -15,7 +15,8 @@ interface VerifiInputProps {
 export const VerifiInput = forwardRef<HTMLInputElement, VerifiInputProps>(
   ({ value, onChange, onClick, isVerified, isValid, placeholder, type, buttonText, ...props }, ref) => {
     const { isMobile } = useDeviceLayout();
-    const defaultButtonText = type === 'email' ? (isVerified ? '인증완료' : '인증하기') : '확인';
+
+    const defaultButtonText = isVerified ? '인증완료' : '인증하기';
 
     return (
       <div className="w-full relative">
@@ -42,6 +43,20 @@ export const VerifiInput = forwardRef<HTMLInputElement, VerifiInputProps>(
             disabled={!isValid}>
             {buttonText || defaultButtonText}
           </button>
+
+          {type === 'code' && (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                if (onClick) onClick(e);
+              }}
+              className={`${isMobile ? 'w-12 h-8 rounded-md' : 'w-24 h-12'} flex justify-center items-center text-sm p-0 rounded-md ${
+                isValid ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }`}
+              disabled={!isValid}>
+              확인
+            </button>
+          )}
         </div>
       </div>
     );

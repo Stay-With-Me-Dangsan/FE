@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 import { IResConfig } from '../../types/res.config';
-import { getDefaultStore } from 'jotai';
-import { jwtAtom, jwtStore } from '../../store';
+import { getDefaultStore, useSetAtom } from 'jotai';
+import { jwtAtom, clearJwtAtom, clearUserAtom } from '../../store';
 
 interface IGetReq<D> {
   url: string;
@@ -74,7 +74,9 @@ export class AxiosConfig {
         } else if (error.response?.status === 400) {
           const { message } = error.response.data;
           alert(message);
-        } else if (error.response?.status === 401) {
+        } else if (error.response?.status === 401 && !originalRequest._retry) {
+          originalRequest._retry = true;
+
           try {
             const refreshResponse = await axios.post(
               `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/user/refresh`,
@@ -85,12 +87,18 @@ export class AxiosConfig {
             const newAccessToken = refreshResponse.data.data.accessToken;
 
             store.set(jwtAtom, newAccessToken);
+            localStorage.setItem('accessToken', newAccessToken);
 
             originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
             return this._axiosInstance(originalRequest);
           } catch (refreshError) {
             console.error('Refresh token 요청 실패:', refreshError);
           }
+
+          localStorage.removeItem('accessToken');
+          store.set(clearJwtAtom);
+          store.set(clearUserAtom);
+          window.location.href = '/';
         }
 
         return Promise.reject(error);

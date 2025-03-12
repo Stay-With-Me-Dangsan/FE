@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
-import { useAtom } from 'jotai';
-import { userIdAtom } from '../../store/auth/authAtom';
+import { useAtom, useSetAtom } from 'jotai';
+import { userIdAtom, clearJwtAtom, clearUserAtom } from '../../store/auth/authAtom';
 import { useEffect, useState } from 'react';
 import { AuthButton } from '../../components/button';
 import person from '../../asset/images/person.png';
@@ -15,23 +15,28 @@ export const MyPageEdit = () => {
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
+  const setClearJwt = useSetAtom(clearJwtAtom);
+  const setClearUser = useSetAtom(clearUserAtom);
+
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
 
-  const { getMyPageMutation, updateEmailMutation, updatePwMutation } = useAuthMutation();
+  const { getMyPageMutation, updateEmailMutation, updatePwMutation, logOutMutation } = useAuthMutation();
 
   useEffect(() => {
     if (!userId) return;
 
     getMyPageMutation.mutate(userId, {
       onSuccess: (data) => {
+        const user = data.data.data.user;
         setUserInfo({
-          email: data.data.data.result.email,
-          password: data.data.data.result.password,
-          nickname: data.data.data.result.nickname,
+          email: user.email,
+          password: user.password,
+          nickname: user.nickname,
         });
-        setEmail(data.data.data.result.email);
-        setPassword(data.data.data.result.password);
+        setEmail(user.email);
+        setPassword(user.password);
       },
     });
   }, [userId]);
@@ -47,6 +52,11 @@ export const MyPageEdit = () => {
         onSuccess: () => {
           setUserInfo((prev) => (prev ? { ...prev, email } : null));
           setIsEditing(false);
+          alert('마이페이지지 변경 성공공');
+        },
+        onError: (err) => {
+          console.error(err);
+          alert('마이페이지지 변경에 실패했습니다.');
         },
       },
     );
@@ -62,6 +72,11 @@ export const MyPageEdit = () => {
         onSuccess: () => {
           setUserInfo((prev) => (prev ? { ...prev, password } : null));
           setIsEditing(false);
+          alert('비밀번호 변경 성공');
+        },
+        onError: (err) => {
+          console.error(err);
+          alert('비밀번호 변경에 실패했습니다.');
         },
       },
     );
@@ -69,8 +84,18 @@ export const MyPageEdit = () => {
 
   const logOutHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.stopPropagation();
-
-    navigate('/home');
+    logOutMutation.mutate(undefined, {
+      onSuccess: () => {
+        setClearJwt();
+        setClearUser();
+        alert('로그아웃 되셨습니다.');
+        navigate('/');
+      },
+      onError: (err) => {
+        console.error(err);
+        alert('로그아웃 실패입니다.');
+      },
+    });
   };
 
   return (

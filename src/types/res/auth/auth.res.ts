@@ -1,14 +1,12 @@
 import { IGetUser } from '../../interface/auth';
 
 export interface ISignInRes {
-  result: {
+  user: {
     accessToken: string;
     refreshToken: string;
-    user: {
-      userId: number;
-      nickname: string;
-      email: string;
-    };
+    userId: number;
+    nickname: string;
+    email: string;
   };
 }
 
@@ -19,7 +17,7 @@ export interface ISignUpRes {
 }
 
 export interface IgetMypageRes {
-  result: {
+  user: {
     nickname: string;
     email: string;
     password: string;
@@ -56,9 +54,8 @@ export interface IfindEmailRes {
   success: boolean;
   message: string;
   user: {
-    id: number;
-    nickname: string;
     email: string;
+    createdDate: Date;
   };
 }
 

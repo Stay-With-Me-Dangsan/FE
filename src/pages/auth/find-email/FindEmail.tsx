@@ -15,17 +15,16 @@ export const FindEmail = () => {
   const isValidBirth = /^\d{6}$/.test(birth); // 생년월일 유효성 체크 상태
   const isValidNickname = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}\[\]:;"'<>,.?/]).{3,12}$/.test(nickname); // 닉네임 유효성 체크 상태
   const [email, setEmail] = useState<string | null>(null);
-  const [expiredDt, setExpiredDt] = useState<string | null>(null);
+  const [createdDate, setCreatedDate] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const { isMobile } = useDeviceLayout();
   const { onFindEmailMutation } = useAuthMutation();
 
-  const handleFindEmail = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.preventDefault();
+  const handleFindEmail = (e?: React.MouseEvent<HTMLButtonElement>) => {
+    e?.preventDefault();
 
     if (!isValidBirth || !isValidNickname) {
       setErrorMessage('모든 필드를 입력해 주세요.');
-      alert('no!!');
       return;
     }
 
@@ -33,7 +32,24 @@ export const FindEmail = () => {
     setEmail(null);
     setIsVerified(false);
 
-    onFindEmailMutation.mutate({ nickname, birth });
+    onFindEmailMutation.mutate(
+      { nickname, birth },
+      {
+        onSuccess: (res) => {
+          const user = res.data.data.user;
+          if (user.email && user.createdDate) {
+            setEmail(user.email);
+            setCreatedDate(new Date(user.createdDate).toLocaleDateString());
+            setIsVerified(true);
+          } else {
+            setErrorMessage('입력한 정보와 일치하는 아이디가 없습니다.');
+          }
+        },
+        onError: () => {
+          setErrorMessage('이메일 찾기 실패');
+        },
+      },
+    );
   };
 
   return (
@@ -71,7 +87,7 @@ export const FindEmail = () => {
                   </p>
                   <div className={`${isMobile ? 'grid' : 'flex'}`}>
                     <p className=" mr-2">가입된 계정</p>
-                    <span className="text-gray-400">{expiredDt} 가입</span>
+                    <span className="text-gray-400">{createdDate} 가입</span>
                   </div>
                   <div className={`${isMobile ? 'grid' : 'flex'}`}>
                     <p className=" mr-2 text-gray-400">이메일</p>
@@ -86,7 +102,7 @@ export const FindEmail = () => {
                     value={nickname}
                     onChange={(e) => setNickname(e.target.value)}
                     placeholder="닉네임"
-                    isValid={nickname ? isValidNickname : undefined} // 값이 있으면 유효성 검사 적용
+                    isValid={nickname ? isValidNickname : undefined}
                     errorMessage={
                       nickname && !isValidNickname ? '닉네임은 3~12자의 영문, 숫자, 특수문자가 포함되야 합니다.' : ''
                     }
@@ -97,7 +113,7 @@ export const FindEmail = () => {
                       type="birth"
                       value={birth}
                       onChange={(e) => setBirth(e.target.value)}
-                      onClick={(e) => handleFindEmail}
+                      onClick={(e) => handleFindEmail(e)}
                       isVerified={isVerified}
                       isValid={isValidBirth}
                       placeholder="생년월일"

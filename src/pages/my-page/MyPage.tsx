@@ -23,8 +23,13 @@ export const MyPage = () => {
 
     getMyPageMutation.mutate(userId, {
       onSuccess: (data) => {
-        setUserInfo({ nickname: data.data.data.result.nickname, email: data.data.data.result.email });
-        setNickname(data.data.data.result.nickname);
+        const user = data.data.data.user;
+        // const user = res.data.data.user || res.data.user;
+        setUserInfo({ nickname: user.nickname, email: user.email });
+        setNickname(user.nickname);
+      },
+      onError: (error) => {
+        console.error('마이페이지 데이터 불러오기 실패:', error);
       },
     });
   }, [userId]);
@@ -46,8 +51,12 @@ export const MyPage = () => {
       { userId, nickname },
       {
         onSuccess: () => {
-          setUserInfo((prev) => (prev ? { ...prev, nickname } : null)); // ✅ UI 업데이트
+          setUserInfo((prev) => (prev ? { ...prev, nickname } : null));
           setIsEditing(false);
+        },
+        onError: (error) => {
+          alert('닉네임 변경 실패');
+          console.error('닉네임 변경 실패:', error);
         },
       },
     );
@@ -107,7 +116,6 @@ export const MyPage = () => {
               </div>
             </div>
           </div>
-
           <div className="w-full h-[222px] border-t-[1px] border-[#CDCDCD]">
             <div className="grid pt-[30px] gap-5">
               <div className=" justify-between">
