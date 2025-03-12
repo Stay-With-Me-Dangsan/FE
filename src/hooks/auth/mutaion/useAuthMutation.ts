@@ -15,8 +15,24 @@ import { jwtStore, userIdStore } from '../../../store/auth';
 import authApi from '../../../api-url/auth/auth.api';
 
 export default function useAuthMutation() {
+  const navigate = useNavigate();
+
+  const [, setUserId] = useAtom(userIdStore);
+  const [, setJwt] = useAtom(jwtStore);
+
   const onSignInMutation = useMutation({
     mutationFn: (data: ISignInDto) => AuthApi.postSignIn(data),
+    onSuccess: (res) => {
+      const data = res.data?.data?.user;
+
+      setJwt(data.accessToken);
+      setUserId(data.userId);
+      navigate('/home');
+    },
+    onError: (err) => {
+      console.error(err);
+      alert('로그인 실패입니다');
+    },
   });
 
   const onSignUpMutation = useMutation({
