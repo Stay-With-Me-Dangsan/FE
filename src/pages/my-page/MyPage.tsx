@@ -5,9 +5,11 @@ import person from '../../asset/images/person.png';
 import vector from '../../asset/images/Vector.png';
 import pen from '../../asset/images/pen.png';
 import { Link, useNavigate } from 'react-router-dom';
+import { MypageLayout } from './components';
 import { IPatchUpdateNicknameDto } from '../../types/dto/auth';
 import useAuthMutation from '../../hooks/auth/mutaion/useAuthMutation';
 // import Alert from '../../components/popup';
+import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 
 export const MyPage = () => {
   const [userId] = useAtom(userIdAtom);
@@ -15,7 +17,7 @@ export const MyPage = () => {
   const [nickname, setNickname] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-
+  const { isMobile } = useDeviceLayout();
   const { getMyPageMutation, updateNicknameMutation } = useAuthMutation();
 
   useEffect(() => {
@@ -63,60 +65,60 @@ export const MyPage = () => {
   };
 
   return (
-    <div className="h-full flex justify-center items-center overflow-y-hidden">
-      <div className="w-[20px] h-full bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]" />
-      <div className="relative w-full h-full px-[40px] flex flex-col items-center overflow-y-auto">
-        <div className="w-full h-[100px] flex items-center px-10">
-          <p className="text-3xl text-purple-300 font-bold">마이페이지</p>
-        </div>
+    <>
+      <MypageLayout>
+        <div
+          className={`${isMobile ? '' : ' px-[40px] py-[50px]'} relative w-full h-full flex flex-col items-center overflow-y-auto`}>
+          {/* <div className="relative w-full h-full px-[40px] flex flex-col items-center overflow-y-auto">
+           */}
 
-        <div className="w-full h-2 bg-[#f0f0f0] mt-2" />
-        <div className="w-full px-10">
-          <div className="w-full h-[208px] flex items-center">
-            <div className="w-full flex py-5 gap-2">
-              <div className="flex flex-col justify-center gap-2">
-                <img src={person} alt="person" width={116} />
-              </div>
-              <div className="w-full flex flex-col justify-center gap-2">
-                <div className="flex justify-between items-center w-full">
-                  <div className="flex gap-2 text-2xl font-bold">
-                    {isEditing ? (
-                      <input
-                        type="text"
-                        value={userInfo?.nickname}
-                        onChange={handleNicknameChange}
-                        onBlur={handleBlur}
-                        onKeyDown={(e) => e.key === 'Enter' && saveNickname()}
-                        autoFocus
-                        className="border-b border-gray-500 focus:outline-none"
+          {/* <div className="w-full h-2 bg-[#f0f0f0] mt-2" /> */}
+          <div className="w-full px-10">
+            <div className="w-full h-[208px] flex items-center">
+              <div className="w-full flex py-5 gap-2">
+                <div className="flex flex-col justify-center gap-2">
+                  <img src={person} alt="person" width={116} />
+                </div>
+                <div className="w-full flex flex-col justify-center gap-2">
+                  <div className="flex justify-between items-center w-full">
+                    <div className="flex gap-2 text-2xl font-bold">
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={userInfo?.nickname}
+                          onChange={handleNicknameChange}
+                          onBlur={handleBlur}
+                          onKeyDown={(e) => e.key === 'Enter' && saveNickname()}
+                          autoFocus
+                          className="border-b border-gray-500 focus:outline-none"
+                        />
+                      ) : (
+                        <p onClick={() => setIsEditing(true)} className="cursor-pointer">
+                          {userInfo?.nickname}
+                        </p>
+                      )}
+                      <img
+                        src={pen}
+                        alt="pen"
+                        width={26}
+                        height={24}
+                        onClick={() => setIsEditing(true)}
+                        className="cursor-pointer"
                       />
-                    ) : (
-                      <p onClick={() => setIsEditing(true)} className="cursor-pointer">
-                        {userInfo?.nickname}
-                      </p>
-                    )}
-                    <img
-                      src={pen}
-                      alt="pen"
-                      width={26}
-                      height={24}
-                      onClick={() => setIsEditing(true)}
-                      className="cursor-pointer"
-                    />
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center w-full">
+                    <p>{userInfo?.email}</p>
                   </div>
                 </div>
-                <div className="flex justify-between items-center w-full">
-                  <p>{userInfo?.email}</p>
+                <div className="flex flex-col justify-center">
+                  <button onClick={() => navigate('/mypage/edit')}>
+                    <img src={vector} alt="vector" width={12} height={28} />
+                  </button>
                 </div>
               </div>
-              <div className="flex flex-col justify-center">
-                <button onClick={() => navigate('/mypage/edit')}>
-                  <img src={vector} alt="vector" width={12} height={28} />
-                </button>
-              </div>
             </div>
-          </div>
-          <div className="w-full h-[222px] border-t-[1px] border-[#CDCDCD]">
+            {/* <div className="w-full h-[222px] border-t-[1px] border-[#CDCDCD]">
             <div className="grid pt-[30px] gap-5">
               <div className=" justify-between">
                 <p className="text-purple-400 font-bold ">스테이 윗 미</p>
@@ -157,10 +159,10 @@ export const MyPage = () => {
                 </div>
               </div>
             </div>
+          </div> */}
           </div>
         </div>
-      </div>
-      <div className="w-[20px] h-full bg-gradient-to-l from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]" />
-    </div>
+      </MypageLayout>
+    </>
   );
 };

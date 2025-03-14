@@ -105,7 +105,8 @@ export const SignUp: React.FC = () => {
 
   return (
     <AuthLayout>
-      <div className="relative w-full h-full px-[40px] py-[50px] flex flex-col items-center overflow-y-auto">
+      <div
+        className={`${isMobile ? '' : ' px-[40px] py-[50px]'} relative w-full h-full flex flex-col items-center overflow-y-auto`}>
         <div className="mb-14 flex flex-col items-center text-center">
           <Link to={'/home'}>
             <img src={logo} alt="logo" width={160} />

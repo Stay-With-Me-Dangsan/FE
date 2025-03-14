@@ -32,19 +32,19 @@ export const VerifiInput = forwardRef<HTMLInputElement, VerifiInputProps>(
           }`}
         />
         <div className="absolute right-5 top-1/2 -translate-y-1/2">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              if (onClick) onClick(e);
-            }}
-            className={`${isMobile ? 'w-12 h-8 rounded-md' : 'w-24 h-12'} flex justify-center items-center text-sm p-0 rounded-md ${
-              isValid ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
-            disabled={!isValid}>
-            {buttonText || defaultButtonText}
-          </button>
-
-          {type === 'code' && (
+          {type !== 'code' ? (
+            <button
+              onClick={(e) => {
+                e.preventDefault();
+                if (onClick) onClick(e);
+              }}
+              className={`${isMobile ? 'w-12 h-8 rounded-md' : 'w-24 h-12'} flex justify-center items-center text-sm p-0 rounded-md ${
+                isValid ? 'bg-purple-500 text-white' : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+              }`}
+              disabled={!isValid}>
+              {buttonText || defaultButtonText}
+            </button>
+          ) : (
             <button
               onClick={(e) => {
                 e.preventDefault();

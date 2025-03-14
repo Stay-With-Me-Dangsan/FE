@@ -12,12 +12,13 @@ import { AuthLayout } from '../_components';
 import { Image } from '../../../components/image';
 import { Margin } from '../../../components/margin';
 import { ImageTypeEnum } from '../../../constant/enum';
+import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 
 export const SignIn = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
+  const { isMobile } = useDeviceLayout();
   const { onSignInMutation } = useAuthMutation();
 
   const onSignInHandler = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -75,8 +76,8 @@ export const SignIn = () => {
         </div>
 
         <Margin direction="bottom" size={14} />
-
-        <div className="w-full flex justify-center gap-20">
+        <div className={`${isMobile ? 'w-full flex justify-center gap-10' : 'w-full flex justify-center gap-20'}`}>
+          {/* // <div className="w-full flex justify-center gap-20"> */}
           <Image src={kakao} type={ImageTypeEnum.SMALL} alt="kakao" />
 
           <Image src={naver} type={ImageTypeEnum.SMALL} alt="naver" />

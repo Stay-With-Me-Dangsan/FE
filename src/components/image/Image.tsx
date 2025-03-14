@@ -14,7 +14,7 @@ const imageType = {
   [ImageTypeEnum.SMALL_LOGO]: 300,
   [ImageTypeEnum.LARGE]: 120,
   [ImageTypeEnum.MEDIUM]: 100,
-  [ImageTypeEnum.SMALL]: 80,
+  [ImageTypeEnum.SMALL]: 50,
   [ImageTypeEnum.THUMBNAIL]: 50,
 };
 

@@ -54,7 +54,8 @@ export const FindEmail = () => {
 
   return (
     <AuthLayout>
-      <div className="relative w-full h-full px-[40px] py-[50px] flex flex-col items-center overflow-y-auto">
+      <div
+        className={`${isMobile ? '' : ' px-[40px]'} relative w-full h-full py-[50px] flex flex-col items-center overflow-y-auto`}>
         <div className="mb-14">
           <Link to={'/home'}>
             <img src={logo} alt="logo" width={160} />
