@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig } from 'axios';
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import { IResConfig } from '../../types/res.config';
 import { getDefaultStore, useSetAtom } from 'jotai';
 import { jwtAtom, clearJwtAtom, clearUserAtom } from '../../store';
@@ -79,7 +79,7 @@ export class AxiosConfig {
 
           try {
             const refreshResponse = await axios.post(
-              `${process.env.REACT_APP_API_URL}:${process.env.REACT_APP_API_PORT}/user/refresh`,
+              `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/user/refresh`,
               {},
               { withCredentials: true },
             );
@@ -91,14 +91,19 @@ export class AxiosConfig {
 
             originalRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
             return this._axiosInstance(originalRequest);
-          } catch (refreshError) {
-            console.error('Refresh token 요청 실패:', refreshError);
-          }
+          } catch (refreshError: unknown) {
+            const axiosError = refreshError as AxiosError;
 
-          localStorage.removeItem('accessToken');
-          store.set(clearJwtAtom);
-          store.set(clearUserAtom);
-          window.location.href = '/';
+            console.error('Refresh token 요청 실패:', axiosError);
+
+            if (axiosError.response?.status === 401) {
+              alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+            }
+            localStorage.removeItem('accessToken');
+            store.set(clearJwtAtom);
+            store.set(clearUserAtom);
+            window.location.href = '/';
+          }
         }
 
         return Promise.reject(error);

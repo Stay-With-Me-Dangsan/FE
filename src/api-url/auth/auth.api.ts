@@ -20,7 +20,7 @@ import {
 import { promises } from 'dns';
 
 class AuthApi extends AxiosConfig {
-  private readonly _baseURL = '/api/user';
+  private readonly _baseURL = '/user';
 
   async postSignIn(dto: ISignInDto) {
     return await this.post<ISignInRes, ISignInDto>({

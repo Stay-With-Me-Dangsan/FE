@@ -37,7 +37,7 @@ export const AuthButton = (props: IProps) => {
   }
 
   return (
-    <div className={`${isMobile ? 'w-auto relative bottom-0' : 'w-full relative bottom-0'}`}>
+    <div className={`${isMobile ? 'w-[90%] absolute bottom-[70px] ' : 'w-full absolute bottom-[70px] '}`}>
       <button
         type={type}
         className={`py-3 px-5 ${style()} w-full p-2 text-white rounded mt-4 transition-colors`}

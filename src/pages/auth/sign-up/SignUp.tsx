@@ -1,7 +1,7 @@
 import { AuthLayout } from '../_components';
 import { AuthInput, PasswordInput, VerifiInput } from '../../../components/input';
 import { AuthButton } from '../../../components/button';
-import { TermsAgreement } from '../../../components/popup';
+import { TermsAgreement, Alert } from '../../../components/popup';
 import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 import logo from '../../../asset/images/logo.png';
 import { ISignUpDto, IEmailCodeDto } from '../../../types/dto/auth';
@@ -10,9 +10,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import useAuthMutation from '../../../hooks/auth/mutaion/useAuthMutation';
 import { useEffect } from 'react';
-export const SignUp: React.FC = () => {
-  const { isMobile } = useDeviceLayout();
 
+export const SignUp: React.FC = () => {
   const {
     register,
     handleSubmit,
@@ -22,14 +21,26 @@ export const SignUp: React.FC = () => {
 
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
+  const nickname = watch('nickname');
   const password = watch('password');
   const confirmPassword = watch('confirmPassword');
   const [allChecked, setAllChecked] = useState(false);
   const [code, setVerificationCode] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const isValidNickname = nickname ? /^(?=.*\d)[A-Za-z가-힣\d]{3,12}$/.test(nickname) : false;
 
   const { onSignUpMutation, sendEmailMutation, verifyCodeMutation } = useAuthMutation();
+
+  const { isMobile } = useDeviceLayout();
+
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+  const showAlert = (message: string) => {
+    setAlertMessage(message);
+  };
+  const closeAlert = () => {
+    setAlertMessage(null);
+  };
 
   // 인증번호 전송
   const sendVerificationCode = (e?: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
@@ -55,7 +66,7 @@ export const SignUp: React.FC = () => {
     e?.preventDefault();
 
     if (!email || !code) {
-      alert('이메일과 인증 코드를 입력해 주세요.');
+      showAlert('이메일과 인증 코드를 입력해 주세요.');
       return;
     }
 
@@ -70,14 +81,14 @@ export const SignUp: React.FC = () => {
         onSuccess: (res) => {
           const isValid = res.data?.data;
           if (isValid) {
-            alert('이메일 인증이 완료되었습니다.');
+            showAlert('이메일 인증이 완료되었습니다.');
           } else {
-            alert('인증 코드가 올바르지 않습니다.');
+            showAlert('인증 코드가 올바르지 않습니다.');
           }
         },
         onError: (err) => {
           console.error(err);
-          alert('인증에 실패했습니다.');
+          showAlert('인증에 실패했습니다.');
         },
       },
     );
@@ -87,18 +98,18 @@ export const SignUp: React.FC = () => {
   /** 회원가입 요청 */
   const onSubmit = async (data: ISignUpDto) => {
     if (!isVerified) {
-      alert('이메일 인증을 완료해주세요.');
+      showAlert('이메일 인증을 완료해주세요.');
       return;
     }
 
     if (!isValid) {
-      alert('모든 필드 확인.');
+      showAlert('모든 필드 확인.');
       return;
     }
-    // if (!allChecked) {
-    //   alert('모든 필수 항목에 동의해야 합니다.');
-    //   return;
-    // }
+    if (!allChecked) {
+      showAlert('모든 필수 항목에 동의해야 합니다.');
+      return;
+    }
 
     onSignUpMutation.mutate(data);
   };
@@ -121,16 +132,12 @@ export const SignUp: React.FC = () => {
           <div className="">
             <AuthInput
               type="text"
-              placeholder="닉네임 (한글, 영어, 숫자 2~6자리)"
+              placeholder="닉네임 (최소 3~12 , 숫자1개)"
               {...register('nickname', {
                 required: '닉네임을 입력해주세요.',
-                // pattern: {
-                //   value: /^[가-힣a-zA-Z0-9]{2,8}$/,
-                //   message: '닉네임은 한글, 영어, 숫자 포함 2~6자리여야 합니다.',
-                // },
               })}
               errorMessage={errors.nickname?.message}
-              isValid={!errors.nickname && !!watch('nickname')}
+              isValid={!errors.nickname && !isValidNickname}
             />
             {/* 2. 성별 , 생년월일일 */}
             <div className={`${isMobile ? '' : 'flex gap-4'}`}>
@@ -256,6 +263,7 @@ export const SignUp: React.FC = () => {
 
           {/*7. 회원가입 버튼 */}
           <AuthButton type="submit" text="회원가입" isValid={isValid} />
+          {alertMessage && <Alert message={alertMessage} onClose={closeAlert} />}
         </form>
       </div>
     </AuthLayout>

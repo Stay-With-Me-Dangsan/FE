@@ -72,15 +72,14 @@ export const FindPassword = () => {
               {errorMessage && <p className="text-red-500 mt-4">{errorMessage}</p>}
             </div>
           </div>
-          {/* <div className="w-full absolute bottom-0"> */}
-          <AuthButton
-            text="임시 비밀번호 받기"
-            onClick={onFindPw}
-            color={isValidEmail ? 'purple' : 'gray'}
-            disabled={!isValidEmail}
-          />
-          {/* </div> */}
         </div>
+
+        <AuthButton
+          text="임시 비밀번호 받기"
+          onClick={onFindPw}
+          color={isValidEmail ? 'purple' : 'gray'}
+          disabled={!isValidEmail}
+        />
       </div>
     </AuthLayout>
   );

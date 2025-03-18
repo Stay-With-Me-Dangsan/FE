@@ -3,15 +3,18 @@ import { useAtom, useSetAtom } from 'jotai';
 import { userIdAtom, clearJwtAtom, clearUserAtom } from '../../store/auth/authAtom';
 import { useEffect, useState } from 'react';
 import { AuthButton } from '../../components/button';
-import person from '../../asset/images/person.png';
-import back from '../../asset/images/back.png';
+import mypageEdit_profile from '../../asset/images/mypageEdit_profile.png';
+import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 import vector from '../../asset/images/Vector.png';
+
 import { Text } from '../../components/text';
 import useAuthMutation from '../../hooks/auth/mutaion/useAuthMutation';
 
 export const MyPageEdit = () => {
   const [userId] = useAtom(userIdAtom);
-  const [userInfo, setUserInfo] = useState<{ email: string; password: string; nickname: string } | null>(null);
+  const [userInfo, setUserInfo] = useState<{ email: string; password: string; nickname: string } | undefined>(
+    undefined,
+  );
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -21,12 +24,14 @@ export const MyPageEdit = () => {
 
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
-
+  const { isMobile } = useDeviceLayout();
   const { getMyPageMutation, updateEmailMutation, updatePwMutation, logOutMutation } = useAuthMutation();
 
   useEffect(() => {
-    if (!userId) return;
-
+    if (!userId) {
+      navigate('/mypageNl');
+      return;
+    }
     getMyPageMutation.mutate(userId, {
       onSuccess: (data) => {
         const user = data.data.data.user;
@@ -43,34 +48,36 @@ export const MyPageEdit = () => {
 
   const saveEmail = async () => {
     if (!userId) {
-      alert('로그인이 필요합니다!');
+      navigate('/mypageNl');
       return;
     }
+
     updateEmailMutation.mutate(
       { userId, email },
       {
         onSuccess: () => {
-          setUserInfo((prev) => (prev ? { ...prev, email } : null));
+          setUserInfo((prev) => (prev ? { ...prev, email } : undefined));
           setIsEditing(false);
           alert('마이페이지지 변경 성공공');
         },
         onError: (err) => {
           console.error(err);
-          alert('마이페이지지 변경에 실패했습니다.');
+          alert('마이페이지 변경에 실패했습니다.');
         },
       },
     );
   };
   const savePw = async () => {
     if (!userId) {
-      alert('로그인이 필요합니다!');
+      navigate('/mypageNl');
       return;
     }
+
     updatePwMutation.mutate(
       { userId, password },
       {
         onSuccess: () => {
-          setUserInfo((prev) => (prev ? { ...prev, password } : null));
+          setUserInfo((prev) => (prev ? { ...prev, password } : undefined));
           setIsEditing(false);
           alert('비밀번호 변경 성공');
         },
@@ -99,18 +106,16 @@ export const MyPageEdit = () => {
   };
 
   return (
-    <div className="h-full flex justify-center items-center overflow-y-hidden">
-      <div className="w-[20px] h-full bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]" />
-      <div className="relative  w-full h-full px-[40px] flex flex-col items-center overflow-y-auto">
-        <div className="w-full h-[100px] flex items-center  px-10">
-          <img src={back} alt="back" />
-        </div>
-
-        <div className="w-full h-2 bg-[#f0f0f0] mt-2" />
+    <div className="h-full flex justify-center overflow-x-hidden overflow-y-auto">
+      <div
+        className={`${isMobile ? '' : 'w-[20px] h-full bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]'}`}
+      />
+      <div
+        className={`${isMobile ? 'w-full' : 'w-[80vw] px-10 pb-[50px]'} max-w-[960px] flex flex-col items-center overflow-y-auto`}>
         <div className="w-full">
           <div className="w-full border-b-[1px] border-[#CDCDCD]">
             <div className="grid mb-14 justify-center">
-              <img src={person} alt="person" width={203} />
+              <img src={mypageEdit_profile} alt="mypageEdit_profile" className="ml-auto" />
               <h2>{userInfo?.nickname}</h2>
             </div>
           </div>
@@ -134,16 +139,17 @@ export const MyPageEdit = () => {
               </div>
             </div>
           </div>
-          <div className="w-full text-center">
-            <div className="mb-5 underline-offset-1">
-              <Text value="계정탈퇴" color="gray" />
-            </div>
-            <AuthButton text="로그아웃" onClick={(e) => logOutHandler(e)} color="purple" />
+        </div>
+        <div className="w-[90%] absolute bottom-[105px] justify-center">
+          <div className="mb-5 underline-offset-1 ">
+            <Text value="계정탈퇴" color="gray" />
           </div>
+          <AuthButton text="로그아웃" onClick={(e) => logOutHandler(e)} color="purple" />
         </div>
       </div>
-
-      <div className="w-[20px] h-full bg-gradient-to-l from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]" />
+      <div
+        className={`${isMobile ? '' : 'w-[20px] h-full bg-gradient-to-l from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]'}`}
+      />
     </div>
   );
 };

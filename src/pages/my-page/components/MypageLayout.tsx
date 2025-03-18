@@ -49,15 +49,15 @@ export const MypageLayout = (props: IProps) => {
             <div className=" h-[184px] flex flex-col gap-6">
               <div className="flex justify-between w-full">
                 <p className="text-xl  ">내가 작성한 글</p>
-                <img src={vector} alt="vector" />
+                <img src={vector} alt="vector" className="ml-auto" />
               </div>
               <div className="flex justify-between w-full">
                 <p className="text-xl  ">내가 작성한 댓글</p>
-                <img src={vector} alt="vector" />
+                <img src={vector} alt="vector" className="ml-auto" />
               </div>
               <div className="flex justify-between w-full">
                 <p className="text-xl ">내가 찜한 게시글</p>
-                <img src={vector} alt="vector" />
+                <img src={vector} alt="vector" className="ml-auto" />
               </div>
             </div>
           </div>

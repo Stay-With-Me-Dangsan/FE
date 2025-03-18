@@ -7,24 +7,39 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 import useAuthMutation from '../../../hooks/auth/mutaion/useAuthMutation';
 import { IfindEmailDto } from '../../../types/dto/auth';
+import { Alert } from '../../../components/popup';
 
 export const FindEmail = () => {
   const [nickname, setNickname] = useState('');
   const [birth, setBirth] = useState('');
   const [isVerified, setIsVerified] = useState(false);
   const isValidBirth = /^\d{6}$/.test(birth); // 생년월일 유효성 체크 상태
-  const isValidNickname = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+\-={}\[\]:;"'<>,.?/]).{3,12}$/.test(nickname); // 닉네임 유효성 체크 상태
+  const isValidNickname = /^(?=.*\d)[A-Za-z가-힣\d]{3,12}$/.test(nickname); // 닉네임 유효성 체크 상태
   const [email, setEmail] = useState<string | null>(null);
   const [createdDate, setCreatedDate] = useState<string | null>(null);
   const [errorMessage, setErrorMessage] = useState<string>('');
   const { isMobile } = useDeviceLayout();
   const { onFindEmailMutation } = useAuthMutation();
 
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const showAlert = (message: string) => {
+    setAlertMessage(message);
+  };
+  const closeAlert = () => {
+    setAlertMessage(null);
+  };
+
   const handleFindEmail = (e?: React.MouseEvent<HTMLButtonElement>) => {
     e?.preventDefault();
 
-    if (!isValidBirth || !isValidNickname) {
-      setErrorMessage('모든 필드를 입력해 주세요.');
+    if (!isValidBirth) {
+      showAlert('생년월일을 입력해주세요.');
+      return;
+    }
+
+    if (!isValidNickname) {
+      showAlert('닉네임임을 입력해주세요.');
       return;
     }
 
@@ -127,6 +142,7 @@ export const FindEmail = () => {
           </div>
         </div>
       </div>
+      {alertMessage && <Alert message={alertMessage} onClose={closeAlert} />}
     </AuthLayout>
   );
 };
