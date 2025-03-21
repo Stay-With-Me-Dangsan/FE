@@ -45,7 +45,7 @@ class AuthApi extends AxiosConfig {
 
   async verifyCode(email: string, code: string) {
     return await this.post({
-      url: `${this._baseURL}/emailCodeverify`,
+      url: `${this._baseURL}/emailCodeVerify`,
       data: { email, code },
     });
   }
