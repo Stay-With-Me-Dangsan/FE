@@ -106,10 +106,10 @@ export const SignUp: React.FC = () => {
       showAlert('모든 필드 확인.');
       return;
     }
-    if (!allChecked) {
-      showAlert('모든 필수 항목에 동의해야 합니다.');
-      return;
-    }
+    // if (!allChecked) {
+    //   showAlert('모든 필수 항목에 동의해야 합니다.');
+    //   return;
+    // }
 
     onSignUpMutation.mutate(data);
   };
