@@ -1,30 +1,64 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 
 export const useChattingSocket = () => {
   const [roomId, setRoomId] = useState<string | null>(null);
   const [socket, setSocket] = useState<WebSocket | null>(null);
+  const [messageList, setMessageList] = useState<String[]>([]);
 
   useEffect(() => {
     if (!roomId) {
-      setSocket(null);
+      if (socket) {
+        socket.close();
+        setSocket(null);
+      }
       return;
     }
 
+    if (socket) {
+      console.log('기존 websocket 닫는중!');
+      socket.close();
+    }
+
     const socketInstance = new WebSocket(
-        `${process.env.REACT_APP_SOCKET_URL}:${process.env.REACT_APP_API_PORT}/ws/chat?roomId=${roomId}`,
+      `${process.env.REACT_APP_SOCKET_URL}:${process.env.REACT_APP_API_PORT}/ws/chat?roomId=${roomId}`,
     );
 
     socketInstance.onopen = () => {
-      console.log('web socket 연결 완료');
+      console.log('websocket 연결 완료');
+    };
+
+    socketInstance.onmessage = (event) => {
+      console.log('메시지 수신:', event.data);
+      setMessageList((prev) => [...prev, event.data]);
+    };
+
+    socketInstance.onclose = (e) => {
+      console.log('websocket 연결 종료 : ', e.code, e.reason);
+    };
+
+    socketInstance.onerror = (error) => {
+      console.log('websocket 에러 발생 : ', error);
     };
 
     setSocket(socketInstance);
 
     return () => {
-      console.log('web socket 연결 종료');
+      console.log('websocket 연결 종료 요청');
       socketInstance.close();
     };
   }, [roomId]);
 
-  return { socket, setRoomId };
+  const sendMessage = useCallback(
+    (message: string) => {
+      if (socket && socket.readyState === WebSocket.OPEN) {
+        socket.send(message);
+        console.log('메시지 전송:', message);
+      } else {
+        console.warn('WebSocket이 열려있지 않아 메시지를 보낼 수 없음');
+      }
+    },
+    [socket],
+  );
+
+  return { socket, setRoomId, sendMessage, messageList };
 };

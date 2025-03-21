@@ -1,83 +1,49 @@
 import { useSetAtom } from 'jotai';
 import { modalStore } from '../../store';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useChattingSocket } from '../../hooks/socket';
 
 export const Home = () => {
   const openModal = useSetAtom(modalStore.openModal);
-
   const [message, setMessage] = useState('');
-  const [messageList, setMessageList] = useState<string[]>([]);
-
-  const { socket, setRoomId } = useChattingSocket();
-
-  const sendMessage = () => {
-    if (socket && message.trim()) {
-      socket.send(message);
-      socket.onmessage = (e) => {
-        setMessage(e.data);
-      };
-    }
-  };
+  const { setRoomId, sendMessage, messageList } = useChattingSocket();
 
   const onRoomClickHandler = (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     event.stopPropagation();
-
     const { id } = event.currentTarget;
-
-    if (id === 'none') {
-      setRoomId(null);
-    } else {
-      setRoomId(id);
-    }
+    setRoomId(id === 'none' ? null : id);
   };
 
-  useEffect(() => {
-    if (!socket) {
-      setRoomId(null);
-      return;
-    }
-
-    socket.onmessage = (msg: any) => {
-      setMessageList((prev) => [...prev, msg]);
-    };
-
-    return () => {
-      setRoomId(null);
-      socket.onmessage = null;
-    };
-  }, [socket]);
-
   return (
-      <div className="flex flex-col gap-10">
-        <p>홈</p>
+    <div className="flex flex-col gap-10">
+      <p>홈</p>
 
-        <button onClick={openModal}>Open Modal</button>
+      <button onClick={openModal}>Open Modal</button>
 
-        <div className="flex flex-col gap-4">
-          <h1>채팅</h1>
+      <div className="flex flex-col gap-4">
+        <h1>채팅</h1>
 
-          <div className="flex items-center gap-6">
-            <p>방 리스트:</p>
-            <div className="p-2 border-2 border-active-bg" id="none" onClick={(event) => onRoomClickHandler(event)}>
-              종료
-            </div>
-            <div className="p-2 border-2 border-active-bg" id="GA" onClick={(event) => onRoomClickHandler(event)}>
-              GA
-            </div>
-            <div className="p-2 border-2 border-active-bg" id="AB" onClick={(event) => onRoomClickHandler(event)}>
-              AB
-            </div>
+        <div className="flex items-center gap-6">
+          <p>방 리스트:</p>
+          <div className="p-2 border-2 border-active-bg" id="none" onClick={onRoomClickHandler}>
+            종료
           </div>
-
-          <div className="border-2 border-black min-h-32">
-            {messageList.map((msg, index) => (
-                <p key={index}>{msg}</p>
-            ))}
+          <div className="p-2 border-2 border-active-bg" id="GA" onClick={onRoomClickHandler}>
+            GA
           </div>
-          <input className="border-black" type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
-          <button onClick={sendMessage}>전송</button>
+          <div className="p-2 border-2 border-active-bg" id="AB" onClick={onRoomClickHandler}>
+            AB
+          </div>
         </div>
+
+        <div className="border-2 border-black min-h-32">
+          {messageList.map((msg, index) => (
+            <p key={index}>{msg}</p>
+          ))}
+        </div>
+        <input className="border-black" type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
+        <button onClick={() => sendMessage(message)}>전송</button>
       </div>
+    </div>
   );
 };
