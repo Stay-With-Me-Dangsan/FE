@@ -27,10 +27,9 @@ export const SignIn = () => {
     onSignInMutation.mutate({ email, password });
   };
 
-  const naverState = Math.random().toString(36).substring(2, 13);
-  const KAKAO_AUTH_URL = `${process.env.KAKAO_REDIRECT_URL}`;
-  const NAVER_AUTH_URL = `${process.env.NAVER_REDIRECT_URL}&state=${naverState}`;
-  const GOOGLE_AUTH_URL = `${process.env.GOOGLE_REDIRECT_URL}`;
+  const KAKAO_AUTH_URL = `http://localhost:8080/oauth2/authorization/kakao`;
+  const NAVER_AUTH_URL = `http://localhost:8080/oauth2/authorization/naver`;
+  const GOOGLE_AUTH_URL = `http://localhost:8080/oauth2/authorization/google`;
 
   const onClickHandler = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
     e.stopPropagation();
@@ -77,12 +76,15 @@ export const SignIn = () => {
 
         <Margin direction="bottom" size={14} />
         <div className={`${isMobile ? 'w-full flex justify-center gap-10' : 'w-full flex justify-center gap-20'}`}>
-          {/* // <div className="w-full flex justify-center gap-20"> */}
-          <Image src={kakao} type={ImageTypeEnum.SMALL} alt="kakao" />
-
-          <Image src={naver} type={ImageTypeEnum.SMALL} alt="naver" />
-
-          <Image src={google} type={ImageTypeEnum.SMALL} alt="google" />
+          <a href={KAKAO_AUTH_URL} target="_self">
+            <Image src={kakao} type={ImageTypeEnum.SMALL} alt="kakao" />
+          </a>
+          <a href={NAVER_AUTH_URL} target="_self">
+            <Image src={naver} type={ImageTypeEnum.SMALL} alt="naver" />
+          </a>
+          <a href={GOOGLE_AUTH_URL} target="_self">
+            <Image src={google} type={ImageTypeEnum.SMALL} alt="google" />
+          </a>
         </div>
 
         <Margin direction="bottom" size={14} />

@@ -32,9 +32,12 @@ export const MyPage = () => {
   };
 
   useEffect(() => {
-    if (!userId) return;
+    if (!userId) {
+      showAlert('로그인이 필요합니다!');
+      navigate('/');
+    }
 
-    getMyPageMutation.mutate(userId, {
+    getMyPageMutation.mutate(userId!, {
       onSuccess: (data) => {
         const user = data.data.data.user;
         // const user = res.data.data.user || res.data.user;
@@ -42,7 +45,7 @@ export const MyPage = () => {
         setNickname(user.nickname);
       },
       onError: (error) => {
-        console.error('마이페이지 데이터 불러오기 실패:', error);
+        console.error(' 데이터 불러오기 실패:', error);
       },
     });
   }, [userId]);
@@ -55,15 +58,10 @@ export const MyPage = () => {
   };
 
   const handleSaveClick = () => {
-    if (!userId) {
-      showAlert('로그인이 필요합니다!');
-      return;
-    }
-
     const newNickname = nicknameRef.current?.innerText.trim();
     const isValidNickname = /^(?=.*\d)[A-Za-z가-힣\d]{3,12}$/.test(newNickname || '');
 
-    if (!newNickname || newNickname.length < 2 || newNickname.length > 12) {
+    if (!newNickname || newNickname.length > 2 || newNickname.length < 13) {
       showAlert('닉네임은3~12자여야 합니다');
       return;
     }
@@ -79,7 +77,7 @@ export const MyPage = () => {
     }
 
     updateNicknameMutation.mutate(
-      { userId, nickname: newNickname },
+      { userId: userId!, nickname: newNickname },
       {
         onSuccess: () => {
           setUserInfo((prev) => (prev ? { ...prev, nickname: newNickname } : prev));

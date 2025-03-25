@@ -4,6 +4,7 @@ import AuthApi from '../../../api-url/auth/auth.api';
 import {
   ISignInDto,
   ISignUpDto,
+  IOauthRegDto,
   IEmailCodeDto,
   IPatchUpdateNicknameDto,
   IPatchEmailDto,
@@ -39,6 +40,9 @@ export default function useAuthMutation() {
     mutationFn: (data: ISignUpDto) => AuthApi.postSignUp(data),
   });
 
+  const OauthRegMutation = useMutation({
+    mutationFn: (data: IOauthRegDto) => AuthApi.PatchOauthReg(data),
+  });
   const sendEmailMutation = useMutation({
     mutationFn: (email: string) => AuthApi.postSendEmail(email),
   });
@@ -81,6 +85,7 @@ export default function useAuthMutation() {
   return {
     onSignInMutation,
     onSignUpMutation,
+    OauthRegMutation,
     sendEmailMutation,
     verifyCodeMutation,
     getMyPageMutation,

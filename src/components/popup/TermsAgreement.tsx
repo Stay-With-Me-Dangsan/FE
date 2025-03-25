@@ -84,7 +84,7 @@ export const TermsAgreement = () => {
 
   return (
     <>
-      <div className="w-full bg-white rounded-lg mt-3 p-4 space-y-3">
+      <div className="w-full bg-white rounded-lg p-4 space-y-3">
         <div
           className={`flex items-center p-2 border rounded-md cursor-pointer transition-colors ${allChecked ? 'bg-purple-500 text-white' : 'bg-gray-100'}`}
           onClick={handleAllChange}>

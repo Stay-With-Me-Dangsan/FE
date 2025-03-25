@@ -12,6 +12,13 @@ export interface ISignUpDto {
   gender: string;
 }
 
+export interface IOauthRegDto {
+  userId: number;
+  nickname: string;
+  gender: string;
+  birth: string;
+}
+
 export interface IEmailCodeDto {
   email: string;
   verificationCode: string;

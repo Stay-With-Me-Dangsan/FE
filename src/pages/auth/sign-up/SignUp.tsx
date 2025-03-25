@@ -4,7 +4,7 @@ import { AuthButton } from '../../../components/button';
 import { TermsAgreement, Alert } from '../../../components/popup';
 import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 import logo from '../../../asset/images/logo.png';
-import { ISignUpDto, IEmailCodeDto } from '../../../types/dto/auth';
+import { ISignUpDto } from '../../../types/dto/auth';
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
@@ -211,25 +211,25 @@ export const SignUp: React.FC = () => {
             {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>}
             {errorMessage && <p className="text-red-500 text-sm mt-1">{errorMessage}</p>}
             {/*3-1. 인증번호 입력 */}
-            {!isVerified && (
-              <div className="flex items-center space-x-2">
-                {
-                  <VerifiInput
-                    type="code"
-                    placeholder="인증번호 입력"
-                    value={code}
-                    onChange={(e) => setVerificationCode(e.target.value)}
-                    onClick={(e) => {
-                      e?.preventDefault();
-                      verifyCode();
-                    }}
-                    isVerified={false}
-                    isValid={code.length === 6}
-                    // className="w-full h-[74px] p-2 my-4 border-[3px] rounded-[12px] border-gray-300"
-                  />
-                }
-              </div>
-            )}
+
+            <div className="flex items-center space-x-2">
+              {
+                <VerifiInput
+                  type="code"
+                  placeholder="인증번호 입력"
+                  value={code}
+                  onChange={(e) => setVerificationCode(e.target.value)}
+                  onClick={(e) => {
+                    e?.preventDefault();
+                    verifyCode();
+                  }}
+                  isVerified={false}
+                  isValid={code.length === 6}
+                  // className="w-full h-[74px] p-2 my-4 border-[3px] rounded-[12px] border-gray-300"
+                />
+              }
+            </div>
+
             {/*4. 비밀번호 */}
             <div>
               <PasswordInput
@@ -260,9 +260,11 @@ export const SignUp: React.FC = () => {
           {/* </form> */}
           {/*6. 전체 동의 항목 */}
           <TermsAgreement />
-
+          <div>
+            <AuthButton type="submit" text="회원가입" isValid={isValid} />
+          </div>
           {/*7. 회원가입 버튼 */}
-          <AuthButton type="submit" text="회원가입" isValid={isValid} />
+
           {alertMessage && <Alert message={alertMessage} onClose={closeAlert} />}
         </form>
       </div>

@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
-import { FindEmail, FindPassword, SignIn, SignUp } from '../pages/auth';
+import { FindEmail, FindPassword, SignIn, SignUp, OAuthSuccess, OAuthRegister } from '../pages/auth';
 import { Layout } from '../common/layout';
 import { Home } from '../pages/home';
 import { Map, MapDetail } from '../pages/map';
@@ -17,7 +17,8 @@ export const Router = () => {
         <Route path="/auth/signUp" element={<SignUp />} />
         <Route path="/auth/findEmail" element={<FindEmail />} />
         <Route path="/auth/findPassword" element={<FindPassword />} />
-
+        <Route path="/oauth/success/:provider" element={<OAuthSuccess />} />
+        <Route path="/oauth/register/:provider" element={<OAuthRegister />} />
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
           <Route path="/map" element={<Map />} />

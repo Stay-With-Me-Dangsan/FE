@@ -11,6 +11,7 @@ import {
 import {
   ISignInDto,
   ISignUpDto,
+  IOauthRegDto,
   IPatchUpdateNicknameDto,
   IPatchEmailDto,
   IPatchPwDto,
@@ -36,6 +37,13 @@ class AuthApi extends AxiosConfig {
     });
   }
 
+  async PatchOauthReg(dto: IOauthRegDto) {
+    return await this.patch({
+      url: `${this._baseURL}/oauthReg`,
+      data: dto,
+    });
+  }
+
   async postSendEmail(email: string) {
     return await this.post({
       url: `${this._baseURL}/emailCodeSend`,
@@ -45,7 +53,7 @@ class AuthApi extends AxiosConfig {
 
   async verifyCode(email: string, code: string) {
     return await this.post({
-      url: `${this._baseURL}/emailCodeverify`,
+      url: `${this._baseURL}/emailCodeVerify`,
       data: { email, code },
     });
   }
@@ -73,20 +81,20 @@ class AuthApi extends AxiosConfig {
 
   async patchUpdateNickname(dto: IPatchUpdateNicknameDto) {
     return await this.patch<IUpdateNicknameRes, IPatchUpdateNicknameDto>({
-      url: `${this._baseURL}/updateNickname`,
+      url: `${this._baseURL}/mypage/updateNickname`,
       data: dto,
     });
   }
 
   async patchUpdateEmail(dto: IPatchEmailDto) {
     return await this.patch<IUpdateEmailRes, IPatchEmailDto>({
-      url: `${this._baseURL}/updateEmail`,
+      url: `${this._baseURL}/mypage/updateEmail`,
       data: dto,
     });
   }
   async patchUpdatePw(dto: IPatchPwDto) {
     return await this.patch<IUpdatePwRes, IPatchPwDto>({
-      url: `${this._baseURL}/updatePw`,
+      url: `${this._baseURL}/mypage/updatePw`,
       data: dto,
     });
   }

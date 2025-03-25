@@ -24,27 +24,31 @@ export const AuthButton = (props: IProps) => {
 
   if (to) {
     return (
-      <div className="w-full absolute bottom-0">
-        <Link
-          to={to}
-          className={`py-3 px-5 ${style()} w-full p-2 text-white rounded mt-4 transition-colors flex justify-center items-center`}>
-          <button type="button" disabled={!isValid} onClick={onClick}>
-            {text}
-          </button>
-        </Link>
+      <div className="relative w-full">
+        <div className="w-full absolute bottom-0">
+          <Link
+            to={to}
+            className={`py-3 px-5 ${style()} w-full p-2 text-white rounded mt-4 transition-colors flex justify-center items-center`}>
+            <button type="button" disabled={!isValid} onClick={onClick}>
+              {text}
+            </button>
+          </Link>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className={`${isMobile ? 'w-[90%] absolute bottom-[70px] ' : 'w-full absolute bottom-[70px] '}`}>
-      <button
-        type={type}
-        className={`py-3 px-5 ${style()} w-full p-2 text-white rounded mt-4 transition-colors`}
-        disabled={!isValid}
-        onClick={onClick}>
-        {text}
-      </button>
+    <div className="relative w-full">
+      <div className="w-full absolute">
+        <button
+          type={type}
+          className={`py-3 px-5 ${style()} w-full p-2 text-white rounded mt-4 transition-colors`}
+          disabled={!isValid}
+          onClick={onClick}>
+          {text}
+        </button>
+      </div>
     </div>
   );
 };

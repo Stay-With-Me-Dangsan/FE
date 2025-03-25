@@ -5,6 +5,7 @@ interface IProps {
   src: string;
   type: ImageTypeEnum;
   alt: string;
+  link?: string;
   onClick?: (event: React.MouseEvent<HTMLImageElement, MouseEvent>) => void;
   className?: string;
 }
@@ -19,11 +20,11 @@ const imageType = {
 };
 
 export const Image = (props: IProps) => {
-  const { src, type, alt, onClick, className } = props;
+  const { src, type, alt, link, onClick, className } = props;
 
   const { isMobile } = useDeviceLayout();
 
-  return (
+  const imgElement = (
     <img
       className={`${onClick ? 'cursor-pointer' : ''} ${type === ImageTypeEnum.THUMBNAIL ? 'rounded-3xl' : ''} ${className}`}
       src={src}
@@ -32,5 +33,13 @@ export const Image = (props: IProps) => {
       height={imageType[type]}
       onClick={(event) => onClick && onClick(event)}
     />
+  );
+
+  return link ? (
+    <a href={link} target="_blank" rel="noopener noreferrer">
+      {imgElement}
+    </a>
+  ) : (
+    imgElement
   );
 };

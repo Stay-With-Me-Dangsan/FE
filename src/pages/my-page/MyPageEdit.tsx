@@ -58,11 +58,9 @@ export const MyPageEdit = () => {
         onSuccess: () => {
           setUserInfo((prev) => (prev ? { ...prev, email } : undefined));
           setIsEditing(false);
-          alert('마이페이지지 변경 성공공');
         },
         onError: (err) => {
           console.error(err);
-          alert('마이페이지 변경에 실패했습니다.');
         },
       },
     );
@@ -133,7 +131,7 @@ export const MyPageEdit = () => {
                 </div>
                 <div className="flex justify-between w-full">
                   <Text value="비밀번호 변경" color="gray" />
-                  <span>{userInfo?.email}</span>
+                  <span>{userInfo?.password}</span>
                   <img src={vector} alt="vector" className="ml-auto" />
                 </div>
               </div>

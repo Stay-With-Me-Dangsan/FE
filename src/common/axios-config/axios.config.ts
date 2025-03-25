@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosError } from 'axios';
 import { IResConfig } from '../../types/res.config';
 import { getDefaultStore, useSetAtom } from 'jotai';
-import { jwtAtom, clearJwtAtom, clearUserAtom } from '../../store';
+import { jwtAtom, clearJwtAtom } from '../../store';
 
 interface IGetReq<D> {
   url: string;
@@ -67,6 +67,25 @@ export class AxiosConfig {
         const originalRequest = error.config;
         const store = getDefaultStore();
 
+        //인증 필요한 요청등
+        const isAuthRequired = [
+          '/api/user/mypage',
+          '/api/user/logout',
+          '/api/user/update',
+          '/api/user/delete',
+          '/api/user/refresh',
+          '/api/house/register',
+          '/api/house/update',
+          '/api/house/delete',
+          '/api/house/reserve',
+          '/api/house/like',
+        ].some((path) => originalRequest.url?.includes(path));
+
+        if (!isAuthRequired && error.response?.status === 401) {
+          // 인증 필요 없는 요청에서의 401은 무시
+          return Promise.reject(error);
+        }
+
         if (error.response?.status === 302) {
           const { redirect } = error.response.data;
 
@@ -96,12 +115,11 @@ export class AxiosConfig {
 
             console.error('Refresh token 요청 실패:', axiosError);
 
-            if (axiosError.response?.status === 401) {
-              alert('세션이 만료되었습니다. 다시 로그인해주세요.');
-            }
+            // if (axiosError.response?.status === 401) {
+            //   alert('세션이 만료되었습니다. 다시 로그인해주세요.');
+            // }
             localStorage.removeItem('accessToken');
             store.set(clearJwtAtom);
-            store.set(clearUserAtom);
             window.location.href = '/';
           }
         }
