@@ -27,9 +27,9 @@ export const SignIn = () => {
     onSignInMutation.mutate({ email, password });
   };
 
-  const KAKAO_AUTH_URL = `http://localhost:8080/oauth2/authorization/kakao`;
-  const NAVER_AUTH_URL = `http://localhost:8080/oauth2/authorization/naver`;
-  const GOOGLE_AUTH_URL = `http://localhost:8080/oauth2/authorization/google`;
+  const KAKAO_AUTH_URL = `${process.env.REACT_APP_API_URL}/oauth2/authorization/kakao`;
+  const NAVER_AUTH_URL = `${process.env.REACT_APP_API_URL}/oauth2/authorization/naver`;
+  const GOOGLE_AUTH_URL = `${process.env.REACT_APP_API_URL}/oauth2/authorization/google`;
 
   const onClickHandler = (e: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => {
     e.stopPropagation();
