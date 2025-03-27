@@ -49,7 +49,7 @@ export class AxiosConfig {
         const token = store.get(jwtAtom);
 
         if (token && config.headers) {
-          config.headers.set('Authorization', `Bearer ${token}`);
+          config.headers.set('Authorization', `Bearer ${token?.replace(/^"|"$/g, '')}`);
         }
 
         return config;
@@ -98,7 +98,7 @@ export class AxiosConfig {
 
           try {
             const refreshResponse = await axios.post(
-              `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/user/refresh`,
+              `${window.location.origin}/${process.env.REACT_APP_API_PREFIX}/user/refresh`,
               {},
               { withCredentials: true },
             );

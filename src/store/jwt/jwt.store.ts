@@ -3,7 +3,7 @@ import { atom } from 'jotai';
 
 const getAccessToken = () => (typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null);
 
-const decodeJwt = (accessToken: string | null) => {
+const decodeJwt = (accessToken: string | null | undefined) => {
   if (!accessToken) return null;
   try {
     const payload = JSON.parse(atob(accessToken.split('.')[1])); // JWT payload 디코딩
@@ -23,7 +23,8 @@ export const jwtAtom = atomWithStorage<string | null>('accessToken', getAccessTo
 // 디코딩된 user 정보 atom
 export const decodedTokenAtom = atom<{ userId: number; isNewUser: boolean } | null>((get) => {
   const token = get(jwtAtom);
-  return decodeJwt(token);
+  const cleanedToken = token?.replace(/^"|"$/g, '') ?? null;
+  return decodeJwt(cleanedToken);
 });
 
 export const jwtStore = atom(
@@ -46,30 +47,3 @@ export const clearJwtAtom = atom(null, (get, set) => {
 export interface User {
   userId: number | null;
 }
-
-// export const userIdAtom = atomWithStorage<number | null>('userId', null);
-
-// // userId를 관리하는 Atom
-// export const userIdStore = atom(
-//   (get) => get(userIdAtom),
-//   (get, set, newUserId: number | null) => {
-//     if (newUserId) {
-//       localStorage.setItem('userId', String(newUserId));
-//     } else {
-//       localStorage.removeItem('userId');
-//     }
-//     set(userIdAtom, newUserId);
-//   },
-// );
-
-// export const clearUserAtom = atom(null, (get, set) => {
-//   localStorage.removeItem('user');
-//   set(userIdStore, null);
-// });
-
-// export const clearAuthAtom = atom(null, (get, set) => {
-//   localStorage.removeItem('accessToken');
-//   localStorage.removeItem('userId');
-//   set(jwtAtom, null);
-//   set(userIdAtom, null);
-// });

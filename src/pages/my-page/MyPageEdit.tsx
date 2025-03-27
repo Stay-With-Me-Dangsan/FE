@@ -138,7 +138,7 @@ export const MyPageEdit = () => {
             </div>
           </div>
         </div>
-        <div className="w-[90%] absolute bottom-[105px] justify-center">
+        <div className="w-[90%] absolute bottom-[150px] justify-center text-center">
           <div className="mb-5 underline-offset-1 ">
             <Text value="계정탈퇴" color="gray" />
           </div>
