@@ -4,7 +4,6 @@ import { useAtom } from 'jotai';
 import { jwtStore, decodedTokenAtom } from '../../../store/jwt';
 
 export const OAuthSuccess: React.FC = () => {
-  alert('여기도착!');
   const [accessToken, setAccessToken] = useAtom(jwtStore);
   const [decoded] = useAtom(decodedTokenAtom);
   const [searchParams] = useSearchParams();
@@ -14,12 +13,11 @@ export const OAuthSuccess: React.FC = () => {
     const accessToken = searchParams.get('accessToken');
 
     if (accessToken) {
-      alert(accessToken);
       setAccessToken(accessToken);
       navigate('/home');
     } else {
       alert(' JWT 토큰 없음');
-      navigate('/login');
+      navigate('/auth');
     }
   }, [searchParams, setAccessToken, navigate]);
 

@@ -14,10 +14,7 @@ export const AuthLayout = (props: IProps) => {
       <div
         className={`${isMobile ? '' : 'w-[20px] h-full bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]'}`}
       />
-      <div
-        className={`${isMobile ? 'w-full' : 'w-[80vw] px-10 pb-[50px]'} max-w-[960px] flex flex-col items-center overflow-y-auto`}>
-        {children}
-      </div>
+      <div className="w-full max-w-[960px] flex flex-col items-center overflow-y-auto">{children}</div>
       <div
         className={`${isMobile ? '' : 'w-[20px] h-full bg-gradient-to-l from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]'}`}
       />

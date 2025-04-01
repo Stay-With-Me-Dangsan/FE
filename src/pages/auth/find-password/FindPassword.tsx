@@ -35,8 +35,7 @@ export const FindPassword = () => {
 
   return (
     <AuthLayout>
-      <div
-        className={`${isMobile ? '' : ' px-[40px]'} relative w-full h-full py-[50px] flex flex-col items-center overflow-y-auto`}>
+      <div className="relative w-full h-full py-[50px] flex flex-col items-center overflow-y-auto">
         <div className="mb-14">
           <Link to={'/home'}>
             <img src={logo} alt="logo" width={160} />
@@ -57,7 +56,7 @@ export const FindPassword = () => {
             </Link>
           </div>
 
-          <div className="w-full flex flex-col gap-10 mb-20 mt-10">
+          <div className="w-full flex flex-col gap-10 mb-20 mt-10 px-[40px]">
             <h2 className={`${isMobile ? 'font-bold text-sm' : 'font-bold text-2xl'}`}>
               가입하신 이메일로 임시 비밀번호를 보내드려요!
             </h2>
@@ -74,12 +73,14 @@ export const FindPassword = () => {
           </div>
         </div>
 
-        <AuthButton
-          text="임시 비밀번호 받기"
-          onClick={onFindPw}
-          color={isValidEmail ? 'purple' : 'gray'}
-          disabled={!isValidEmail}
-        />
+        <div className="w-[90%]">
+          <AuthButton
+            text="임시 비밀번호 받기"
+            onClick={onFindPw}
+            color={isValidEmail ? 'purple' : 'gray'}
+            disabled={!isValidEmail}
+          />
+        </div>
       </div>
     </AuthLayout>
   );

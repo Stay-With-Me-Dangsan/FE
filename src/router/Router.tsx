@@ -1,10 +1,21 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
+import PrivateRoute from './PrivateRoute';
 import { FindEmail, FindPassword, SignIn, SignUp, OAuthSuccess, OAuthRegister } from '../pages/auth';
 import { Layout } from '../common/layout';
 import { Home } from '../pages/home';
 import { Map, MapDetail } from '../pages/map';
 import { Board, BoardDetail } from '../pages/board';
-import { MyPage, MyPageNL, MyPageEdit } from '../pages/my-page';
+import {
+  MyPage,
+  MyPageNL,
+  MyPageEdit,
+  MyPageBoardWrite,
+  MyPageBoardComment,
+  MypageBoardLike,
+  MyPageHouseUpload,
+  MyPageHouseLike,
+  MypageHouseView,
+} from '../pages/my-page';
 
 export const Router = () => {
   // const _BASE_URL = process.env.PUBLIC_URL;
@@ -26,8 +37,21 @@ export const Router = () => {
           <Route path="/board" element={<Board />} />
           <Route path="/board/detail" element={<BoardDetail />} />
           <Route path="/board/detail/:id" element={<BoardDetail />} />
-          <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypageNl" element={<MyPageNL />} />
+        </Route>
+        <Route
+          element={
+            <PrivateRoute>
+              <Layout />
+            </PrivateRoute>
+          }>
+          <Route path="/mypage" element={<MyPage />} />
+          <Route path="/mypage/board/write" element={<MyPageBoardWrite />} />
+          <Route path="/mypage/board/comment" element={<MyPageBoardComment />} />
+          <Route path="/mypage/board/like" element={<MypageBoardLike />} />
+          <Route path="/mypage/house/upload" element={<MyPageHouseUpload />} />
+          <Route path="/mypage/house/like" element={<MyPageHouseLike />} />
+          <Route path="/mypage/house/view" element={<MypageHouseView />} />
           <Route path="/mypage/edit" element={<MyPageEdit />} />
         </Route>
       </Routes>

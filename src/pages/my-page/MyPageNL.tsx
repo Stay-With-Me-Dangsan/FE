@@ -1,5 +1,5 @@
 import person from '../../asset/images/person.png';
-import vector from '../../asset/images/Vector.png';
+import rightArrow from '../../asset/images/rightArrow.png';
 import { MypageLayout } from './components';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,7 +25,7 @@ export const MyPageNL = () => {
 
                 <div className="flex flex-col justify-center">
                   <button onClick={() => navigate('/auth')}>
-                    <img src={vector} alt="vector" className="ml-auto" />
+                    <img src={rightArrow} alt="rightArrow" className="ml-auto" />
                   </button>
                 </div>
               </div>

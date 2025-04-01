@@ -2,7 +2,7 @@ import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 
 interface IProps {
   value: string;
-  color: 'gray' | 'black' | 'red';
+  color: 'gray' | 'black' | 'red' | 'purple';
   id?: string;
   size?: 'small' | 'base' | 'large';
   onClick?: (event: React.MouseEvent<HTMLParagraphElement, MouseEvent>) => void;
@@ -13,6 +13,7 @@ const textColor = {
   gray: 'text-[#989898]',
   black: 'text-black',
   red: 'text-red-400',
+  purple: 'text-[#9470DC]',
 };
 
 const textSize = {

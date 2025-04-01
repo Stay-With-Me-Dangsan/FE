@@ -8,7 +8,7 @@ import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 import useAuthMutation from '../../../hooks/auth/mutaion/useAuthMutation';
 import { IfindEmailDto } from '../../../types/dto/auth';
 import { Alert } from '../../../components/popup';
-
+import { Margin } from '../../../components/margin';
 export const FindEmail = () => {
   const [nickname, setNickname] = useState('');
   const [birth, setBirth] = useState('');
@@ -69,15 +69,14 @@ export const FindEmail = () => {
 
   return (
     <AuthLayout>
-      <div
-        className={`${isMobile ? '' : ' px-[40px]'} relative w-full h-full py-[50px] flex flex-col items-center overflow-y-auto`}>
+      <div className="w-full h-full py-[50px] flex flex-col items-center overflow-y-auto">
         <div className="mb-14">
           <Link to={'/home'}>
             <img src={logo} alt="logo" width={160} />
           </Link>
         </div>
 
-        <div className="w-full">
+        <div className="w-full ">
           <div className="w-full z-50 flex">
             <Link
               to="/auth/findEmail"
@@ -91,26 +90,30 @@ export const FindEmail = () => {
             </Link>
           </div>
 
-          <div className="w-full flex flex-col gap-10 mb-20 mt-10">
+          <div className="w-full flex flex-col gap-10 mb-20 mt-10 px-[40px]">
             <div className="flex flex-col gap-4">
               {email ? (
-                <div className="w-full p-2 border-2 rounded">
-                  <p className={`${isMobile ? 'text-sm font-semibold' : 'text-lg font-semibold'}`}>
-                    가입하신 이메일 계정을 찾았습니다.
-                  </p>
-                  <p className={`${isMobile ? 'text-sm font-semibold' : 'text-lg font-semibold'}`}>
-                    아래 계정으로 로그인하세요
-                  </p>
-                  <div className={`${isMobile ? 'grid' : 'flex'}`}>
-                    <p className=" mr-2">가입된 계정</p>
-                    <span className="text-gray-400">{createdDate} 가입</span>
+                <>
+                  <div className="w-full p-2 border-2 rounded">
+                    <p className={`${isMobile ? 'text-sm font-semibold' : 'text-lg font-semibold'}`}>
+                      가입하신 이메일 계정을 찾았습니다.
+                    </p>
+                    <p className={`${isMobile ? 'text-sm font-semibold' : 'text-lg font-semibold'}`}>
+                      아래 계정으로 로그인하세요
+                    </p>
+                    <div className={`${isMobile ? 'grid' : 'flex'}`}>
+                      <p className=" mr-2">가입된 계정</p>
+                      <span className="text-gray-400">{createdDate} 가입</span>
+                    </div>
+                    <div className={`${isMobile ? 'grid' : 'flex'}`}>
+                      <p className=" mr-2 text-gray-400">이메일</p>
+                      <span className={`${isMobile ? 'text-sm' : ''}`}>{email}</span>
+                    </div>
                   </div>
-                  <div className={`${isMobile ? 'grid' : 'flex'}`}>
-                    <p className=" mr-2 text-gray-400">이메일</p>
-                    <span className={`${isMobile ? 'text-sm' : ''}`}>{email}</span>
-                  </div>
+                  <Margin direction="bottom" size={14} />
+
                   <AuthButton text="로그인 하기" to="/auth" color="purple" />
-                </div>
+                </>
               ) : (
                 <>
                   <AuthInput

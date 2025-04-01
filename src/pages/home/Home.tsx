@@ -16,8 +16,6 @@ export const Home = () => {
 
   return (
     <div className="flex flex-col gap-10">
-      <p>홈</p>
-
       <button onClick={openModal}>Open Modal</button>
 
       <div className="flex flex-col gap-4">

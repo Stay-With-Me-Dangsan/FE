@@ -58,7 +58,7 @@ export const SignIn = () => {
 
         <Margin direction="bottom" size={14} />
 
-        <div className="w-full flex flex-col gap-4">
+        <div className="w-[90%] flex flex-col gap-4">
           <Input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="이메일 주소" />
           <Input
             type="password"
@@ -70,7 +70,7 @@ export const SignIn = () => {
 
         <Margin direction="bottom" size={14} />
 
-        <div className="w-full">
+        <div className="w-[90%]">
           <Button text="입장하기" onClick={(e) => onSignInHandler(e)} color="purple" />
         </div>
 

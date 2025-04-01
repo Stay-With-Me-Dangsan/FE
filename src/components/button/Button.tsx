@@ -1,7 +1,9 @@
 import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 
 interface IProps {
-  text: string;
+  id?: string;
+  text?: string;
+  icon?: React.ReactNode;
   onClick: (event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
   color?: 'gray' | 'purple';
   disabled?: boolean;
@@ -14,16 +16,23 @@ const buttonColor = {
 };
 
 export const Button = (props: IProps) => {
-  const { text, onClick, color = 'gray', disabled, className } = props;
+  const { id, text, icon, onClick, color = 'gray', disabled, className } = props;
 
   const { isMobile } = useDeviceLayout();
-
+  if (id === 'back') {
+    return (
+      <button className="flex items-center gap-2" onClick={(event) => onClick(event)} disabled={disabled} name={text}>
+        {icon && <span className="">{icon}</span>}
+      </button>
+    );
+  }
   return (
     <button
-      className={`w-full ${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${buttonColor[color]} ${className}`}
+      className={`w-full className="absolute ${isMobile ? 'py-2 px-4' : 'py-3 px-5'} ${buttonColor[color]} ${className}`}
       onClick={(event) => onClick(event)}
       disabled={disabled}
       name={text}>
+      {icon && <span className="">{icon}</span>}
       <p className="whitespace-nowrap">{text}</p>
     </button>
   );

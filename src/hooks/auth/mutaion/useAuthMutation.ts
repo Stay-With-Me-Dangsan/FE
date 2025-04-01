@@ -12,13 +12,13 @@ import {
   IfindEmailDto,
 } from '../../../types/dto/auth';
 import { useAtom } from 'jotai';
-import { jwtStore, userIdStore } from '../../../store/auth';
+import { jwtStore } from '../../../store';
 import authApi from '../../../api-url/auth/auth.api';
 
 export default function useAuthMutation() {
   const navigate = useNavigate();
 
-  const [, setUserId] = useAtom(userIdStore);
+  // const [, setUserId] = useAtom(userIdStore);
   const [, setJwt] = useAtom(jwtStore);
 
   const onSignInMutation = useMutation({
@@ -27,7 +27,6 @@ export default function useAuthMutation() {
       const data = res.data?.data?.user;
 
       setJwt(data.accessToken);
-      setUserId(data.userId);
       navigate('/home');
     },
     onError: (err) => {

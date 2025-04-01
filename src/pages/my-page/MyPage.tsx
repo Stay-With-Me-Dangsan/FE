@@ -1,8 +1,8 @@
 import { useAtom } from 'jotai';
-import { userIdAtom } from '../../store/auth/authAtom';
+import { userIdAtom, decodeJwt } from '../../store/jwt';
 import { useEffect, useState, useRef } from 'react';
 import person from '../../asset/images/person.png';
-import vector from '../../asset/images/Vector.png';
+import rightArrow from '../../asset/images/rightArrow.png';
 import mypage_nickname_check from '../../asset/images/mypage_nickname_check.png';
 import pen from '../../asset/images/pen.png';
 import { useNavigate } from 'react-router-dom';
@@ -21,34 +21,39 @@ export const MyPage = () => {
   const navigate = useNavigate();
   const { isMobile } = useDeviceLayout();
   const { getMyPageMutation, updateNicknameMutation } = useAuthMutation();
-
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
-
   const showAlert = (message: string) => {
     setAlertMessage(message);
   };
   const closeAlert = () => {
     setAlertMessage(null);
   };
-
   useEffect(() => {
-    if (!userId) {
-      showAlert('로그인이 필요합니다!');
-      navigate('/');
-    }
+    // 브라우저 환경에서만 실행
+    if (typeof window !== 'undefined') {
+      const token = localStorage.getItem('accessToken');
+      const decoded = decodeJwt(token);
 
-    getMyPageMutation.mutate(userId!, {
-      onSuccess: (data) => {
-        const user = data.data.data.user;
-        // const user = res.data.data.user || res.data.user;
-        setUserInfo({ nickname: user.nickname, email: user.email });
-        setNickname(user.nickname);
-      },
-      onError: (error) => {
-        console.error(' 데이터 불러오기 실패:', error);
-      },
-    });
-  }, [userId]);
+      // 유효하지 않은 토큰이거나 userId가 없으면 리다이렉트
+      if (!decoded?.userId) {
+        showAlert('로그인이 필요합니다!');
+        navigate('/mypageNl');
+        return;
+      }
+
+      getMyPageMutation.mutate(decoded.userId, {
+        onSuccess: (data) => {
+          const user = data.data.data.user;
+          setUserInfo({ nickname: user.nickname, email: user.email });
+          setNickname(user.nickname);
+        },
+        onError: (error) => {
+          console.error(' 데이터 불러오기 실패:', error);
+          showAlert('유저 정보 불러오기 실패');
+        },
+      });
+    }
+  }, []);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -58,10 +63,10 @@ export const MyPage = () => {
   };
 
   const handleSaveClick = () => {
-    const newNickname = nicknameRef.current?.innerText.trim();
+    const newNickname = nicknameRef.current?.innerText.replace(/\s+/g, '').trim();
     const isValidNickname = /^(?=.*\d)[A-Za-z가-힣\d]{3,12}$/.test(newNickname || '');
 
-    if (!newNickname || newNickname.length > 2 || newNickname.length < 13) {
+    if (!newNickname || newNickname.length < 3 || newNickname.length > 12) {
       showAlert('닉네임은3~12자여야 합니다');
       return;
     }
@@ -112,7 +117,7 @@ export const MyPage = () => {
                         suppressContentEditableWarning
                         onKeyDown={(e) => handleSaveClick()}
                         className={`cursor-pointer focus:outline-none ${isEditing ? 'border-b border-gray-500' : ''}`}>
-                        {nickname} 님
+                        {nickname}
                       </p>
 
                       <img
@@ -132,7 +137,7 @@ export const MyPage = () => {
 
                 <div className="flex flex-col justify-center">
                   <button onClick={() => navigate('/mypage/edit')}>
-                    <img src={vector} alt="vector" className="ml-auto" />
+                    <img src={rightArrow} alt="rightArrow" className="ml-auto" />
                   </button>
                 </div>
               </div>

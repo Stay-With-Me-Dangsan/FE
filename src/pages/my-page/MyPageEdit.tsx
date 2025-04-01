@@ -1,11 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import { useAtom, useSetAtom } from 'jotai';
-import { userIdAtom, clearJwtAtom, clearUserAtom } from '../../store/auth/authAtom';
+import { userIdAtom, clearJwtAtom } from '../../store';
 import { useEffect, useState } from 'react';
 import { AuthButton } from '../../components/button';
 import mypageEdit_profile from '../../asset/images/mypageEdit_profile.png';
 import { useDeviceLayout } from '../../hooks/useDeviceLayout';
-import vector from '../../asset/images/Vector.png';
+import rightArrow from '../../asset/images/rightArrow.png';
+import { Alert } from '../../components/popup';
 
 import { Text } from '../../components/text';
 import useAuthMutation from '../../hooks/auth/mutaion/useAuthMutation';
@@ -20,14 +21,23 @@ export const MyPageEdit = () => {
   const [password, setPassword] = useState('');
 
   const setClearJwt = useSetAtom(clearJwtAtom);
-  const setClearUser = useSetAtom(clearUserAtom);
 
   const [isEditing, setIsEditing] = useState(false);
   const navigate = useNavigate();
   const { isMobile } = useDeviceLayout();
   const { getMyPageMutation, updateEmailMutation, updatePwMutation, logOutMutation } = useAuthMutation();
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const showAlert = (message: string) => {
+    setAlertMessage(message);
+  };
+  const closeAlert = () => {
+    setAlertMessage(null);
+  };
 
   useEffect(() => {
+    if (userId === null) return;
+
     if (!userId) {
       navigate('/mypageNl');
       return;
@@ -47,13 +57,8 @@ export const MyPageEdit = () => {
   }, [userId]);
 
   const saveEmail = async () => {
-    if (!userId) {
-      navigate('/mypageNl');
-      return;
-    }
-
     updateEmailMutation.mutate(
-      { userId, email },
+      { userId: userId!, email },
       {
         onSuccess: () => {
           setUserInfo((prev) => (prev ? { ...prev, email } : undefined));
@@ -66,13 +71,8 @@ export const MyPageEdit = () => {
     );
   };
   const savePw = async () => {
-    if (!userId) {
-      navigate('/mypageNl');
-      return;
-    }
-
     updatePwMutation.mutate(
-      { userId, password },
+      { userId: userId!, password },
       {
         onSuccess: () => {
           setUserInfo((prev) => (prev ? { ...prev, password } : undefined));
@@ -92,24 +92,19 @@ export const MyPageEdit = () => {
     logOutMutation.mutate(undefined, {
       onSuccess: () => {
         setClearJwt();
-        setClearUser();
-        alert('로그아웃 되셨습니다.');
+        showAlert('로그아웃 되셨습니다.');
         navigate('/');
       },
       onError: (err) => {
         console.error(err);
-        alert('로그아웃 실패입니다.');
+        showAlert('로그아웃 실패입니다.');
       },
     });
   };
 
   return (
     <div className="h-full flex justify-center overflow-x-hidden overflow-y-auto">
-      <div
-        className={`${isMobile ? '' : 'w-[20px] h-full bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]'}`}
-      />
-      <div
-        className={`${isMobile ? 'w-full' : 'w-[80vw] px-10 pb-[50px]'} max-w-[960px] flex flex-col items-center overflow-y-auto`}>
+      <div className="w-full max-w-[960px] flex flex-col items-center overflow-y-auto">
         <div className="w-full">
           <div className="w-full border-b-[1px] border-[#CDCDCD]">
             <div className="grid mb-14 justify-center">
@@ -127,12 +122,12 @@ export const MyPageEdit = () => {
                 <div className="flex justify-between w-full">
                   <Text value="이메일 변경" color="gray" />
                   <span>{userInfo?.email}</span>
-                  <img src={vector} alt="vector" className="ml-auto" />
+                  <img src={rightArrow} alt="rightArrow" className="ml-auto" />
                 </div>
                 <div className="flex justify-between w-full">
                   <Text value="비밀번호 변경" color="gray" />
                   <span>{userInfo?.password}</span>
-                  <img src={vector} alt="vector" className="ml-auto" />
+                  <img src={rightArrow} alt="rightArrow" className="ml-auto" />
                 </div>
               </div>
             </div>
@@ -144,10 +139,8 @@ export const MyPageEdit = () => {
           </div>
           <AuthButton text="로그아웃" onClick={(e) => logOutHandler(e)} color="purple" />
         </div>
+        {alertMessage && <Alert message={alertMessage} onClose={closeAlert} />}
       </div>
-      <div
-        className={`${isMobile ? '' : 'w-[20px] h-full bg-gradient-to-l from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]'}`}
-      />
     </div>
   );
 };

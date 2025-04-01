@@ -38,7 +38,7 @@ export class AxiosConfig {
 
   constructor() {
     this._axiosInstance = axios.create({
-      baseURL: `${window.location.origin}/${process.env.REACT_APP_API_PREFIX}`,
+      baseURL: `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}`,
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
     });
@@ -98,7 +98,7 @@ export class AxiosConfig {
 
           try {
             const refreshResponse = await axios.post(
-              `${window.location.origin}/${process.env.REACT_APP_API_PREFIX}/user/refresh`,
+              `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/user/refresh`,
               {},
               { withCredentials: true },
             );
