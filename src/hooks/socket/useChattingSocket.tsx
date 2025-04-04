@@ -26,11 +26,6 @@ export const useChattingSocket = () => {
 
     socketInstance.onopen = () => {
       console.log('websocket 연결 완료');
-      setInterval(() => {
-        if (socketInstance.readyState === WebSocket.OPEN) {
-          socketInstance.send(JSON.stringify({ type: 'ping' }));
-        }
-      }, 30000);
     };
 
     socketInstance.onmessage = (event) => {
