@@ -12,7 +12,6 @@ export const useChattingSocket = () => {
   useEffect(() => {
     if (!roomId) {
       if (socket) {
-        console.log('소켓 강제 닫음1');
         socket.close();
         setSocket(null);
       }
@@ -20,7 +19,6 @@ export const useChattingSocket = () => {
     }
 
     if (socket) {
-      console.log('소켓 강제 닫음2');
       socket.close();
     }
     const socketInstance = new WebSocket(`${process.env.REACT_APP_SOCKET_URL}/ws/chat?roomId=${roomId}`);
@@ -35,7 +33,7 @@ export const useChattingSocket = () => {
     };
 
     socketInstance.onclose = (e) => {
-      console.log('websocket 연결 종료 : ', e.code, e.reason);
+      console.log('websocket 연결 종료 : ', e);
     };
 
     socketInstance.onerror = (error) => {
