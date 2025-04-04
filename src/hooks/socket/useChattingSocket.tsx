@@ -12,6 +12,7 @@ export const useChattingSocket = () => {
   useEffect(() => {
     if (!roomId) {
       if (socket) {
+        console.log('소켓 강제 닫음1');
         socket.close();
         setSocket(null);
       }
@@ -19,7 +20,7 @@ export const useChattingSocket = () => {
     }
 
     if (socket) {
-      console.log('기존 websocket 닫는중!');
+      console.log('소켓 강제 닫음2');
       socket.close();
     }
     const socketInstance = new WebSocket(`${process.env.REACT_APP_SOCKET_URL}/ws/chat?roomId=${roomId}`);
