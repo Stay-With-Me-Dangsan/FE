@@ -13,7 +13,6 @@ export const useChattingSocket = () => {
     if (!roomId) {
       if (socket) {
         socket.close();
-        setSocket(null);
       }
       return;
     }
@@ -34,6 +33,7 @@ export const useChattingSocket = () => {
 
     socketInstance.onclose = (e) => {
       console.log('websocket 연결 종료 : ', e);
+      setSocket(null);
     };
 
     socketInstance.onerror = (error) => {
@@ -44,7 +44,9 @@ export const useChattingSocket = () => {
 
     return () => {
       console.log('websocket 연결 종료 요청');
-      socketInstance.close();
+      if (socketInstance.readyState === WebSocket.OPEN || socketInstance.readyState === WebSocket.CONNECTING) {
+        socketInstance.close();
+      }
     };
   }, [roomId]);
 
