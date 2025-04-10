@@ -51,7 +51,7 @@ export const FindEmail = () => {
       { nickname, birth },
       {
         onSuccess: (res) => {
-          const user = res.data.data.user;
+          const user = res.data.data.result.user;
           if (user.email && user.createdDate) {
             setEmail(user.email);
             setCreatedDate(new Date(user.createdDate).toLocaleDateString());

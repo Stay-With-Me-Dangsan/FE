@@ -1,1 +1,1 @@
-export * from './userHouseMutation';
+export * from './useHouseMutation';

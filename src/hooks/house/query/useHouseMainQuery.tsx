@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import HouseApi from '../../../api-url/house/house.api';
-import { IHouseMainDto } from '../../../types/dto/board';
+import { IHouseMainDto } from '../../../types/dto/house';
 
 interface IProps extends IHouseMainDto {}
 

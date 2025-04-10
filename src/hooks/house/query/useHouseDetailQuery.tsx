@@ -1,4 +1,4 @@
-import { IHouseDetail } from '../../../types/dto/board';
+import { IHouseDetail } from '../../../types/dto/house';
 import HouseApi from '../../../api-url/house/house.api';
 import { useQuery } from '@tanstack/react-query';
 

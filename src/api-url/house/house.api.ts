@@ -1,5 +1,5 @@
 import { AxiosConfig } from '../../common/axios-config';
-import { HouseGetMainRes } from '../../types/res/board';
+import { IHouseMainRes } from '../../types/res/house';
 import {
   ICreateHouseDetail,
   ICreateHouseMain,
@@ -8,13 +8,14 @@ import {
   IHouseDetails,
   IHouseMainDto,
   IPatchUpdateHouseDetail,
-} from '../../types/dto/board';
+  ClusterWithHouses,
+} from '../../types/dto/house';
 
 class HouseApi extends AxiosConfig {
   private readonly _baseURL = '/house';
 
   async getHouseMain(dto: IHouseMainDto) {
-    return await this.get<HouseGetMainRes, IHouseMainDto>({ url: `${this._baseURL}/getMain`, params: dto });
+    return await this.get<IHouseMainRes, IHouseMainDto>({ url: `${this._baseURL}/getMain`, params: dto });
   }
 
   async getHouseDetail(dto: IHouseDetail) {
@@ -25,8 +26,8 @@ class HouseApi extends AxiosConfig {
     return await this.get<null, IHouseDetails>({ url: `${this._baseURL}/getDetails`, params: dto });
   }
 
-  async getHouseDetailsByCondition() {
-    return await this.get<null, null>({ url: `${this._baseURL}/getDetailsByCondition` });
+  async getHouseDetailsByCondition(filters: Record<string, any>) {
+    return await this.get<null, any>({ url: `${this._baseURL}/getDetailsByCondition`, params: filters });
   }
 
   async postCreateHouseMain(dto: ICreateHouseMain) {
@@ -43,6 +44,12 @@ class HouseApi extends AxiosConfig {
 
   async deleteHouseDetail(dto: IDeleteHouseDetail) {
     return await this.delete<null, IHouseDetail>({ url: `${this._baseURL}/deleteDetail`, params: dto });
+  }
+
+  async getClusteredHouses() {
+    return await this.get<ClusterWithHouses[], null>({
+      url: `${this._baseURL}/clustered`,
+    });
   }
 }
 

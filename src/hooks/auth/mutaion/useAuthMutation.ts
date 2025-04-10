@@ -24,7 +24,7 @@ export default function useAuthMutation() {
   const onSignInMutation = useMutation({
     mutationFn: (data: ISignInDto) => AuthApi.postSignIn(data),
     onSuccess: (res) => {
-      const data = res.data?.data?.user;
+      const data = res.data?.data.result.user;
 
       setJwt(data.accessToken);
       navigate('/home');

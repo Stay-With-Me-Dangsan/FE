@@ -18,7 +18,7 @@ export const Home = () => {
     <div className="flex flex-col gap-10">
       <button onClick={openModal}>Open Modal</button>
 
-      <div className="flex flex-col gap-4">
+      {/* <div className="flex flex-col gap-4">
         <h1>채팅</h1>
 
         <div className="flex items-center gap-6">
@@ -41,7 +41,7 @@ export const Home = () => {
         </div>
         <input className="border-black" type="text" value={message} onChange={(e) => setMessage(e.target.value)} />
         <button onClick={() => sendMessage(message)}>전송</button>
-      </div>
+      </div> */}
     </div>
   );
 };

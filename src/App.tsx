@@ -19,10 +19,10 @@ function App() {
       <QueryClientProvider client={queryClient}>
         <Router />
       </QueryClientProvider>
-      <Modal>
+      {/* <Modal onConfirm={() => {}} onCancel={() => {}}>
         <h2>모달</h2>
         <p>모달 내용</p>
-      </Modal>
+      </Modal> */}
     </>
   );
 }

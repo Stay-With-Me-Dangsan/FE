@@ -13,6 +13,7 @@ interface IProps {
   className?: string;
   isConfirm?: boolean;
   onClick?: (event: React.MouseEvent<SVGSVGElement, MouseEvent>) => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const borderColor = {
@@ -33,6 +34,7 @@ export const Input = (props: IProps) => {
     className,
     isConfirm,
     onClick,
+    onKeyDown,
   } = props;
 
   const { isMobile } = useDeviceLayout();
@@ -45,6 +47,7 @@ export const Input = (props: IProps) => {
         type={type}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         placeholder={`${optional ? '[선택] ' : ''}${placeholder}`}
         disabled={disabled}
       />

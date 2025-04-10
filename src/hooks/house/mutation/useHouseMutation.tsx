@@ -7,10 +7,9 @@ import {
   IDeleteHouseDetail,
   IHouseDetails,
   IPatchUpdateHouseDetail,
-} from '../../../types/dto/board';
+} from '../../../types/dto/house';
 
-export const userHouseMutation = () => {
-  const navigate = useNavigate();
+export const useHouseMutation = () => {
   const queryClient = useQueryClient();
 
   const createHouseMainMutation = useMutation({
@@ -41,10 +40,15 @@ export const userHouseMutation = () => {
     },
   });
 
+  const getHouseMainMutation = useMutation({
+    mutationFn: () => HouseApi.getClusteredHouses(),
+  });
+
   return {
     createHouseMainMutation,
     createHouseDetailMutation,
     updateHouseDetailMutation,
     deleteHouseDetailMutation,
+    getHouseMainMutation,
   };
 };

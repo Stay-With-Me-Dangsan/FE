@@ -16,6 +16,7 @@ import {
   MyPageHouseLike,
   MypageHouseView,
 } from '../pages/my-page';
+import { Admin, AdminUserList, AdminBlackList, AdminUserDetail, AdminBlackDetail, AdminCode } from '../pages/admin';
 
 export const Router = () => {
   // const _BASE_URL = process.env.PUBLIC_URL;
@@ -53,6 +54,13 @@ export const Router = () => {
           <Route path="/mypage/house/like" element={<MyPageHouseLike />} />
           <Route path="/mypage/house/view" element={<MypageHouseView />} />
           <Route path="/mypage/edit" element={<MyPageEdit />} />
+
+          <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/user/list" element={<AdminUserList />} />
+          <Route path="/admin/black/list" element={<AdminBlackList />} />
+          <Route path="/admin/user/detail" element={<AdminUserDetail />} />
+          <Route path="/admin/black/detail" element={<AdminBlackDetail />} />
+          <Route path="/admin/code" element={<AdminCode />} />
         </Route>
       </Routes>
     </BrowserRouter>

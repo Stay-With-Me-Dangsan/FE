@@ -4,14 +4,14 @@ import { atom } from 'jotai';
 export const decodeJwt = (accessToken: string | null | undefined) => {
   if (!accessToken) return null;
   try {
-    // const payload = JSON.parse(atob(accessToken.split('.')[1])); // JWT payload 디코딩
     const payloadBase64 = accessToken.split('.')[1];
     if (!payloadBase64) return null;
     const payload = JSON.parse(atob(payloadBase64));
     const userId = payload.sub ? parseInt(payload.sub, 10) : null; // userId 추출
     const isNewUser = payload.isNewUser ?? false;
+    const role = payload.role ?? null;
 
-    return userId !== null ? { userId, isNewUser } : null;
+    return userId !== null ? { userId, isNewUser, role } : null;
   } catch (error) {
     console.error('JWT 디코딩 오류:', error);
     return null;
@@ -29,15 +29,24 @@ export const jwtStore = atom(
 );
 
 // accessToken 디코딩 atom
-export const decodedTokenAtom = atom<{ userId: number; isNewUser: boolean } | null>((get) => {
+export const decodedTokenAtom = atom<{
+  userId: number;
+  isNewUser: boolean;
+  role: string;
+} | null>((get) => {
   const token = get(jwtAtom);
   return decodeJwt(token);
 });
 
-// 여기에서 userId 자동 추출
+// userId 자동 추출
 export const userIdAtom = atom<number | null>((get) => {
   const decoded = get(decodedTokenAtom);
   return decoded?.userId ?? null;
+});
+// role 자동 추출
+export const roleAtom = atom<string | null>((get) => {
+  const decoded = get(decodedTokenAtom);
+  return decoded?.role ?? null;
 });
 
 export const clearJwtAtom = atom(null, (_get, set) => {

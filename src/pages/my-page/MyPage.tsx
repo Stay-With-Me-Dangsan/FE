@@ -1,5 +1,5 @@
 import { useAtom } from 'jotai';
-import { userIdAtom, decodeJwt } from '../../store/jwt';
+import { userIdAtom, roleAtom, decodeJwt } from '../../store/jwt';
 import { useEffect, useState, useRef } from 'react';
 import person from '../../asset/images/person.png';
 import rightArrow from '../../asset/images/rightArrow.png';
@@ -14,6 +14,7 @@ import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 
 export const MyPage = () => {
   const [userId] = useAtom(userIdAtom);
+  const [role] = useAtom(roleAtom);
   const [userInfo, setUserInfo] = useState<{ nickname: string; email: string } | null>(null);
   const [nickname, setNickname] = useState(userInfo?.nickname || '');
   const nicknameRef = useRef<HTMLParagraphElement | null>(null);
@@ -41,9 +42,13 @@ export const MyPage = () => {
         return;
       }
 
+      if (role === 'ADMIN') {
+        navigate('/admin');
+      }
+
       getMyPageMutation.mutate(decoded.userId, {
         onSuccess: (data) => {
-          const user = data.data.data.user;
+          const user = data.data.data.result.user;
           setUserInfo({ nickname: user.nickname, email: user.email });
           setNickname(user.nickname);
         },

@@ -46,6 +46,23 @@ export const Header = () => {
     } else {
       title = '마이페이지';
     }
+  } else if (depth_1 === 'admin') {
+    if (depth_2 && depth_3 && subPageMap[depth_2]?.[depth_3]) {
+      title = subPageMap[depth_2][depth_3];
+      showBackButton = true;
+      textColor = 'purple';
+      centerTitle = true;
+    } else if (depth_2 === 'edit') {
+      showBackButton = true;
+      title = '';
+      centerTitle = true;
+    } else if (depth_4 === 'edit') {
+      showBackButton = true;
+      title = '편집';
+      centerTitle = true;
+    } else {
+      title = '마이페이지';
+    }
   } else {
     switch (depth_1) {
       case 'home':

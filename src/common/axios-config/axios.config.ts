@@ -41,6 +41,23 @@ export class AxiosConfig {
       baseURL: `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}`,
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
+      //지도 배열 파라미터의 경우
+      paramsSerializer: (params) => {
+        const searchParams = new URLSearchParams();
+
+        for (const key in params) {
+          const value = params[key];
+          if (Array.isArray(value)) {
+            value.forEach((v) => {
+              searchParams.append(key, String(v)); // ❗ [] 없이 append
+            });
+          } else if (value !== undefined && value !== null) {
+            searchParams.append(key, String(value));
+          }
+        }
+
+        return searchParams.toString();
+      },
     });
 
     this._axiosInstance.interceptors.request.use(

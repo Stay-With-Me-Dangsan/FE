@@ -44,7 +44,7 @@ export const MyPageEdit = () => {
     }
     getMyPageMutation.mutate(userId, {
       onSuccess: (data) => {
-        const user = data.data.data.user;
+        const user = data.data.data.result.user;
         setUserInfo({
           email: user.email,
           password: user.password,
