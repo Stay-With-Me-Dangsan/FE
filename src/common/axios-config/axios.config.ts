@@ -86,16 +86,12 @@ export class AxiosConfig {
 
         //인증 필요한 요청등
         const isAuthRequired = [
-          '/api/user/mypage',
-          '/api/user/logout',
-          '/api/user/update',
-          '/api/user/delete',
-          '/api/user/refresh',
+          '/api/mypage/**',
           '/api/house/register',
           '/api/house/update',
           '/api/house/delete',
           '/api/house/reserve',
-          '/api/house/like',
+          '/api/house/bookmark',
         ].some((path) => originalRequest.url?.includes(path));
 
         if (!isAuthRequired && error.response?.status === 401) {

@@ -31,5 +31,19 @@ class AdminApi extends AxiosConfig {
       data: { commonCodeId },
     });
   }
+
+  // 유저
+  async getUserList() {
+    return await this.get({
+      url: `${this._baseURL}/user/list`,
+    });
+  }
+
+  // 게시판
+  async getBoardList() {
+    return await this.get({
+      url: `${this._baseURL}/board/list`,
+    });
+  }
 }
 export default new AdminApi();

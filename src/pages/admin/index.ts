@@ -4,3 +4,4 @@ export * from './AdminBlackList';
 export * from './AdminUserDetail';
 export * from './AdminBlackDetail';
 export * from './AdminCode';
+export * from './AdminBoardList';

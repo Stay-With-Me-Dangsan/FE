@@ -1,24 +1,6 @@
 import { AxiosConfig } from '../../common/axios-config';
-import {
-  ISignInRes,
-  ISignUpRes,
-  IUpdateNicknameRes,
-  IUpdateEmailRes,
-  IUpdatePwRes,
-  IfindEmailRes,
-  IgetMypageRes,
-} from '../../types/res/auth';
-import {
-  ISignInDto,
-  ISignUpDto,
-  IOauthRegDto,
-  IPatchUpdateNicknameDto,
-  IPatchEmailDto,
-  IPatchPwDto,
-  IfindEmailDto,
-  IEmailCodeDto,
-} from '../../types/dto/auth';
-import { promises } from 'dns';
+import { ISignInRes, ISignUpRes, IfindEmailRes } from '../../types/res/auth';
+import { ISignInDto, ISignUpDto, IOauthRegDto, IfindEmailDto } from '../../types/dto/auth';
 
 class AuthApi extends AxiosConfig {
   private readonly _baseURL = '/user';
@@ -69,44 +51,6 @@ class AuthApi extends AxiosConfig {
     return await this.post({
       url: `${this._baseURL}/findPw`,
       data: { email },
-    });
-  }
-
-  async getMyPage(userId: number) {
-    return await this.get<IgetMypageRes, { userId: number }>({
-      url: `${this._baseURL}/mypage/${userId}`,
-      params: { userId },
-    });
-  }
-
-  async patchUpdateNickname(dto: IPatchUpdateNicknameDto) {
-    return await this.patch<IUpdateNicknameRes, IPatchUpdateNicknameDto>({
-      url: `${this._baseURL}/mypage/updateNickname`,
-      data: dto,
-    });
-  }
-
-  async patchUpdateEmail(dto: IPatchEmailDto) {
-    return await this.patch<IUpdateEmailRes, IPatchEmailDto>({
-      url: `${this._baseURL}/mypage/updateEmail`,
-      data: dto,
-    });
-  }
-  async patchUpdatePw(dto: IPatchPwDto) {
-    return await this.patch<IUpdatePwRes, IPatchPwDto>({
-      url: `${this._baseURL}/mypage/updatePw`,
-      data: dto,
-    });
-  }
-
-  async postLogOut() {
-    return await this.post({
-      url: `${this._baseURL}/logout`,
-      data: null,
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // ✅ JWT 추가
-        'Content-Type': 'application/json',
-      },
     });
   }
 }

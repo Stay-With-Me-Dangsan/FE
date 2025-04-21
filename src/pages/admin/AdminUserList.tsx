@@ -1,68 +1,56 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { IBoardComments } from '../../types/interface/board/board.model';
-import { BoardCommentItem } from '../my-page/components/BoardCommentItem';
-import { BoardSection } from './components/BoardSection';
-import myapge_list from '../../asset/images/myapge_list.png';
 import mypage_comment_drop from '../../asset/images/mypage_comment_drop.png';
-
+import { UsersDto } from '../../types/dto/admin/admin.dto';
+import admin_userList from '../../asset/images/admin_userList.png';
+import { useAllUsersQuery } from '../../hooks/admin/query/useUserListQuery';
+import { Alert } from '../../components/popup';
 const sortOptions = ['최신순', '오래된순', '많이본순'];
 
 export const AdminUserList = () => {
-  const [comments, setcomments] = useState<IBoardComments[]>([]);
+  const [users, setusers] = useState<UsersDto[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState('최신순');
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
+  const { data, isLoading, isError } = useAllUsersQuery();
+
+  const showAlert = (message: string) => {
+    setAlertMessage(message);
+  };
+  const closeAlert = () => {
+    setAlertMessage(null);
+  };
+
+  // 🔹 data 수신 후 users 상태 업데이트
   useEffect(() => {
-    // const fetchMyComments = async () => {
-    //   try {
-    //     const res = await axios.get('/api/mypage/board/comment'); // ← 백엔드 API 경로에 맞춰 수정
-    //     setcomments(res.data.data); // ← 응답 구조에 맞게 수정
-    //   } catch (err) {
-    //     console.error('댓글 단 글 불러오기 실패', err);
-    //   }
-    // };
+    if (data) {
+      setusers(data); // select에서 result만 꺼낸 상태라면 그대로 사용 가능
+    }
+    if (isError) {
+      showAlert('회원 리스트를 불러오는 데 실패했습니다.');
+    }
+  }, [data, isError]);
 
-    // fetchMyComments();
-    const mockComments: IBoardComments[] = [
-      {
-        id: 1,
-        title:
-          '쉐어하우스 계약하기 전 확인해야 할 팁 모음 다년간의 쉐어메이트 계약 인생... 모으고 모았던 팁 뿌릴게 ... 더보기 ',
-        comments: 'ㅇㄷ',
-        comment_date: new Date(Date.now() - 1000 * 60 * 60 * 2), // 2시간 전
-      },
-      {
-        id: 2,
-        title:
-          '야밤에 냉동만두에 와인 한 잔을 하면서 제 자취생활 동안 얻게 된 요리 팁을 대방출하고자 합니다. ... 더보기',
-        comments: '닭볶음탕 집에서 쉽게 하는 법도 부탁드립니다ㅠㅠ',
-        comment_date: new Date(Date.now() - 60 * 1000), // 1분 전
-      },
-      {
-        id: 3,
-        title: '쇼파 추천 좀요요',
-        comments:
-          '오늘의 집에서 3d방오늘의집에서 3D로 방 구현해가지고 인테리어 비치 미리 해보는 시뮬레이션 기능 있으니까 그거 참고해보세요 무료 프로그램이라서 돈 따로 내지 않아도 돼요',
-        comment_date: new Date(Date.now() - 1000 * 60 * 60 * 24 * 3), // 3일 전
-      },
-    ];
-
-    setcomments(mockComments);
-  }, []);
   const handleSortSelect = (option: string) => {
     setSelectedSort(option);
     setIsOpen(false);
-    // TODO: 정렬된 comments 갱신 로직 추가 가능
+    const sorted = [...users];
+    if (option === '최신순')
+      sorted.sort((a, b) => new Date(b.createdDate).getTime() - new Date(a.createdDate).getTime());
+    if (option === '오래된순')
+      sorted.sort((a, b) => new Date(a.createdDate).getTime() - new Date(b.createdDate).getTime());
+    setusers(sorted);
   };
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
       <div className="w-full h-full px-8">
+        <div className=""></div>
         <div className="w-full inline-flex items-center py-6">
-          <div className="relative">
+          <div className="">
             <button
               onClick={() => setIsOpen((prev) => !prev)}
-              className="flex items-center w-28 gap-4 px-3 py-3 border border-gray-300 rounded-md text-md bg-gray-200 ">
+              className="flex items-center w-30 gap-4 px-3 py-3 border border-gray-300 rounded-md text-md bg-gray-200 ">
               <span>{selectedSort}</span>
               <img src={mypage_comment_drop} alt="dropdown" className="w-4 h-4" />
             </button>
@@ -81,10 +69,24 @@ export const AdminUserList = () => {
             )}
           </div>
         </div>
-        {/* <BoardSection title="내가 작성한 댓댓글" comments={comments} boards={[]} /> */}
-        {comments.map((comment) => (
-          <BoardCommentItem key={comment.id} comment={comment} />
-        ))}
+        <div className="mt-4">
+          {users.length === 0 ? (
+            <p className="text-gray-500">등록된 유저가 없습니다.</p>
+          ) : (
+            users.map((user) => (
+              <div key={user.user_id} className="w-full border-b py-4 flex justify-between items-center">
+                <div className="flex items-center">
+                  <img src={admin_userList} alt="어드민_유저리스트" />
+                  <div className="justify-between items-center ml-1">
+                    <p className="font-semibold">{user.nickname || '이름 없음'}</p>
+                    <p className="text-sm text-gray-500">{user.email}</p>
+                  </div>
+                </div>
+                <div className="text-sm text-gray-400">가입일: {new Date(user.createdDate).toLocaleDateString()}</div>
+              </div>
+            ))
+          )}
+        </div>
       </div>
     </div>
   );

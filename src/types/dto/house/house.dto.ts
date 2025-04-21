@@ -17,12 +17,12 @@ export interface IHouseDetails {
 }
 
 // 지도 마커 렌더링용
-export interface HouseMarkerDto {
+export interface IHouseDetailDto {
   latitude: number;
   longitude: number;
   count?: number;
-  houseMainId: number;
-  imageSrc: string;
+  houseDetailId: number;
+  houseFilePath: string;
   tags: string[];
   propertyType: string;
   houseDetailAddress: string;
@@ -31,6 +31,7 @@ export interface HouseMarkerDto {
   maintenance: number;
   management: number;
   options: { icon: string; label: string }[];
+  roomType: string;
 }
 
 // 4. 필터 조건으로 지도 집 목록 조회 시 (GET /getDetailsByCondition)
@@ -86,5 +87,5 @@ export interface ClusterWithHouses {
   lat: number;
   lng: number;
   count: number;
-  houses: HouseMarkerDto[];
+  houses: IHouseDetailDto[];
 }

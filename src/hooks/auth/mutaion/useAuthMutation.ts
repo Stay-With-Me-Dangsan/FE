@@ -14,6 +14,7 @@ import {
 import { useAtom } from 'jotai';
 import { jwtStore } from '../../../store';
 import authApi from '../../../api-url/auth/auth.api';
+import mypageApi from '../../../api-url/auth/mypage.api';
 
 export default function useAuthMutation() {
   const navigate = useNavigate();
@@ -24,9 +25,9 @@ export default function useAuthMutation() {
   const onSignInMutation = useMutation({
     mutationFn: (data: ISignInDto) => AuthApi.postSignIn(data),
     onSuccess: (res) => {
-      const data = res.data?.data.result.user;
-
+      const data = res.data?.data.result;
       setJwt(data.accessToken);
+      localStorage.setItem('accessToken', data.accessToken);
       navigate('/home');
     },
     onError: (err) => {
@@ -59,26 +60,37 @@ export default function useAuthMutation() {
   });
 
   const getMyPageMutation = useMutation({
-    mutationFn: (userId: number) => authApi.getMyPage(userId),
+    mutationFn: (userId: number) => mypageApi.getMyPage(userId),
   });
 
+  const gethouseUploadMutation = useMutation({
+    mutationFn: () => mypageApi.gethouseUpload(),
+  });
+
+  const gethouseLikeMutation = useMutation({
+    mutationFn: () => mypageApi.gethouseLike(),
+  });
+
+  const gethouseViewMutation = useMutation({
+    mutationFn: () => mypageApi.gethouseView(),
+  });
   const updateNicknameMutation = useMutation({
-    mutationFn: (data: IPatchUpdateNicknameDto) => authApi.patchUpdateNickname(data),
+    mutationFn: (data: IPatchUpdateNicknameDto) => mypageApi.patchUpdateNickname(data),
     onSuccess: async () => {
       // await queryClient.invalidateQueries({ queryKey: ['myPage'] });
     },
   });
 
   const updateEmailMutation = useMutation({
-    mutationFn: (data: IPatchEmailDto) => authApi.patchUpdateEmail(data),
+    mutationFn: (data: IPatchEmailDto) => mypageApi.patchUpdateEmail(data),
   });
 
   const updatePwMutation = useMutation({
-    mutationFn: (data: IPatchPwDto) => authApi.patchUpdatePw(data),
+    mutationFn: (data: IPatchPwDto) => mypageApi.patchUpdatePw(data),
   });
 
   const logOutMutation = useMutation({
-    mutationFn: () => AuthApi.postLogOut(),
+    mutationFn: () => mypageApi.postLogOut(),
   });
 
   return {
@@ -94,5 +106,8 @@ export default function useAuthMutation() {
     onFindEmailMutation,
     onFindPwMutation,
     logOutMutation,
+    gethouseUploadMutation,
+    gethouseLikeMutation,
+    gethouseViewMutation,
   };
 }

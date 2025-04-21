@@ -41,7 +41,11 @@ export const useHouseMutation = () => {
   });
 
   const getHouseMainMutation = useMutation({
-    mutationFn: () => HouseApi.getClusteredHouses(),
+    mutationFn: () => HouseApi.getMainClusteredHouses(),
+  });
+
+  const getClustersMutation = useMutation({
+    mutationFn: (data: IHouseDetails) => HouseApi.getClusteredHouses(data),
   });
 
   return {
@@ -50,5 +54,6 @@ export const useHouseMutation = () => {
     updateHouseDetailMutation,
     deleteHouseDetailMutation,
     getHouseMainMutation,
+    getClustersMutation,
   };
 };

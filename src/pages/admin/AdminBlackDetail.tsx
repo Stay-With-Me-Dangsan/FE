@@ -44,7 +44,7 @@ export const AdminBlackDetail = () => {
     }
     getMyPageMutation.mutate(userId, {
       onSuccess: (data) => {
-        const user = data.data.data.result.user;
+        const user = data.data.data.result;
         setUserInfo({
           email: user.email,
           password: user.password,

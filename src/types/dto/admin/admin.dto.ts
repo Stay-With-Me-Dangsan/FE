@@ -1,9 +1,9 @@
 export interface CommonCode {
-  id: number;
-  group: string;
-  name: string;
-  codeKey: string;
-  description: string;
+  commonCodeId: number;
+  commonCodeGroupId: string;
+  commonCodeName: string;
+  commonCodeKey: string;
+  commonCodeDescription: string;
 }
 
 export interface IGetCodeDto {
@@ -27,4 +27,14 @@ export interface IPatchCodeDto {
 
 export interface IdeleteCodeDto {
   commonCodeId: number;
+}
+
+export interface UsersDto {
+  user_id: number;
+  email: string;
+  nickname: string;
+  birth: string;
+  gender: string;
+  createdDate: Date;
+  provider: string;
 }

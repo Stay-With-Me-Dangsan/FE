@@ -47,8 +47,10 @@ export const MyPage = () => {
       }
 
       getMyPageMutation.mutate(decoded.userId, {
-        onSuccess: (data) => {
-          const user = data.data.data.result.user;
+        onSuccess: (res) => {
+          console.log(res);
+          const user = res.data.data.result;
+          console.log('user: ', user);
           setUserInfo({ nickname: user.nickname, email: user.email });
           setNickname(user.nickname);
         },

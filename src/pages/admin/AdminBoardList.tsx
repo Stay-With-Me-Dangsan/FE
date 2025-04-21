@@ -3,8 +3,8 @@ import { useEffect, useState } from 'react';
 import useAuthMutation from '../../hooks/auth/mutaion/useAuthMutation';
 import myapge_list from '../../asset/images/myapge_list.png';
 import { IHouseDetailDto } from '../../types/dto/house';
-import { HouseItem } from '../../pages/my-page/components/HouseItem';
-export const MyPageHouseUpload = () => {
+import { HouseItem } from '../my-page/components/HouseItem';
+export const AdminBoardList = () => {
   const navigate = useNavigate();
   const [houses, setHouse] = useState<IHouseDetailDto[]>([]);
   const { gethouseUploadMutation } = useAuthMutation();

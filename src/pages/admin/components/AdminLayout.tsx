@@ -16,7 +16,7 @@ const MenuItem = ({ label, to }: { label: string; to: string }) => {
     </div>
   );
 };
-export const MypageLayout = (props: IProps) => {
+export const AdminLayout = (props: IProps) => {
   const { children } = props;
   const { isMobile } = useDeviceLayout();
 
@@ -25,14 +25,13 @@ export const MypageLayout = (props: IProps) => {
       <div className="w-full max-w-[960px] mx-auto flex flex-col items-center overflow-y-auto">
         {children}
 
-        {/* 스테이 윗 미 항목 */}
+        {/* 게시판 항목 */}
         <div className="w-full h-fit border-t-[1px] border-[#CDCDCD] mt-[20px]">
           <div className="grid pt-[30px] gap-5">
-            <p className="text-purple-400 font-bold">스테이 윗 미</p>
+            <p className="text-purple-400 font-bold">게시판 및 게시글</p>
             <div className="flex flex-col gap-6">
-              <MenuItem label="내가 올린 집" to="/mypage/house/upload" />
-              <MenuItem label="내가 찜한 집" to="/mypage/house/bookmark" />
-              <MenuItem label="최근 조회한 집" to="/mypage/house/view" />
+              <MenuItem label="게시판 관리" to="/admin/board/list" />
+              <MenuItem label="블라인드 된 게시글 리스트" to="/admin/blind/list" />
             </div>
           </div>
         </div>
@@ -40,11 +39,20 @@ export const MypageLayout = (props: IProps) => {
         {/* 게시판 항목 */}
         <div className="w-full h-fit border-t-[1px] border-[#CDCDCD] mt-[20px]">
           <div className="grid pt-[30px] gap-5">
-            <p className="text-purple-400 font-bold">게시판</p>
+            <p className="text-purple-400 font-bold">유저 정보 및 차단 유저</p>
             <div className="flex flex-col gap-6">
-              <MenuItem label="내가 작성한 글" to="/mypage/board/write" />
-              <MenuItem label="내가 작성한 댓글" to="/mypage/board/comment" />
-              <MenuItem label="내가 찜한 게시글" to="/mypage/borad/like" />
+              <MenuItem label="전체 회원 목록" to="/admin/user/list" />
+              <MenuItem label="차단 회원 목록" to="/admin/black/list" />
+            </div>
+          </div>
+        </div>
+
+        {/* 공통코드드 항목 */}
+        <div className="w-full h-fit border-t-[1px] border-[#CDCDCD] mt-[20px]">
+          <div className="grid pt-[30px] gap-5">
+            <p className="text-purple-400 font-bold">공통코드</p>
+            <div className="flex flex-col gap-6">
+              <MenuItem label="공통코드 관리리" to="/admin/code" />
             </div>
           </div>
         </div>

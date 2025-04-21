@@ -49,13 +49,15 @@ export const Router = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/board/write" element={<MyPageBoardWrite />} />
           <Route path="/mypage/board/comment" element={<MyPageBoardComment />} />
-          <Route path="/mypage/board/like" element={<MypageBoardLike />} />
+          <Route path="/mypage/board/bookmark" element={<MypageBoardLike />} />
           <Route path="/mypage/house/upload" element={<MyPageHouseUpload />} />
-          <Route path="/mypage/house/like" element={<MyPageHouseLike />} />
+          <Route path="/mypage/house/bookmark" element={<MyPageHouseLike />} />
           <Route path="/mypage/house/view" element={<MypageHouseView />} />
           <Route path="/mypage/edit" element={<MyPageEdit />} />
 
           <Route path="/admin" element={<Admin />} />
+          <Route path="/admin/board/list" element={<AdminUserList />} />
+          <Route path="/admin/blind/list" element={<AdminBlackList />} />
           <Route path="/admin/user/list" element={<AdminUserList />} />
           <Route path="/admin/black/list" element={<AdminBlackList />} />
           <Route path="/admin/user/detail" element={<AdminUserDetail />} />

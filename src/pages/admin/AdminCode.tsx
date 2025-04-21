@@ -11,16 +11,7 @@ import { useCodeQuery } from '../../hooks/admin/query/useCodeQuery';
 import { IGetCodeDto, ICreateCodeDto, IPatchCodeDto, CommonCode } from '../../types/dto/admin';
 
 export const AdminCode = () => {
-  // const initialData: CommonCode[] = [
-  //   { id: 1, group: 'SPTYP', name: '1인실', codeKey: '공용코드 키', description: '1인실', selected: false },
-  //   { id: 2, group: 'SPTYP', name: '2인실', codeKey: '공용코드 키', description: '2인실', selected: false },
-  //   { id: 3, group: 'SPTYP', name: '3인실', codeKey: '공용코드 키', description: '3인실', selected: false },
-  // ];
-
-  const { data: codes = [], refetch } = useCodeQuery({
-    groupId: 'SPTYP',
-    codeKey: '',
-  } as IGetCodeDto);
+  const { data: codes = [], refetch } = useCodeQuery();
   const [selectAll, setSelectAll] = useState(false);
   const [search, setSearch] = useState('');
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -50,7 +41,7 @@ export const AdminCode = () => {
     if (selectAll) {
       setSelectedIds([]);
     } else {
-      setSelectedIds(codes.map((code: CommonCode) => code.id));
+      setSelectedIds(codes.map((code: CommonCode) => code.commonCodeId));
     }
     setSelectAll(!selectAll);
   };
@@ -93,7 +84,7 @@ export const AdminCode = () => {
   };
 
   const handleDelete = () => {
-    const selectedItems = codes.filter((code: CommonCode) => selectedIds.includes(code.id));
+    const selectedItems = codes.filter((code: CommonCode) => selectedIds.includes(code.commonCodeId));
     console.log('selectedItems : ' + selectedItems);
     if (selectedItems.length === 0) {
       showAlert('삭제할 항목을 선택해주세요.');
@@ -124,9 +115,9 @@ export const AdminCode = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const filteredCodes = codes.filter(
-    (code: CommonCode) => code.name.includes(search) || code.description.includes(search),
-  );
+  // const filteredCodes = codes.filter(
+  //   (code: CommonCode) => code.name.includes(search) || code.description.includes(search),
+  // );
 
   return (
     <div className="p-6 bg-white rounded-md shadow-md">
@@ -175,30 +166,44 @@ export const AdminCode = () => {
             </tr>
           </thead>
           <tbody>
-            {filteredCodes.map((code: CommonCode, idx: number) => (
+            {/* <tbody>
+  {codes.map((code, idx) => (
+    <tr key={code.id}>
+      <td>{idx + 1}</td>
+      <td>{code.group}</td>
+      <td>{code.name}</td>
+      ...
+    </tr>
+  ))}
+</tbody> */}
+
+            {codes.map((code: CommonCode, idx: number) => (
               <tr
-                key={code.id}
+                key={code.commonCodeId}
                 className={`text-center transition-colors ${
-                  selectedIds.includes(code.id) ? 'bg-blue-100' : 'hover:bg-blue-50'
+                  selectedIds.includes(code.commonCodeId) ? 'bg-blue-100' : 'hover:bg-blue-50'
                 } cursor-pointer`}
                 onDoubleClick={() => {
-                  setSelectedIds([code.id]);
-                  setSelectedCodeId(code.id);
-                  setGroupId(code.group);
-                  setName(code.name);
-                  setCodeKey(code.codeKey);
-                  setDescript(code.description);
+                  setSelectedIds([code.commonCodeId]);
+                  setSelectedCodeId(code.commonCodeId);
+                  setGroupId(code.commonCodeGroupId);
+                  setName(code.commonCodeName);
+                  setCodeKey(code.commonCodeKey);
+                  setDescript(code.commonCodeDescription);
 
                   openModal();
                 }}>
                 <td className="p-2 border">
-                  <Checkbox checked={selectedIds.includes(code.id)} onChange={() => toggleCheckbox(code.id)} />
+                  <Checkbox
+                    checked={selectedIds.includes(code.commonCodeId)}
+                    onChange={() => toggleCheckbox(code.commonCodeId)}
+                  />
                 </td>
                 <td className="p-2 border">{idx + 1}</td>
-                <td className="p-2 border">{code.group}</td>
-                <td className="p-2 border">{code.name}</td>
-                <td className="p-2 border">{code.codeKey}</td>
-                <td className="p-2 border">{code.description}</td>
+                <td className="p-2 border">{code.commonCodeId}</td>
+                <td className="p-2 border">{code.commonCodeName}</td>
+                <td className="p-2 border">{code.commonCodeKey}</td>
+                <td className="p-2 border">{code.commonCodeDescription}</td>
               </tr>
             ))}
           </tbody>

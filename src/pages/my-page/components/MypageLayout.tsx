@@ -31,7 +31,7 @@ export const MypageLayout = (props: IProps) => {
             <p className="text-purple-400 font-bold">스테이 윗 미</p>
             <div className="flex flex-col gap-6">
               <MenuItem label="내가 올린 집" to="/mypage/house/upload" />
-              <MenuItem label="내가 찜한 집" to="/mypage/house/like" />
+              <MenuItem label="내가 찜한 집" to="/mypage/house/bookmark" />
               <MenuItem label="최근 조회한 집" to="/mypage/house/view" />
             </div>
           </div>

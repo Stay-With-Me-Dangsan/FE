@@ -4,6 +4,12 @@ import { IGetCodeDto, ICreateCodeDto, IPatchCodeDto, CommonCode } from '../../ty
 class commonCodeApi extends AxiosConfig {
   private readonly _baseURL = '/commonCode';
 
+  async getCodeList() {
+    return await this.get<CommonCode[], null>({
+      url: `${this._baseURL}/list`,
+    });
+  }
+
   async getCode(dto: IGetCodeDto) {
     return await this.get<CommonCode[], IGetCodeDto>({
       url: `${this._baseURL}/get`,

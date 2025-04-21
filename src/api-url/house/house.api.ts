@@ -46,10 +46,12 @@ class HouseApi extends AxiosConfig {
     return await this.delete<null, IHouseDetail>({ url: `${this._baseURL}/deleteDetail`, params: dto });
   }
 
-  async getClusteredHouses() {
-    return await this.get<ClusterWithHouses[], null>({
-      url: `${this._baseURL}/clustered`,
-    });
+  async getMainClusteredHouses() {
+    return await this.get<ClusterWithHouses[], null>({ url: `${this._baseURL}/Main/clustered` });
+  }
+
+  async getClusteredHouses(dto: IHouseDetails) {
+    return await this.get<ClusterWithHouses[], null>({ url: `${this._baseURL}/clustered`, params: dto });
   }
 }
 

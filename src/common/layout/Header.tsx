@@ -1,4 +1,5 @@
 import { useLocation, useParams, useNavigate } from 'react-router-dom';
+import { Search } from '../../components/search';
 import { Text } from '../../components/text';
 import BackIcon from '../../asset/images/back.png';
 import { Button } from '../..//components/button';
@@ -52,9 +53,21 @@ export const Header = () => {
       showBackButton = true;
       textColor = 'purple';
       centerTitle = true;
-    } else if (depth_2 === 'edit') {
+    } else if (depth_2 === 'user') {
       showBackButton = true;
-      title = '';
+      title = '유저 리스트';
+      centerTitle = true;
+    } else if (depth_2 === 'black') {
+      showBackButton = true;
+      title = '블랙 리스트';
+      centerTitle = true;
+    } else if (depth_2 === 'code') {
+      showBackButton = true;
+      title = '공통코드 관리';
+      centerTitle = true;
+    } else if (depth_2 === 'board') {
+      showBackButton = true;
+      title = '전체 게시글 리스트';
       centerTitle = true;
     } else if (depth_4 === 'edit') {
       showBackButton = true;
@@ -98,6 +111,7 @@ export const Header = () => {
           <Text value={title} color={textColor} size="large" />
         </div>
       )}
+
       {/* 오른쪽 영역  */}
       <div className="flex items-center justify-end w-1/3">
         {depth_4 === 'edit' && (
@@ -106,6 +120,8 @@ export const Header = () => {
           </button>
         )}
       </div>
+
+      <div className="flex items-center justify-end w-1/3">{depth_4 === 'list' && <Search />}</div>
     </div>
   );
 };

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@tanstack/react-query';
-import { IGetCodeDto, ICreateCodeDto, IPatchCodeDto } from '../../../types/dto/admin';
+import { IGetCodeDto, ICreateCodeDto, IPatchCodeDto, UsersDto } from '../../../types/dto/admin';
 import AdminApi from '../../../api-url/admin/admin.api';
 
 export default function useAdminMutation() {
@@ -21,10 +21,15 @@ export default function useAdminMutation() {
     mutationFn: (deleteCode: number) => AdminApi.deleteCode(deleteCode),
   });
 
+  const onGetUserListMutation = useMutation({
+    mutationFn: () => AdminApi.getUserList(),
+  });
+
   return {
     onGetCodeMutation,
     onCreateCodeMutation,
     onpatchCodeMutation,
     onDelteCodeMutation,
+    onGetUserListMutation,
   };
 }

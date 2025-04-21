@@ -1,4 +1,4 @@
-import { Map, useKakaoLoader, MapMarker, CustomOverlayMap, ZoomControl } from 'react-kakao-maps-sdk';
+import { Map, useKakaoLoader } from 'react-kakao-maps-sdk';
 import { useRef, useState, useEffect } from 'react';
 import { useHouseDetailsQuery } from '../../../hooks/house';
 import map_plus from '../../../asset/images/map_plus.png';
@@ -6,7 +6,7 @@ import map_minus from '../../../asset/images/map_minus.png';
 import map_location from '../../../asset/images/map_location.png';
 import { useHouseMutation } from '../../../hooks/house/mutation/useHouseMutation';
 import ClusterCircle from './ClusterCircle';
-import { HouseMarkerDto, ClusterWithHouses } from '../../../types/dto/house';
+import { IHouseDetailDto, ClusterWithHouses } from '../../../types/dto/house';
 
 interface IProps {
   latitude: number;
@@ -31,54 +31,86 @@ export const Maps = ({ latitude, setLatitude, longitude, setLongitude, setIsOpen
   const [minY, setMinY] = useState<number>(0);
   const mapRef = useRef<kakao.maps.Map>(null);
   const [loading] = useKakaoLoader({ appkey: process.env.REACT_APP_KAKAO_APP_KEY as string });
-  const { getHouseMainMutation } = useHouseMutation();
-  const [selectedCluster, setSelectedCluster] = useState<{ lat: number; lng: number } | null>(null);
+  const { getHouseMainMutation, getClustersMutation } = useHouseMutation();
+  const [selectedCluster, setSelectedCluster] = useState<{ lat: number; lng: number; count: number } | null>(null);
   const [clusteredHouses, setClusteredHouses] = useState<ClusterWithHouses[]>([]); //클러스터 목록 (count + houses[])
-  const [selectedClusterHouses, setSelectedClusterHouses] = useState<HouseMarkerDto[]>([]); // 리스트용
+  const [selectedClusterHouses, setSelectedClusterHouses] = useState<IHouseDetailDto[]>([]); // 리스트용
 
   const handleClusterClick = (cluster: ClusterWithHouses) => {
-    setSelectedCluster({ lat: cluster.lat, lng: cluster.lng });
+    setSelectedCluster({ lat: cluster.lat, lng: cluster.lng, count: cluster.count });
     setSelectedClusterHouses(cluster.houses);
-    console.log(selectedCluster);
-    console.log(selectedClusterHouses.length);
-    console.log('선택된 클러스터 하우스:', selectedClusterHouses);
   };
 
+  // 메인 가장 많은 지역으로 이동
   useEffect(() => {
-    getHouseMainMutation.mutate();
-  }, []);
-
-  useEffect(() => {
-    if (getHouseMainMutation.isSuccess && getHouseMainMutation.data) {
-      const result = getHouseMainMutation.data.data.data.result;
-
-      // result가 배열인지 검사
-      if (Array.isArray(result) && result.length > 0) {
+    getHouseMainMutation.mutate(undefined, {
+      onSuccess: (result) => {
         const clusters: ClusterWithHouses[] = result;
         setClusteredHouses(clusters);
         const topCluster = clusters[0];
         setLatitude(topCluster.lat);
         setLongitude(topCluster.lng);
         mapRef.current?.setCenter(new kakao.maps.LatLng(topCluster.lat, topCluster.lng));
+      },
+    });
+  }, []);
 
-        setClusteredHouses(clusters);
-      } else {
-        console.warn('클러스터 결과가 배열이 아님:', result);
-      }
-    }
-  }, [getHouseMainMutation.isSuccess, getHouseMainMutation.data]);
+  //   useEffect(() => {
+  //  if (getHouseMainMutation.isSuccess && getHouseMainMutation.data) {
 
-  // 초기 bounds 설정
-  useEffect(() => {
-    if (loading || !mapRef.current) return;
+  //       // result가 배열인지 검사
+  //       if (Array.isArray(result) && result.length > 0) {
+  //         const clusters: ClusterWithHouses[] = result;
+  //         setClusteredHouses(clusters);
+  //         const topCluster = clusters[0];
+  //         setLatitude(topCluster.lat);
+  //         setLongitude(topCluster.lng);
+  //         mapRef.current?.setCenter(new kakao.maps.LatLng(topCluster.lat, topCluster.lng));
 
-    const bounds = mapRef.current.getBounds();
-    setMinX(bounds.getSouthWest().getLng());
-    setMaxX(bounds.getNorthEast().getLng());
-    setMinY(bounds.getSouthWest().getLat());
-    setMaxY(bounds.getNorthEast().getLat());
-  }, [loading]);
+  //         setClusteredHouses(clusters);
+  //       } else {
+  //         console.warn('클러스터 결과가 배열이 아님:', result);
+  //       }
+  //     }
+  //   }, [getHouseMainMutation.isSuccess, getHouseMainMutation.data]);
 
+  // // 초기 bounds 설정
+  // useEffect(() => {
+  //   if (loading || !mapRef.current) return;
+
+  //   const bounds = mapRef.current.getBounds();
+  //   setMinX(bounds.getSouthWest().getLng());
+  //   setMaxX(bounds.getNorthEast().getLng());
+  //   setMinY(bounds.getSouthWest().getLat());
+  //   setMaxY(bounds.getNorthEast().getLat());
+  // }, [loading]);
+
+  // 지도 움직임에 따라 클러스트 이동
+  const onMapZoomChangedHandler = (target: kakao.maps.Map) => {
+    if (!mapRef.current) return; // mapRef.current 체크 추가
+    const level = target.getLevel();
+    const bounds = target.getBounds();
+
+    const minX = bounds.getSouthWest().getLng();
+    const maxX = bounds.getNorthEast().getLng();
+    const minY = bounds.getSouthWest().getLat();
+    const maxY = bounds.getNorthEast().getLat();
+
+    setZoomLevel(level);
+    setMinX(minX);
+    setMaxX(maxX);
+    setMinY(minY);
+    setMaxY(maxY);
+
+    getClustersMutation.mutate(
+      { minX, maxX, minY, maxY },
+      {
+        onSuccess: (res) => {
+          setClusteredHouses(res.data.data.result);
+        },
+      },
+    );
+  };
   const { data: houseList = [] } = useHouseDetailsQuery({
     ...filters,
     minX,
@@ -93,18 +125,6 @@ export const Maps = ({ latitude, setLatitude, longitude, setLongitude, setIsOpen
       // 클릭 위치에 대한 작업 (예시로는 그냥 콘솔에 출력)
       console.log(position.getLat(), position.getLng());
     }
-  };
-
-  const onMapZoomChangedHandler = (target: kakao.maps.Map) => {
-    if (!mapRef.current) return; // mapRef.current 체크 추가
-
-    setZoomLevel(target.getLevel());
-
-    const bounds = target.getBounds();
-    setMinX(bounds.getSouthWest().getLng());
-    setMaxX(bounds.getNorthEast().getLng());
-    setMinY(bounds.getSouthWest().getLat());
-    setMaxY(bounds.getNorthEast().getLat());
   };
 
   const handleMyLocation = () => {
@@ -140,7 +160,7 @@ export const Maps = ({ latitude, setLatitude, longitude, setLongitude, setIsOpen
   // console.log('houseList', houseList);
 
   return (
-    <div className="flex flex-col w-full h-full">
+    <div className="flex flex-col w-full h-screen">
       <div className="relative w-full h-[calc(100vh-200px)]">
         <div className="absolute top-0 left-0 w-full h-2/3 z-10">
           <Map
@@ -163,18 +183,14 @@ export const Maps = ({ latitude, setLatitude, longitude, setLongitude, setIsOpen
         </div>
         {selectedCluster && selectedClusterHouses.length > 0 && (
           <div className="absolute bottom-0 left-0 w-full h-1/3 z-40 bg-white overflow-y-auto shadow-md border-b border-gray-200 p-4">
-            <h2 className="text-sm text-gray-600 mb-2">해당 지역 쉐어하우스 목록</h2>
+            <h2 className="text-md bold mb-2 text-center">목록 {selectedCluster.count}</h2>
             {selectedClusterHouses.map((house) => (
               <div
-                key={house.houseMainId}
+                key={house.houseDetailId}
                 className="flex gap-4 p-4 border-b border-gray-100 bg-white rounded-md shadow-sm">
                 {/* 썸네일 */}
                 <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0">
-                  <img
-                    src={house.imageSrc || '/default_house.jpg'}
-                    alt="썸네일"
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={house.houseFilePath} alt="썸네일" className="w-full h-full object-cover" />
                 </div>
 
                 {/* 상세 정보 */}
@@ -191,11 +207,6 @@ export const Maps = ({ latitude, setLatitude, longitude, setLongitude, setIsOpen
                   </div>
 
                   <div className="text-[11px] text-gray-400">{house.houseDetailAddress}</div>
-                </div>
-
-                {/* 찜 아이콘 */}
-                <div className="self-start">
-                  <button>🤍 {/* or filled heart if liked */}</button>
                 </div>
               </div>
             ))}

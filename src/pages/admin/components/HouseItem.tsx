@@ -17,8 +17,8 @@ export const HouseItem = ({ house }: HouseItemProps) => {
             </div>
           </div>
           <div className="inline-grid">
-            <div className="flex gap-3">
-              <p className="text-2xl text-purple-300 font-bold">{house.tags.join(' ')}</p>
+            <div className="text-sm text-purple-500 font-bold mb-1">
+              #{house.tags?.[0]} #{house.tags?.[1]}
             </div>
             <div className="flex gap-5">
               <p className="font-bold">{house.address}</p>
