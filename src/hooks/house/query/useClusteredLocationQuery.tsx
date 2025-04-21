@@ -4,7 +4,7 @@ import { useQuery } from '@tanstack/react-query';
 export const useMostClusteredLocationQuery = () => {
   return useQuery({
     queryKey: ['clustered-location'],
-    queryFn: () => HouseApi.getClusteredHouses(),
+    queryFn: () => HouseApi.getMainClusteredHouses(),
     select: (res) => res.data.data.result,
   });
 };

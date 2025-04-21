@@ -45,7 +45,7 @@ export const Maps = ({ latitude, setLatitude, longitude, setLongitude, setIsOpen
   useEffect(() => {
     getHouseMainMutation.mutate(undefined, {
       onSuccess: (result) => {
-        const clusters: ClusterWithHouses[] = result;
+        const clusters: ClusterWithHouses[] = result.data.data.result;
         setClusteredHouses(clusters);
         const topCluster = clusters[0];
         setLatitude(topCluster.lat);
