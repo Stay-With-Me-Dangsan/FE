@@ -40,7 +40,7 @@ export class AxiosConfig {
     this._axiosInstance = axios.create({
       baseURL: `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}`,
       headers: { 'Content-Type': 'application/json' },
-      // withCredentials: true,
+       withCredentials: true,
       //지도 배열 파라미터의 경우
       paramsSerializer: (params) => {
         const searchParams = new URLSearchParams();
