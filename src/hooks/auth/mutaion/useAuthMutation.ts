@@ -71,9 +71,22 @@ export default function useAuthMutation() {
     mutationFn: () => mypageApi.gethouseLike(),
   });
 
+  const posthouseLikeMutation = useMutation({
+    mutationFn: (houseDetailId: number) => mypageApi.postHouseLike(houseDetailId),
+  });
+
+  const posthouseLikeCancelMutation = useMutation({
+    mutationFn: (houseDetailId: number) => mypageApi.cancelHouseLike(houseDetailId),
+  });
+
   const gethouseViewMutation = useMutation({
     mutationFn: () => mypageApi.gethouseView(),
   });
+
+  const getBoardUploadMutation = useMutation({
+    mutationFn: () => mypageApi.getboardUpload(),
+  });
+
   const updateNicknameMutation = useMutation({
     mutationFn: (data: IPatchUpdateNicknameDto) => mypageApi.patchUpdateNickname(data),
     onSuccess: async () => {
@@ -108,6 +121,9 @@ export default function useAuthMutation() {
     logOutMutation,
     gethouseUploadMutation,
     gethouseLikeMutation,
+    posthouseLikeMutation,
+    posthouseLikeCancelMutation,
     gethouseViewMutation,
+    getBoardUploadMutation,
   };
 }

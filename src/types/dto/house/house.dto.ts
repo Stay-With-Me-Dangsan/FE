@@ -14,6 +14,7 @@ export interface IHouseDetails {
   maxX: number;
   minY: number;
   maxY: number;
+  precision: number;
 }
 
 // 지도 마커 렌더링용
@@ -23,7 +24,7 @@ export interface IHouseDetailDto {
   count?: number;
   houseDetailId: number;
   houseFilePath: string;
-  tags: string[];
+  houseKeyword: string[];
   propertyType: string;
   houseDetailAddress: string;
   size: string;
@@ -40,17 +41,21 @@ export interface IHouseFilterCondition {
   maxX: number;
   minY: number;
   maxY: number;
+  precision: number;
   depositRange?: [number, number];
   monthlyRentRange?: [number, number];
-  spaceTypes?: string[];
-  genderTypes?: string[];
-  contractPeriod?: {
-    minYear: string;
-    minMonth: string;
-    maxYear: string;
-    maxMonth: string;
-  };
+  spaceType?: string[];
+  genderType?: string;
+  shareStartDate?: string; // 'YYYY-MM-DD'
+  shareEndDate?: string;
+  // contractPeriod?: Partial<{ 계약기간
+  //   minYear: string;
+  //   minMonth: string;
+  //   maxYear: string;
+  //   maxMonth: string;
+  // }>;
 }
+
 // POST /createMain
 export interface ICreateHouseMain {
   houseMainId: number;
@@ -82,10 +87,4 @@ export interface IPatchUpdateHouseDetail {
 // DELETE /deleteDetail
 export interface IDeleteHouseDetail {
   houseDetailId: number;
-}
-export interface ClusterWithHouses {
-  lat: number;
-  lng: number;
-  count: number;
-  houses: IHouseDetailDto[];
 }

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import mypage_comment_drop from '../../asset/images/mypage_comment_drop.png';
 import { UsersDto } from '../../types/dto/admin/admin.dto';
 import admin_userList from '../../asset/images/admin_userList.png';
@@ -7,6 +8,7 @@ import { Alert } from '../../components/popup';
 const sortOptions = ['최신순', '오래된순', '많이본순'];
 
 export const AdminUserList = () => {
+  const navigate = useNavigate();
   const [users, setusers] = useState<UsersDto[]>([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSort, setSelectedSort] = useState('최신순');
@@ -21,10 +23,9 @@ export const AdminUserList = () => {
     setAlertMessage(null);
   };
 
-  // 🔹 data 수신 후 users 상태 업데이트
   useEffect(() => {
     if (data) {
-      setusers(data); // select에서 result만 꺼낸 상태라면 그대로 사용 가능
+      setusers(data);
     }
     if (isError) {
       showAlert('회원 리스트를 불러오는 데 실패했습니다.');
@@ -42,10 +43,16 @@ export const AdminUserList = () => {
     setusers(sorted);
   };
 
+  const handleUserClick = (userId: number) => {
+    navigate(`/admin/user/detail/${userId}`);
+  };
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
       <div className="w-full h-full px-8">
-        <div className=""></div>
+        <div className="font-bold">
+          <p>총 {users.length} 명</p>
+        </div>
         <div className="w-full inline-flex items-center py-6">
           <div className="">
             <button
@@ -74,7 +81,10 @@ export const AdminUserList = () => {
             <p className="text-gray-500">등록된 유저가 없습니다.</p>
           ) : (
             users.map((user) => (
-              <div key={user.user_id} className="w-full border-b py-4 flex justify-between items-center">
+              <div
+                key={user.user_id}
+                className="w-full border-b py-4 flex justify-between items-center"
+                onClick={() => handleUserClick(user.user_id)}>
                 <div className="flex items-center">
                   <img src={admin_userList} alt="어드민_유저리스트" />
                   <div className="justify-between items-center ml-1">

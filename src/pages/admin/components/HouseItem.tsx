@@ -1,6 +1,9 @@
 import { useDeviceLayout } from '../../../hooks/useDeviceLayout';
 import { IHouse } from '../../../types/interface/house/house.model';
-
+import sun from '../../../asset/images/sun.png';
+import space from '../../../asset/images/space.png';
+import animal from '../../../asset/images/animal.png';
+import what from '../../../asset/images/what.png';
 interface HouseItemProps {
   house: IHouse;
 }
@@ -29,13 +32,30 @@ export const HouseItem = ({ house }: HouseItemProps) => {
               <p>|</p>
               <p className="font-bold">{house.maintenance}</p>
             </div>
-            <div className="flex flex-wrap gap-x-4 gap-y-2 max-w-[824px]">
-              {house.options.map((opt: any, idx: any) => (
-                <div className="flex items-center gap-1 " key={idx}>
-                  <img src={opt.icon} alt={opt.label} />
-                  <p>{opt.label}</p>
-                </div>
-              ))}
+            <div className="flex gap-6 mt-4 text-sm text-gray-600">
+              {/* 반려동물 불가 */}
+              <div className="flex items-center gap-1">
+                <img src={animal} alt="반려동물 불가능" className="w-5 h-5" />
+                <span>애완동물 불가능</span>
+              </div>
+
+              {/* 즉시 입주 */}
+              <div className="flex items-center gap-1">
+                <img src={what} alt="즉시 입주 가능" className="w-5 h-5" />
+                <span>즉시 입주 가능</span>
+              </div>
+
+              {/* 동향 */}
+              <div className="flex items-center gap-1">
+                <img src={sun} alt="동향" className="w-5 h-5" />
+                <span>동향 (안방 주실 기준)</span>
+              </div>
+
+              {/* 주소 */}
+              <div className="flex items-center gap-1">
+                <img src={space} alt="위치" className="w-5 h-5" />
+                <span>{house.address}</span>
+              </div>
             </div>
           </div>
         </div>

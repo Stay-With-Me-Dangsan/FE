@@ -21,8 +21,16 @@ export default function useAdminMutation() {
     mutationFn: (deleteCode: number) => AdminApi.deleteCode(deleteCode),
   });
 
-  const onGetUserListMutation = useMutation({
-    mutationFn: () => AdminApi.getUserList(),
+  const getUserListMutation = useMutation({
+    mutationFn: () => AdminApi.getAdminUserList(),
+  });
+
+  const getAdminBoardListMutation = useMutation({
+    mutationFn: (category: string) => AdminApi.getAdminBoardList(category),
+  });
+
+  const onpatchBoardBlindMutatiion = useMutation({
+    mutationFn: (selectedIds: number[]) => AdminApi.updateBoardBlind(selectedIds),
   });
 
   return {
@@ -30,6 +38,8 @@ export default function useAdminMutation() {
     onCreateCodeMutation,
     onpatchCodeMutation,
     onDelteCodeMutation,
-    onGetUserListMutation,
+    getUserListMutation,
+    getAdminBoardListMutation,
+    onpatchBoardBlindMutatiion,
   };
 }

@@ -3,8 +3,8 @@ import PrivateRoute from './PrivateRoute';
 import { FindEmail, FindPassword, SignIn, SignUp, OAuthSuccess, OAuthRegister } from '../pages/auth';
 import { Layout } from '../common/layout';
 import { Home } from '../pages/home';
-import { Map, MapDetail } from '../pages/map';
-import { Board, BoardDetail } from '../pages/board';
+import { Maps, HouseDetail } from '../pages/map';
+import { Board, BoardDetail, BoardWrite } from '../pages/board';
 import {
   MyPage,
   MyPageNL,
@@ -16,7 +16,15 @@ import {
   MyPageHouseLike,
   MypageHouseView,
 } from '../pages/my-page';
-import { Admin, AdminUserList, AdminBlackList, AdminUserDetail, AdminBlackDetail, AdminCode } from '../pages/admin';
+import {
+  Admin,
+  AdminUserList,
+  AdminBlackList,
+  AdminUserDetail,
+  AdminBlackDetail,
+  AdminCode,
+  AdminBoardList,
+} from '../pages/admin';
 
 export const Router = () => {
   // const _BASE_URL = process.env.PUBLIC_URL;
@@ -24,7 +32,7 @@ export const Router = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Navigate to={`/auth`} />} />
+        <Route path="/" element={<Navigate to={`/home`} />} />
         <Route path="/auth" element={<SignIn />} />
         <Route path="/auth/signUp" element={<SignUp />} />
         <Route path="/auth/findEmail" element={<FindEmail />} />
@@ -33,11 +41,11 @@ export const Router = () => {
         <Route path="/oauth/register/:provider" element={<OAuthRegister />} />
         <Route element={<Layout />}>
           <Route path="/home" element={<Home />} />
-          <Route path="/map" element={<Map />} />
-          <Route path="/map/detail/:id" element={<MapDetail />} />
+          <Route path="/map" element={<Maps />} />
+          <Route path="/map/detail/:id" element={<HouseDetail />} />
           <Route path="/board" element={<Board />} />
-          <Route path="/board/detail" element={<BoardDetail />} />
-          <Route path="/board/detail/:id" element={<BoardDetail />} />
+          <Route path="/board/write" element={<BoardWrite />} />
+          <Route path="/board/detail/:boardType/:id" element={<BoardDetail />} />
           <Route path="/mypageNl" element={<MyPageNL />} />
         </Route>
         <Route
@@ -49,18 +57,18 @@ export const Router = () => {
           <Route path="/mypage" element={<MyPage />} />
           <Route path="/mypage/board/write" element={<MyPageBoardWrite />} />
           <Route path="/mypage/board/comment" element={<MyPageBoardComment />} />
-          <Route path="/mypage/board/bookmark" element={<MypageBoardLike />} />
+          <Route path="/mypage/board/like" element={<MypageBoardLike />} />
           <Route path="/mypage/house/upload" element={<MyPageHouseUpload />} />
           <Route path="/mypage/house/bookmark" element={<MyPageHouseLike />} />
           <Route path="/mypage/house/view" element={<MypageHouseView />} />
           <Route path="/mypage/edit" element={<MyPageEdit />} />
 
           <Route path="/admin" element={<Admin />} />
-          <Route path="/admin/board/list" element={<AdminUserList />} />
+          <Route path="/admin/board/list" element={<AdminBoardList />} />
           <Route path="/admin/blind/list" element={<AdminBlackList />} />
           <Route path="/admin/user/list" element={<AdminUserList />} />
           <Route path="/admin/black/list" element={<AdminBlackList />} />
-          <Route path="/admin/user/detail" element={<AdminUserDetail />} />
+          <Route path="/admin/user/detail/:userId" element={<AdminUserDetail />} />
           <Route path="/admin/black/detail" element={<AdminBlackDetail />} />
           <Route path="/admin/code" element={<AdminCode />} />
         </Route>

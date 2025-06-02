@@ -2,6 +2,8 @@ import { AxiosConfig } from '../../common/axios-config';
 import { IUpdateNicknameRes, IUpdateEmailRes, IUpdatePwRes, IgetMypageRes } from '../../types/res/auth';
 import { IPatchUpdateNicknameDto, IPatchEmailDto, IPatchPwDto } from '../../types/dto/auth';
 import { IHouseDetailDto } from '../../types/dto/house';
+import { IBoardDto, IBoardComments } from '../../types/dto/board';
+import { IBoardListRes } from '../../types/res/board/board.res';
 
 class MypageApi extends AxiosConfig {
   private readonly _baseURL = '/mypage';
@@ -25,9 +27,42 @@ class MypageApi extends AxiosConfig {
     });
   }
 
+  // 찜 추가
+  async postHouseLike(houseDetailId: number) {
+    return await this.post<IHouseDetailDto[], { houseDetailId: number }>({
+      url: `${this._baseURL}/house/bookmark/${houseDetailId}`,
+      data: { houseDetailId },
+    });
+  }
+
+  // 찜 취소
+  async cancelHouseLike(houseDetailId: number) {
+    return await this.delete<IHouseDetailDto[], { houseDetailId: number }>({
+      url: `${this._baseURL}/house/bookmark/cancle/${houseDetailId}`,
+    });
+  }
+
   async gethouseView() {
     return await this.get<IHouseDetailDto[], null>({
       url: `${this._baseURL}/house/view`,
+    });
+  }
+
+  async getboardUpload() {
+    return await this.get<IBoardListRes[], null>({
+      url: `${this._baseURL}/board/upload`,
+    });
+  }
+
+  async getboardComments() {
+    return await this.get<IBoardComments[], null>({
+      url: `${this._baseURL}/board/comments`,
+    });
+  }
+
+  async getBoardLike() {
+    return await this.get<IBoardListRes[], null>({
+      url: `${this._baseURL}/board/like`,
     });
   }
 

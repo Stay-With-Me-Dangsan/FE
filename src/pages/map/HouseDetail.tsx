@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
-export const MapDetail = () => {
+export const HouseDetail = () => {
   const params = useParams();
 
   const [id, setId] = useState<string | null>(null);

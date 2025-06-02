@@ -30,36 +30,33 @@ export const MyPage = () => {
     setAlertMessage(null);
   };
   useEffect(() => {
-    // 브라우저 환경에서만 실행
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('accessToken');
-      const decoded = decodeJwt(token);
+    const token = localStorage.getItem('accessToken');
+    const decoded = decodeJwt(token);
 
-      // 유효하지 않은 토큰이거나 userId가 없으면 리다이렉트
-      if (!decoded?.userId) {
-        showAlert('로그인이 필요합니다!');
-        navigate('/mypageNl');
-        return;
-      }
-
-      if (role === 'ADMIN') {
-        navigate('/admin');
-      }
-
-      getMyPageMutation.mutate(decoded.userId, {
-        onSuccess: (res) => {
-          console.log(res);
-          const user = res.data.data.result;
-          console.log('user: ', user);
-          setUserInfo({ nickname: user.nickname, email: user.email });
-          setNickname(user.nickname);
-        },
-        onError: (error) => {
-          console.error(' 데이터 불러오기 실패:', error);
-          showAlert('유저 정보 불러오기 실패');
-        },
-      });
+    // 유효하지 않은 토큰이거나 userId가 없으면 리다이렉트
+    if (!decoded?.userId) {
+      showAlert('로그인이 필요합니다!');
+      navigate('/mypageNl');
+      return;
     }
+
+    if (role === 'ADMIN') {
+      navigate('/admin');
+    }
+
+    getMyPageMutation.mutate(decoded.userId, {
+      onSuccess: (res) => {
+        console.log(res);
+        const user = res.data.data.result;
+        console.log('user: ', user);
+        setUserInfo({ nickname: user.nickname, email: user.email });
+        setNickname(user.nickname);
+      },
+      onError: (error) => {
+        console.error(' 데이터 불러오기 실패:', error);
+        showAlert('유저 정보 불러오기 실패');
+      },
+    });
   }, []);
 
   const handleEditClick = () => {

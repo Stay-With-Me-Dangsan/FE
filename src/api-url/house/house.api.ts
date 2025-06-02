@@ -8,8 +8,9 @@ import {
   IHouseDetails,
   IHouseMainDto,
   IPatchUpdateHouseDetail,
-  ClusterWithHouses,
+  IHouseFilterCondition,
 } from '../../types/dto/house';
+import { ClusterWithHouses } from '../../types/interface/house';
 
 class HouseApi extends AxiosConfig {
   private readonly _baseURL = '/house';
@@ -26,8 +27,19 @@ class HouseApi extends AxiosConfig {
     return await this.get<null, IHouseDetails>({ url: `${this._baseURL}/getDetails`, params: dto });
   }
 
-  async getHouseDetailsByCondition(filters: Record<string, any>) {
-    return await this.get<null, any>({ url: `${this._baseURL}/getDetailsByCondition`, params: filters });
+  async getMainClusteredHouses() {
+    return await this.get<ClusterWithHouses[], null>({ url: `${this._baseURL}/main/clustered` });
+  }
+
+  async getClusteredHouses(dto: IHouseDetails) {
+    return await this.get<ClusterWithHouses[], IHouseDetails>({ url: `${this._baseURL}/clustered`, params: dto });
+  }
+
+  async getHouseDetailsByCondition(dto: IHouseFilterCondition) {
+    return await this.post<ClusterWithHouses[], IHouseFilterCondition>({
+      url: `${this._baseURL}/postDetailsByCondition`,
+      data: dto,
+    });
   }
 
   async postCreateHouseMain(dto: ICreateHouseMain) {
@@ -46,12 +58,18 @@ class HouseApi extends AxiosConfig {
     return await this.delete<null, IHouseDetail>({ url: `${this._baseURL}/deleteDetail`, params: dto });
   }
 
-  async getMainClusteredHouses() {
-    return await this.get<ClusterWithHouses[], null>({ url: `${this._baseURL}/Main/clustered` });
+  async postLikeMutation(houseDetailId: number) {
+    return await this.post({
+      url: `${this._baseURL}/insert/like`,
+      data: houseDetailId,
+    });
   }
 
-  async getClusteredHouses(dto: IHouseDetails) {
-    return await this.get<ClusterWithHouses[], IHouseDetails>({ url: `${this._baseURL}/clustered`, params: dto });
+  async deleteLikeMutation(houseDetailId: number) {
+    return await this.delete<number, { houseDetailId: number }>({
+      url: `${this._baseURL}/delete/like`,
+      params: { houseDetailId },
+    });
   }
 }
 

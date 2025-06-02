@@ -1,31 +1,4 @@
-// 검색 필터 상태
-export interface MapSearchProps {
-  depositRange: [number, number];
-  setDepositRange: React.Dispatch<React.SetStateAction<[number, number]>>;
-  monthlyRentRange: [number, number];
-  setMonthlyRentRange: React.Dispatch<React.SetStateAction<[number, number]>>;
-  selectedSpaceTypes: string[];
-  setSelectedSpaceTypes: React.Dispatch<React.SetStateAction<string[]>>;
-  contractPeriod: {
-    minYear: string;
-    minMonth: string;
-    maxYear: string;
-    maxMonth: string;
-  };
-  setContractPeriod: React.Dispatch<
-    React.SetStateAction<{
-      minYear: string;
-      minMonth: string;
-      maxYear: string;
-      maxMonth: string;
-    }>
-  >;
-  selectedGenderTypes: string[];
-  setSelectedGenderTypes: React.Dispatch<React.SetStateAction<string[]>>;
-  setLatitude: React.Dispatch<React.SetStateAction<number>>;
-  setLongitude: React.Dispatch<React.SetStateAction<number>>;
-  mapRef: React.RefObject<kakao.maps.Map>;
-}
+import { IHouseDetailDto } from '../../dto/house';
 
 export interface IHouse {
   id: number;
@@ -37,4 +10,11 @@ export interface IHouse {
   floor: string;
   maintenance: string;
   options: { icon: string; label: string }[];
+}
+
+export interface ClusterWithHouses {
+  lat: number;
+  lng: number;
+  count: number;
+  houses: IHouseDetailDto[];
 }

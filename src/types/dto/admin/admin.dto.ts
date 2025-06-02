@@ -38,3 +38,36 @@ export interface UsersDto {
   createdDate: Date;
   provider: string;
 }
+
+export interface IBoardListRes {
+  id?: number;
+  boardType?: string;
+  title?: string;
+  content?: string;
+  postId: number;
+  status?: number;
+  createdAt?: Date;
+  updatedAt?: Date;
+  views?: number;
+  commentCount: number;
+  likeCount: number;
+  marked: boolean;
+  thumbnail: string;
+}
+
+export interface IBoardDetailtRes {
+  id?: number;
+  boardType?: string;
+  title?: string;
+  content?: string;
+  postId: number;
+  status?: number;
+  createdAt?: string;
+  updatedAt?: string;
+  views?: number;
+  viewCount: number;
+  commentCount: number;
+  likeCount: number;
+  marked: boolean;
+  nickname: string;
+}

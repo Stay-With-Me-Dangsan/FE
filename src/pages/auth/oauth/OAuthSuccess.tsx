@@ -21,12 +21,5 @@ export const OAuthSuccess: React.FC = () => {
     }
   }, [searchParams, setAccessToken, navigate]);
 
-  // useEffect(() => {
-  //   if (decoded?.userId) {
-  //     console.log('✅ 추출된 userId:', userId);
-  //     navigate('/home');
-  //   }
-  // }, [userId, navigate]);
-
   return <div>로그인 중...</div>;
 };

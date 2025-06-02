@@ -8,8 +8,11 @@ export interface IBoard {
   image?: string;
 }
 export interface IBoardComments {
-  id: number;
+  commentId: number;
+  postId?: number;
+  userId: number;
   title: string;
-  comments: string;
-  comment_date: Date | string;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
 }

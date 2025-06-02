@@ -1,8 +1,5 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { IBoard } from '../../types/interface/board/board.model';
-import { BoardItem } from '../my-page/components/BoardItem';
-import { BoardSection } from './components/BoardSection';
 import myapge_list from '../../asset/images/myapge_list.png';
 export const AdminBlackList = () => {
   const [boards, setBoards] = useState<IBoard[]>([]);
@@ -65,10 +62,6 @@ export const AdminBlackList = () => {
           </h1>
         </div>
       </div>
-      {/* <BoardSection title="내가 작성한 글" boards={boards} comments={[]}/> */}
-      {boards.map((board) => (
-        <BoardItem key={board.id} board={board} />
-      ))}
     </div>
   );
 };

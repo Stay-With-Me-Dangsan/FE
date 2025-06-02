@@ -1,4 +1,3 @@
-import { useNavigate } from 'react-router-dom';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import HouseApi from '../../../api-url/house/house.api';
 import {
@@ -7,6 +6,7 @@ import {
   IDeleteHouseDetail,
   IHouseDetails,
   IPatchUpdateHouseDetail,
+  IHouseFilterCondition,
 } from '../../../types/dto/house';
 
 export const useHouseMutation = () => {
@@ -39,6 +39,9 @@ export const useHouseMutation = () => {
       await queryClient.invalidateQueries({ queryKey: ['house-detail'] });
     },
   });
+  const getHouseByConditionMutation = useMutation({
+    mutationFn: (data: IHouseFilterCondition) => HouseApi.getHouseDetailsByCondition(data),
+  });
 
   const getHouseMainMutation = useMutation({
     mutationFn: () => HouseApi.getMainClusteredHouses(),
@@ -48,6 +51,14 @@ export const useHouseMutation = () => {
     mutationFn: (data: IHouseDetails) => HouseApi.getClusteredHouses(data),
   });
 
+  const postLikeMutation = useMutation({
+    mutationFn: (houseDetailId: number) => HouseApi.postLikeMutation(houseDetailId),
+  });
+
+  const deleteLikeMutation = useMutation({
+    mutationFn: (houseDetailId: number) => HouseApi.deleteLikeMutation(houseDetailId),
+  });
+
   return {
     createHouseMainMutation,
     createHouseDetailMutation,
@@ -55,5 +66,8 @@ export const useHouseMutation = () => {
     deleteHouseDetailMutation,
     getHouseMainMutation,
     getClustersMutation,
+    getHouseByConditionMutation,
+    postLikeMutation,
+    deleteLikeMutation,
   };
 };

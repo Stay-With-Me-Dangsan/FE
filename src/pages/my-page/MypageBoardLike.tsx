@@ -1,62 +1,74 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
-import { IBoard } from '../../types/interface/board/board.model';
-import { BoardItem } from '../../pages/my-page/components/BoardItem';
-import { BoardSection } from './components/BoardSection';
+import { useNavigate } from 'react-router-dom';
+import { IBoardListRes } from '../../types/res/board/board.res';
+import { useGetBoardLikeListQuery } from '../../hooks/mypage/query';
+import useBoardMutation from '../../hooks/board/mutation/useBoardMutation';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { Alert } from '../../components/popup';
 import myapge_list from '../../asset/images/myapge_list.png';
+import RoomComment from '../../asset/images/RoomComment.png';
+import NoHeart from '../../asset/images/RoomLike.png';
+import Heart from '../../asset/images/heart.png';
+import BoradView from '../../asset/images/board_view.png';
+import RoomBookMark from '../../asset/images/RoomBookMark.png';
+
 export const MypageBoardLike = () => {
-  const [boards, setBoards] = useState<IBoard[]>([]);
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    // const fetchMyComments = async () => {
-    //   try {
-    //     const res = await axios.get('/api/mypage/board/like'); // ← 백엔드 API 경로에 맞춰 수정
-    //     setBoards(res.data.data); // ← 응답 구조에 맞게 수정
-    //   } catch (err) {
-    //     console.error('댓글 단 글 불러오기 실패', err);
-    //   }
-    // };
+  const { data: boards = [], refetch } = useGetBoardLikeListQuery();
+  const { deleteLikeMutation, postLikeMutation } = useBoardMutation();
+  const queryClient = useQueryClient();
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
-    // fetchMyComments();
-    const mockBoards: IBoard[] = [
-      {
-        id: 1,
-        title: '쉐어하우스 계약하기 전 확인해야할 팁 모음',
-        content: '다년간의 쉐어메이트 계약 인생...모으고 모았던 팁 뿌릴게',
-        likes: 29,
-        comments: 2,
-        image: '',
-      },
-      {
-        id: 2,
-        title: '아 윗집 소음 좀',
-        content: '체르니 40 그만 좀 쳐라 밤11시 넘었다고 이자식아',
-        likes: 11,
-        comments: 3,
-        thumbnail: '../../../assets/images/room1.png',
-        image: '',
-      },
-      {
-        id: 3,
-        title: '쇼파 추천 좀요요',
-        content: '집에 쇼파를 들여볼까하는데 모르겠더',
-        likes: 24,
-        comments: 15,
-        thumbnail: '../../../assets/images/room1.png',
-        image: '',
-      },
-    ];
+  const showAlert = (message: string) => {
+    setAlertMessage(message);
+  };
+  const closeAlert = () => {
+    setAlertMessage(null);
+  };
 
-    setBoards(mockBoards);
-  }, []);
+  // 1)  좋아요 처리
+  const handleLike = async (postId: number, liked?: boolean) => {
+    if (liked) {
+      deleteLikeMutation.mutate(postId, {
+        onSuccess: () => {
+          showAlert('좋아요를 삭제하였습니다다');
+          refetch();
+        },
+      });
+    } else {
+      postLikeMutation.mutate(postId, {
+        onSuccess: () => {
+          showAlert('좋아요 하였습니다다');
+          refetch();
+        },
+      });
+    }
+  };
+
+  const handelScrap = async (postId: number, marked: boolean) => {
+    // if (marked) {
+    //   await axios.delete(`/api/scraps/${postId}`, { withCredentials: true });
+    // } else {
+    //   await axios.post(
+    //     `/api/scraps`,
+    //     {
+    //       boardId: postId,
+    //     },
+    //     { withCredentials: true },
+    //   );
+    // }
+    // onSuccess: () => {
+    //   queryClient.invalidateQueries({ queryKey: ['boards', category] });
+    // }
+  };
 
   return (
     <div className="w-full min-h-screen flex flex-col items-center gap-4 px-4 py-8">
       <div className="w-full h-[54px] inline-flex items-center py-10">
         <div className="w-full flex justify-start gap-1 ">
           <div className="float-left flex">
-            <p>총 5개</p>
-            {/* <p>총 {boards.length}개</p> */}
+            <p>총 {boards.length}개</p>
           </div>
         </div>
         <div className="float-right content-center">
@@ -65,10 +77,48 @@ export const MypageBoardLike = () => {
           </h1>
         </div>
       </div>
-      {/* <BoardSection title="내가 작성한 글" boards={boards} comments={[]}/> */}
-      {boards.map((board) => (
-        <BoardItem key={board.id} board={board} />
+      {boards?.map((board: IBoardListRes) => (
+        <div key={board.postId} className=" p-4 rounded-xl shadow-sm bg-white flex flex-col gap-2 w-full">
+          <div className="flex">
+            <div
+              onClick={() => navigate(`/board/detail/${board.boardType}/${board.postId}`)}
+              className="cursor-pointer w-[80%]">
+              <h3 className="font-semibold text-lg text-gray-800 line-clamp-1">{board.title}</h3>
+              <p className="mt-2 text-gray-600 text-sm flex-1 line-clamp-2">{board.content}</p>
+            </div>
+            <div>
+              <img src={board.thumbnail} alt="썸네일" className="w-full h-40 object-cover mt-2 rounded" />
+            </div>
+          </div>
+          <div className="flex gap-6 text-xs text-gray-500">
+            <div className="flex items-center gap-2">
+              <button onClick={() => handleLike(board.postId, board.liked)} className="focus:outline-none">
+                {board.liked ? (
+                  <img src={Heart} alt="좋아요" className="w-5 h-5 object-contain" />
+                ) : (
+                  <img src={NoHeart} alt="안좋아요" className="w-5 h-5 object-contain" />
+                )}
+              </button>
+              <p className="text-md">{board.likeCount}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <img src={RoomComment} alt="댓글" className="w-5 h-5 object-contain" />
+              <p className="text-md">{board.commentCount}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <img src={BoradView} alt="조회수" className="w-5 h-5 object-contain" />
+              <p className="text-md">{board.viewCount}</p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button onClick={() => handelScrap(board.postId, board.marked)}>
+                <img src={RoomBookMark} alt="북마크" className="w-5 h-5 object-contain" />
+              </button>
+              <p className="text-md">{board.marked ? '북마크' : '마크안됨'}</p>
+            </div>
+          </div>
+        </div>
       ))}
+      {alertMessage && <Alert message={alertMessage} onClose={closeAlert} />}
     </div>
   );
 };

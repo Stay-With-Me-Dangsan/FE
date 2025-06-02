@@ -44,7 +44,7 @@ export const MypageLayout = (props: IProps) => {
             <div className="flex flex-col gap-6">
               <MenuItem label="내가 작성한 글" to="/mypage/board/write" />
               <MenuItem label="내가 작성한 댓글" to="/mypage/board/comment" />
-              <MenuItem label="내가 찜한 게시글" to="/mypage/borad/like" />
+              <MenuItem label="내가 찜한 게시글" to="/mypage/board/like" />
             </div>
           </div>
         </div>

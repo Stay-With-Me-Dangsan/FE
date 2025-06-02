@@ -7,7 +7,7 @@ import { HouseItem } from '../../pages/my-page/components/HouseItem';
 export const MyPageHouseUpload = () => {
   const navigate = useNavigate();
   const [houses, setHouse] = useState<IHouseDetailDto[]>([]);
-  const { gethouseUploadMutation } = useAuthMutation();
+  const { gethouseUploadMutation, gethouseLikeMutation, posthouseLikeCancelMutation } = useAuthMutation();
 
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
 
@@ -33,6 +33,27 @@ export const MyPageHouseUpload = () => {
     });
   }, []);
 
+  const handleCancelLike = (houseDetailId: number) => {
+    const confirmCancel = window.confirm('좋아요를 취소하시겠습니까?');
+    if (!confirmCancel) return;
+
+    posthouseLikeCancelMutation.mutate(houseDetailId, {
+      onSuccess: () => {
+        // 좋아요 취소 후 리스트 새로고침
+        gethouseLikeMutation.mutate(undefined, {
+          onSuccess: (res) => {
+            const houseList = res.data.data.result;
+            setHouse(houseList);
+          },
+        });
+      },
+      onError: (err) => {
+        showAlert('좋아요 취소 실패');
+        console.error(err);
+      },
+    });
+  };
+
   return (
     <div className="w-full min-h-screen flex flex-col items-center">
       <div className="w-full inline-flex items-center pt-8">
@@ -49,7 +70,12 @@ export const MyPageHouseUpload = () => {
       </div>
       <div className="w-full mt-10">
         {houses.map((house) => (
-          <HouseItem key={house.houseDetailId} {...house} />
+          <HouseItem
+            key={house.houseDetailId}
+            {...house}
+            isLiked={true}
+            onHeartClick={() => handleCancelLike(house.houseDetailId)}
+          />
         ))}
       </div>
     </div>

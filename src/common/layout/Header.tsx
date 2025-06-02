@@ -16,13 +16,13 @@ export const Header = () => {
   const subPageMap: Record<string, Record<string, string>> = {
     house: {
       upload: '내가 올린 집',
-      view: '내가 본 집',
-      like: '내가 좋아요 한 집',
+      view: '최근 본 집',
+      bookmark: '내가 좋아요 한 집',
     },
     board: {
       write: '내가 올린 글',
       comment: '내가 작성한 댓글',
-      like: '내가 찜한 글',
+      bookmark: '내가 찜한 글',
     },
   };
   let title = '홈';
@@ -76,6 +76,10 @@ export const Header = () => {
     } else {
       title = '마이페이지';
     }
+  } else if (depth_1 === 'board' && depth_2 === 'detail') {
+    showBackButton = true;
+    title = decodeURIComponent(depth_3);
+    centerTitle = true;
   } else {
     switch (depth_1) {
       case 'home':

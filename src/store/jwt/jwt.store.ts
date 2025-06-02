@@ -19,8 +19,7 @@ export const decodeJwt = (accessToken: string | null | undefined) => {
 };
 
 //accessToken을 관리하는 Atom (로컬 스토리지 자동 연동)
-export const jwtAtom = atomWithStorage<string | null>('accessToken', null); //새로고침 시 Jotai 상태가 초기화되어 accessToken === null로 판단될 수 있음
-
+export const jwtAtom = atomWithStorage<string | null>('accessToken', null);
 export const jwtStore = atom(
   (get) => get(jwtAtom),
   (_get, set, newJwt: string | null) => {

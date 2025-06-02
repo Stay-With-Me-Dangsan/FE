@@ -85,14 +85,7 @@ export class AxiosConfig {
         const store = getDefaultStore();
 
         //인증 필요한 요청등
-        const isAuthRequired = [
-          '/api/mypage/**',
-          '/api/house/register',
-          '/api/house/update',
-          '/api/house/delete',
-          '/api/house/reserve',
-          '/api/house/bookmark',
-        ].some((path) => originalRequest.url?.includes(path));
+        const isAuthRequired = ['/api/mypage/**'].some((path) => originalRequest.url?.includes(path));
 
         if (!isAuthRequired && error.response?.status === 401) {
           // 인증 필요 없는 요청에서의 401은 무시

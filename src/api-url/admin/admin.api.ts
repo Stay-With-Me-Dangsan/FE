@@ -1,5 +1,5 @@
 import { AxiosConfig } from '../../common/axios-config';
-import { IGetCodeDto, ICreateCodeDto, IPatchCodeDto } from '../../types/dto/admin';
+import { IGetCodeDto, ICreateCodeDto, IPatchCodeDto, IBoardListRes, IBoardDetailtRes } from '../../types/dto/admin';
 
 class AdminApi extends AxiosConfig {
   private readonly _baseURL = '/admin';
@@ -33,16 +33,32 @@ class AdminApi extends AxiosConfig {
   }
 
   // 유저
-  async getUserList() {
+  async getAdminUserList() {
     return await this.get({
       url: `${this._baseURL}/user/list`,
     });
   }
 
-  // 게시판
-  async getBoardList() {
+  // 유저
+  async getAdminUserDetail(userId: number) {
     return await this.get({
+      url: `${this._baseURL}/user/detail/{user_id}`,
+      params: { userId },
+    });
+  }
+
+  // 게시판
+  async getAdminBoardList(category: string) {
+    return await this.get<IBoardListRes[], { category: string }>({
       url: `${this._baseURL}/board/list`,
+      params: { category },
+    });
+  }
+
+  async updateBoardBlind(selectedIds: number[]) {
+    return await this.patch({
+      url: `${this._baseURL}/board/blind/update`,
+      data: selectedIds,
     });
   }
 }
