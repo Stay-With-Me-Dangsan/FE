@@ -38,7 +38,7 @@ export class AxiosConfig {
 
   constructor() {
     this._axiosInstance = axios.create({
-      baseURL: `https://staywithme.kr/api`,
+      baseURL: `https://www.staywithme.kr/api`,
       headers: { 'Content-Type': 'application/json' },
        withCredentials: true,
       //지도 배열 파라미터의 경우
