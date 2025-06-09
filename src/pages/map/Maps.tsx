@@ -8,7 +8,7 @@ export const Maps = () => {
   const [latitude, setLatitude] = useState(37.5665);
   const [longitude, setLongitude] = useState(126.978);
   const mapRef = useRef<kakao.maps.Map | null>(null);
-  const [zoomLevel, setZoomLevel] = useState(3);
+  const [zoomLevel, setZoomLevel] = useState(7);
   const [filterCondition, setFilterCondition] = useState<IHouseFilterCondition>({
     minX: 0,
     maxX: 0,

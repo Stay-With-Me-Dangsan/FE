@@ -2,9 +2,9 @@ import { useAtom } from 'jotai';
 import { userIdAtom } from '../../../store/jwt';
 import { useHouseMutation } from '../../../hooks/house/mutation/useHouseMutation';
 import { IHouseDetailDto } from '../../../types/dto/house';
-import { useNavigate } from 'react-router-dom';
 import heart from '../../../asset/images/heart.png';
 import { Alert } from '../../../components/popup';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import sun from '../../../asset/images/sun.png';
 import space from '../../../asset/images/space.png';
@@ -17,15 +17,14 @@ interface MapListProps {
 }
 
 export const MapList = ({ selectedClusterHouses }: MapListProps) => {
+  const navigate = useNavigate();
   const { deleteLikeMutation, postLikeMutation } = useHouseMutation();
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
   const houses = selectedClusterHouses ?? [];
   const [isExpanded, setIsExpanded] = useState(false);
-  const navigate = useNavigate();
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
   };
-  console.log('house: ', houses);
 
   const showAlert = (message: string) => {
     setAlertMessage(message);
@@ -45,14 +44,14 @@ export const MapList = ({ selectedClusterHouses }: MapListProps) => {
     if (liked) {
       deleteLikeMutation.mutate(houseDetailId, {
         // onSuccess: () => {
-        //   queryClient.invalidateQueries({ queryKey: ['boards', category] });
+        //  refetch();
         // },
       });
     } else {
       console.log('좋아요!', houseDetailId);
       postLikeMutation.mutate(houseDetailId, {
         // onSuccess: () => {
-        //   queryClient.invalidateQueries({ queryKey: ['boards', category] });
+        //  refetch();
         // },
       });
     }
@@ -70,55 +69,59 @@ export const MapList = ({ selectedClusterHouses }: MapListProps) => {
 
       {houses.map((house) => (
         <div key={house.houseDetailId} className="border-b py-2 flex gap-4">
-          {/* <div onClick={() => navigate(`/house/detail/${house.houseDetailId}`)}> */}
-          <div className="mr-5 relative w-[164px] h-[164px]">
-            <img src={house.houseFilePath} alt="room" width={164} className="object-cover" />
-            <div className="absolute top-2 right-2 bg-white bg-opacity-70 px-2 py-1 rounded text-sm font-bold shadow">
-              <img src={heart} alt="room" onClick={() => handleLike(house.houseDetailId)} className="object-cover" />
+          <div className="w-full flex" onClick={() => navigate(`/house/detail/${house.houseDetailId}`)}>
+            <div className="mr-5 relative w-22">
+              <img src={house.houseFilePath} alt="room" width={164} className="object-cover" />
+              <div className="absolute top-2 right-2 bg-white bg-opacity-70 px-2 py-1 rounded text-sm font-bold shadow">
+                <img src={heart} alt="room" onClick={() => handleLike(house.houseDetailId)} className="object-cover" />
+              </div>
+            </div>
+            <div className="inline-grid">
+              <div className="text-sm text-500 font-bold mb-1">{house.propertyType}</div>
+
+              {house.houseKeyword?.map((kw, idx) => (
+                <span key={idx} className="text-sm text-purple-500 font-bold mb-1">
+                  #{kw}
+                </span>
+              ))}
+
+              <div className="flex gap-5">
+                <p className="font-bold">{house.houseDetailAddress}</p>
+                <p>|</p>
+                <p className="font-bold">{house.maintenance}㎡</p>
+                <p>|</p>
+                <p className="font-bold">{house.floor}층</p>
+                <p>|</p>
+                <p className="font-bold">{house.management}</p>
+              </div>
+
+              <div className="flex gap-6 mt-4 text-sm text-gray-600">
+                {/* 반려동물 불가 */}
+                <div className="flex items-center gap-1">
+                  <img src={animal} alt="반려동물 불가능" className="w-5 h-5" />
+                  <span>애완동물 불가능</span>
+                </div>
+
+                {/* 즉시 입주 */}
+                <div className="flex items-center gap-1">
+                  <img src={what} alt="즉시 입주 가능" className="w-5 h-5" />
+                  <span>즉시 입주 가능</span>
+                </div>
+
+                {/* 동향 */}
+                <div className="flex items-center gap-1">
+                  <img src={sun} alt="동향" className="w-5 h-5" />
+                  <span>동향 (안방 주실 기준)</span>
+                </div>
+
+                {/* 주소 */}
+                <div className="flex items-center gap-1">
+                  <img src={space} alt="위치" className="w-5 h-5" />
+                  <span>{house.houseDetailAddress}</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="inline-grid">
-            <div className="text-sm text-500 font-bold mb-1">{house.propertyType}</div>
-            <div className="text-sm text-purple-500 font-bold mb-1">
-              #{house.houseKeyword?.[0]} #{house.houseKeyword?.[1]}
-            </div>
-            <div className="flex gap-5">
-              <p className="font-bold">{house.houseDetailAddress}</p>
-              <p>|</p>
-              <p className="font-bold">{house.maintenance}㎡</p>
-              <p>|</p>
-              <p className="font-bold">{house.floor}층</p>
-              <p>|</p>
-              <p className="font-bold">{house.management}</p>
-            </div>
-
-            <div className="flex gap-6 mt-4 text-sm text-gray-600">
-              {/* 반려동물 불가 */}
-              <div className="flex items-center gap-1">
-                <img src={animal} alt="반려동물 불가능" className="w-5 h-5" />
-                <span>애완동물 불가능</span>
-              </div>
-
-              {/* 즉시 입주 */}
-              <div className="flex items-center gap-1">
-                <img src={what} alt="즉시 입주 가능" className="w-5 h-5" />
-                <span>즉시 입주 가능</span>
-              </div>
-
-              {/* 동향 */}
-              <div className="flex items-center gap-1">
-                <img src={sun} alt="동향" className="w-5 h-5" />
-                <span>동향 (안방 주실 기준)</span>
-              </div>
-
-              {/* 주소 */}
-              <div className="flex items-center gap-1">
-                <img src={space} alt="위치" className="w-5 h-5" />
-                <span>{house.houseDetailAddress}</span>
-              </div>
-            </div>
-          </div>
-          {/* </div> */}
         </div>
       ))}
 

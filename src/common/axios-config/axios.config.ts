@@ -49,7 +49,7 @@ export class AxiosConfig {
           const value = params[key];
           if (Array.isArray(value)) {
             value.forEach((v) => {
-              searchParams.append(key, String(v)); // ❗ [] 없이 append
+              searchParams.append(key, String(v));
             });
           } else if (value !== undefined && value !== null) {
             searchParams.append(key, String(value));

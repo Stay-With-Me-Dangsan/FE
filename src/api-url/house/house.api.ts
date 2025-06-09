@@ -19,8 +19,10 @@ class HouseApi extends AxiosConfig {
     return await this.get<IHouseMainRes, IHouseMainDto>({ url: `${this._baseURL}/getMain`, params: dto });
   }
 
-  async getHouseDetail(dto: IHouseDetail) {
-    return await this.get<null, IHouseDetail>({ url: `${this._baseURL}/getDetail`, params: dto });
+  async getHouseDetail(houseDetailId: number) {
+    return await this.get<IHouseDetail, { houseDetailId: number }>({
+      url: `${this._baseURL}/getDetail/${houseDetailId}`,
+    });
   }
 
   async getHouseDetails(dto: IHouseDetails) {

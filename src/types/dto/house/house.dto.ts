@@ -33,6 +33,10 @@ export interface IHouseDetailDto {
   management: number;
   options: { icon: string; label: string }[];
   roomType: string;
+  elevator: string;
+  parking: string;
+  liked: boolean;
+  createdAt?: string;
 }
 
 // 4. 필터 조건으로 지도 집 목록 조회 시 (GET /getDetailsByCondition)
