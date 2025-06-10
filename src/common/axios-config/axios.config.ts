@@ -38,7 +38,7 @@ export class AxiosConfig {
 
   constructor() {
     this._axiosInstance = axios.create({
-      baseURL: `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}`,
+      baseURL: `https://www.staywithme.kr/api`,
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
       //지도 배열 파라미터의 경우
