@@ -8,7 +8,6 @@ export const useGetBoardCommentsQuery = (postId: number) => {
     queryKey: ['comments', postId],
     queryFn: async () => {
       const res = await CommentApi.getCommentsByPostIdMutation(postId);
-
       console.log('댓글: ', res);
       return res.data.data.result;
     },

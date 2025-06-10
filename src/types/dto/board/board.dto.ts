@@ -21,6 +21,11 @@ export interface IBoardComments {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface IBoardCommentCreate {
+  postId: number;
+  content: string;
+}
 export interface IBoardCreate {
   boardType: string;
   title: string;

@@ -2,28 +2,34 @@ import { useAtom } from 'jotai';
 import { userIdAtom, roleAtom, decodeJwt } from '../../store/jwt';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useQueries, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
+import { Alert } from '../../components/popup';
 import { Heart, Trash2, Pencil } from 'lucide-react';
 import { IBoardDetailtRes, IBoardCommentRes } from '../../types/res/board/board.res';
+import { IBoardCommentCreate } from '../../types/dto/board';
 import { useGetBoardDetailQuery, useGetBoardCommentsQuery } from '../../hooks/board/query';
 import useBoardMutation from '../../hooks/board/mutation/useBoardMutation';
+import { getTimeAgo } from '../../components/time/getTimeAgo';
+
 import RoomBookMark from '../../asset/images/RoomBookMark.png';
 import noMark from '../../asset/images/no_marked.png';
 import RoomComment from '../../asset/images/RoomComment.png';
 import RoomLike from '../../asset/images/RoomLike.png';
 import BoradView from '../../asset/images/board_view.png';
-import room from '../../asset/images/room1.png';
+
 import logo from '../../asset/images/logo.png';
 import person from '../../asset/images/person.png';
 import dot from '../../asset/images/dot.png';
+import room from '../../asset/images/room1.png';
+import heart from '../../asset/images/heart.png';
+import noHeart from '../../asset/images/RoomLike.png';
 
 const reportReasons = ['욕설/비하', '홍보/영리 목적', '음란물', '개인정보 노출', '기타 부적절한 내용'];
 
 export const BoardDetail = () => {
   const { id } = useParams();
   const paramId = id ?? '';
-  const boardId = id ?? '';
   const postId = Number(paramId);
   const queryClient = useQueryClient();
   const [commentText, setCommentText] = useState('');
@@ -31,7 +37,14 @@ export const BoardDetail = () => {
   const [selectedReason, setSelectedReason] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [editContent, setEditContent] = useState('');
-  const { postBoardViewMutation } = useBoardMutation();
+  const {
+    postBoardViewMutation,
+    postLikeMutation,
+    deleteLikeMutation,
+    postCommentMutation,
+    patchCommentMutation,
+    deleteCommentMutation,
+  } = useBoardMutation();
   const { mutate: recordView, isError: recordError } = postBoardViewMutation;
   const [viewRecorded, setViewRecorded] = useState(false);
 
@@ -48,7 +61,7 @@ export const BoardDetail = () => {
     }
   }, [postId, recordView]);
 
-  const { data: board, isLoading: isBoardLoading, isError: isBoardError } = useGetBoardDetailQuery(postId);
+  const { data: board, isLoading: isBoardLoading, isError: isBoardError, refetch } = useGetBoardDetailQuery(postId);
 
   const {
     data: comments = [],
@@ -57,7 +70,13 @@ export const BoardDetail = () => {
     refetch: refetchComments,
   } = useGetBoardCommentsQuery(postId);
 
+  const [form, setForm] = useState<IBoardCommentCreate>({
+    content: '',
+    postId: Number(postId),
+  });
+
   const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
   const showAlert = (message: string) => {
     setAlertMessage(message);
   };
@@ -67,87 +86,86 @@ export const BoardDetail = () => {
 
   const [userId] = useAtom(userIdAtom);
 
-  const commentMutation = useMutation({
-    mutationFn: async () => {
-      await axios.post(`${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/comments`, {
-        boardId,
-        content: commentText,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', boardId] });
-      setCommentText('');
-      refetchComments();
-    },
-  });
+  const handleComment = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const commentUpdateMutation = useMutation({
-    mutationFn: async () => {
-      if (editingCommentId === null) return;
-      await axios.put(
-        `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/comments/${editingCommentId}`,
-        {
-          content: editContent,
-        },
-      );
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', boardId] });
-      setEditingCommentId(null);
-      setEditContent('');
-    },
-  });
-
-  const commentDeleteMutation = useMutation({
-    mutationFn: async (id: number) => {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/comments/${id}`);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['comments', boardId] });
-    },
-  });
-
-  const reportMutation = useMutation({
-    mutationFn: async () => {
-      await axios.post(`${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/reports`, {
-        boardId,
-        userId,
-        reportType: selectedReason,
-        reportCategory: '게시글',
-      });
-    },
-    onSuccess: () => {
-      setShowReportModal(false);
-      setSelectedReason('');
-      alert('신고가 접수되었습니다.');
-    },
-    onError: () => {
-      alert('신고 중 오류가 발생했습니다.');
-    },
-  });
-
-  const likeMutation = useMutation({
-    mutationFn: async ({ postId, liked }: { postId: number; liked: number }) => {
-      if (liked) {
-        await axios.delete(`/api/likes/${postId}`, { withCredentials: true });
-      } else {
-        await axios.post(
-          `/api/likes`,
-          {
-            boardId: postId,
-          },
-          { withCredentials: true },
-        );
-      }
-    },
-    onSuccess: () => {},
-  });
-  const handleLike = (postId: number, liked: number) => {
     if (!userId) {
       showAlert('로그인이 필요합니다!');
       return;
     }
-    likeMutation.mutate({ postId, liked });
+
+    postCommentMutation.mutate(form, {
+      onSuccess: () => {
+        // queryClient.invalidateQueries({ queryKey: ['comments', boardId] });
+        refetchComments();
+      },
+    });
+  };
+
+  const handlecommentUpdate = async () => {
+    patchCommentMutation.mutate(form, {
+      onSuccess: () => {
+        // queryClient.invalidateQueries({ queryKey: ['house-detail', houseDetailId] });
+        setEditingCommentId(null);
+        setEditContent('');
+        refetchComments();
+      },
+    });
+  };
+
+  const handlecommentDelete = async (commentId: number) => {
+    console.log(commentId);
+    if (window.confirm('댓글을 삭제하시겠습니까?')) {
+      deleteCommentMutation.mutate(commentId, {
+        onSuccess: () => {
+          //queryClient.invalidateQueries({ queryKey: ['comments', boardId] });
+          refetchComments();
+        },
+      });
+    }
+  };
+
+  // const reportMutation = useMutation({
+  //   mutationFn: async () => {
+  //     await axios.post(`${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/reports`, {
+  //       boardId,
+  //       userId,
+  //       reportType: selectedReason,
+  //       reportCategory: '게시글',
+  //     });
+  //   },
+  //   onSuccess: () => {
+  //     setShowReportModal(false);
+  //     setSelectedReason('');
+  //     alert('신고가 접수되었습니다.');
+  //   },
+  //   onError: () => {
+  //     alert('신고 중 오류가 발생했습니다.');
+  //   },
+  // });
+
+  const handleLike = (postId: number, liked: boolean) => {
+    if (!userId) {
+      showAlert('로그인이 필요합니다!');
+      return;
+    }
+
+    if (liked) {
+      deleteLikeMutation.mutate(postId, {
+        onSuccess: () => {
+          // queryClient.invalidateQueries({ queryKey: ['house-detail', houseDetailId] });
+          refetch();
+        },
+      });
+    } else {
+      console.log('좋아요!', postId);
+      postLikeMutation.mutate(postId, {
+        onSuccess: () => {
+          // queryClient.invalidateQueries({ queryKey: ['house-detail', houseDetailId] });
+          refetch();
+        },
+      });
+    }
   };
   const handelScrap = async (postId: number, marked: boolean) => {
     if (marked) {
@@ -203,9 +221,30 @@ export const BoardDetail = () => {
         </div>
         <div className="flex gap-6 text-xs text-gray-500">
           <div className="flex items-center gap-2">
-            <button>
+            {userId ? (
+              // ─────────── 로그인 상태일 때 ───────────
+              <button onClick={() => handleLike(board.postId, board.liked)} className="absolute top-2 right-2 p-1">
+                {board.liked ? (
+                  <img
+                    src={heart}
+                    alt="좋아요"
+                    className="w-12 h-12 bg-white bg-opacity-70 px-2 py-1 rounded text-sm font-bold shadow"
+                  />
+                ) : (
+                  <img
+                    src={noHeart}
+                    alt="안좋아요"
+                    className="w-12 h-12 bg-white bg-opacity-70 px-2 py-1 rounded text-sm font-bold shadow"
+                  />
+                )}
+              </button>
+            ) : (
+              // ─────────── 로그아웃(또는 비로그인) 상태일 때 ───────────
+              <img src={noHeart} alt="로그인 필요" className="absolute top-2 right-2 w-12 h-12" />
+            )}
+            {/* <button>
               <img src={RoomLike} alt="좋아요" className="w-5 h-5 object-contain" />
-            </button>
+            </button> */}
             <p className="text-md">{board.likeCount}</p>
           </div>
           <div className="flex items-center gap-2">
@@ -247,7 +286,14 @@ export const BoardDetail = () => {
                         <span className="text-md text-400 block ">{comment.nickname}</span>
                       </div>
                     </div>
-                    {editingCommentId === comment.commentId ? (
+                    <div className="text-xs text-gray-500 grid items-center gap-1">
+                      <p className="text-sm text-gray-800 whitespace-pre-wrap">{comment.content}</p>
+                      <div className="flex mt-2 items-center gap-2">
+                        <span className="text-md text-gray-400 block ">{getTimeAgo(comment.updatedAt)}</span>
+                        <img src={RoomLike} alt="좋아요" className="w-4 h-4 text-gray-400" /> {comment.likeCount}
+                      </div>
+                    </div>
+                    {/* {editingCommentId === comment.commentId ? (
                       <textarea
                         value={editContent}
                         onChange={(e) => setEditContent(e.target.value)}
@@ -261,52 +307,43 @@ export const BoardDetail = () => {
                           <img src={RoomLike} alt="좋아요" className="w-4 h-4 text-gray-400" /> {comment.likeCount}
                         </div>
                       </div>
-                    )}
+                    )} */}
                   </div>
                   <div className="flex flex-col gap-1 items-end">
-                    <img src={dot} alt="댓글 메뉴"></img>
+                    {/* <img src={dot} alt="댓글 메뉴"></img> */}
+                    {/* 로그인 여부(userId) 체크 */}
 
-                    {/* 
-                    {editingCommentId === comment.id ? (
-                      <button
-                        onClick={() => commentUpdateMutation.mutate()}
-                        className="text-xs text-blue-500 hover:underline">
-                        저장
-                      </button>
-                    ) : (
-                      <div className="flex gap-2 mt-1">
-                        <Pencil
-                          className="w-4 h-4 text-gray-500 hover:text-blue-500 cursor-pointer"
-                          onClick={() => {
-                            setEditingCommentId(comment.id);
-                            setEditContent(comment.content);
-                          }}
-                        />
-                        <Trash2
-                          className="w-4 h-4 text-gray-500 hover:text-red-500 cursor-pointer"
-                          onClick={() => {
-                            if (window.confirm('댓글을 삭제하시겠습니까?')) {
-                              commentDeleteMutation.mutate(comment.id);
-                            }
-                          }}
-                        />
-                      </div>
-                    )} */}
+                    {userId && comment.userId === userId ? (
+                      editingCommentId === comment.id ? (
+                        <button onClick={handlecommentUpdate} className="text-xs text-blue-500 hover:underline">
+                          저장
+                        </button>
+                      ) : (
+                        <div className="flex gap-2 mt-1">
+                          <Pencil
+                            className="w-4 h-4 text-gray-500 hover:text-blue-500 cursor-pointer"
+                            onClick={() => {
+                              setEditingCommentId(comment.commentId);
+                              setEditContent(comment.content);
+                            }}
+                          />
+                          <Trash2
+                            className="w-4 h-4 text-gray-500 hover:text-red-500 cursor-pointer"
+                            onClick={() => handlecommentDelete(comment.commentId)}
+                          />
+                        </div>
+                      )
+                    ) : null}
                   </div>
                 </div>
               </div>
             ))}
           </div>
         )}
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            commentMutation.mutate();
-          }}
-          className="flex mt-4 gap-2 mb-4">
+        <form onSubmit={handleComment} className="flex mt-4 gap-2 mb-4">
           <input
-            value={commentText}
-            onChange={(e) => setCommentText(e.target.value)}
+            value={form.content}
+            onChange={(e) => setForm({ ...form, content: e.target.value })}
             placeholder="댓글을 입력하세요"
             className="flex-1 border rounded px-3 py-2 text-sm"
           />
@@ -361,6 +398,7 @@ export const BoardDetail = () => {
           </div>
         </div>
       )} */}
+      {alertMessage && <Alert message={alertMessage} onClose={closeAlert} />}
     </div>
   );
 };

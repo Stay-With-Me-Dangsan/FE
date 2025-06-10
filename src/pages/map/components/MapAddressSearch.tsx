@@ -17,7 +17,7 @@ const MapAddressSearch = ({ setLatitude, setLongitude, mapRef }: MapAddressSearc
   const [address, setAddress] = useState('');
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [loading] = useKakaoLoader({ appkey: process.env.REACT_APP_KAKAO_APP_KEY as string });
+  const [loading] = useKakaoLoader({ appkey: '7dfda83df8b6473f0c1320e0d8f93f8d' });
   const [selectedIndex, setSelectedIndex] = useState<number>(-1);
 
   const geocoder = useMemo(() => {
@@ -33,7 +33,7 @@ const MapAddressSearch = ({ setLatitude, setLongitude, mapRef }: MapAddressSearc
       const response = await axios.get(`https://dapi.kakao.com/v2/local/search/address.json`, {
         params: { query },
         headers: {
-          Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
+          Authorization: `KakaoAK b7bf09d2a33e0bd9b12924b84b936609`,
         },
       });
 
@@ -71,7 +71,7 @@ const MapAddressSearch = ({ setLatitude, setLongitude, mapRef }: MapAddressSearc
       const addressRes = await axios.get('https://dapi.kakao.com/v2/local/search/address.json', {
         params: { query: selectedAddress },
         headers: {
-          Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
+          Authorization: `KakaoAK b7bf09d2a33e0bd9b12924b84b936609`,
         },
       });
 
@@ -87,7 +87,7 @@ const MapAddressSearch = ({ setLatitude, setLongitude, mapRef }: MapAddressSearc
         const keywordRes = await axios.get('https://dapi.kakao.com/v2/local/search/keyword.json', {
           params: { query: selectedAddress },
           headers: {
-            Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
+            Authorization: `KakaoAK b7bf09d2a33e0bd9b12924b84b936609`,
           },
         });
 

@@ -31,6 +31,7 @@ export interface IBoardDetailtRes {
   marked?: boolean;
   nickname: string;
   userId: number;
+  liked: boolean;
 }
 
 export interface IBoardCommentRes {
@@ -39,7 +40,7 @@ export interface IBoardCommentRes {
   content: string;
   createdAt: string;
   postId: number;
-  updateAt: string;
+  updatedAt: string;
   userId: number;
   nickname: string;
   likeCount: number;

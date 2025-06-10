@@ -71,6 +71,7 @@ export const MapList = ({ selectedClusterHouses }: MapListProps) => {
         <div key={house.houseDetailId} className="border-b py-2 flex gap-4">
           <div className="w-full flex" onClick={() => navigate(`/house/detail/${house.houseDetailId}`)}>
             <div className="mr-5 relative w-22">
+              {/* <img src={house.houseFilePath} alt="room" width={164} className="object-cover" /> */}
               <img src={house.houseFilePath} alt="room" width={164} className="object-cover" />
               <div className="absolute top-2 right-2 bg-white bg-opacity-70 px-2 py-1 rounded text-sm font-bold shadow">
                 <img src={heart} alt="room" onClick={() => handleLike(house.houseDetailId)} className="object-cover" />

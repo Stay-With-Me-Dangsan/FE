@@ -1,11 +1,7 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import BoardApi from '../../../api-url/board/board.api';
 import CommentApi from '../../../api-url/board/comment.api';
-import { IBoardCreate } from '../../../types/dto/board';
-import { ICreateHouseMain } from '../../../types/dto/house';
-import { useAtom } from 'jotai';
-import { jwtStore } from '../../../store';
-import { UserMinus } from 'lucide-react';
+import { IBoardCreate, IBoardCommentCreate } from '../../../types/dto/board';
 
 export default function useBoardMutation() {
   const getBoardByIdMutation = useMutation({
@@ -28,16 +24,21 @@ export default function useBoardMutation() {
     mutationFn: (postId: number) => BoardApi.postLikeMutation(postId),
   });
 
+  const postCommentMutation = useMutation({
+    mutationFn: (data: IBoardCommentCreate) => CommentApi.postCommentMutation(data),
+  });
+
+  const patchCommentMutation = useMutation({
+    mutationFn: (data: IBoardCommentCreate) => CommentApi.patchCommentMutation(data),
+  });
+
   const deleteLikeMutation = useMutation({
     mutationFn: (postId: number) => BoardApi.deleteLikeMutation(postId),
   });
 
-  // const createHouseMainMutation = useMutation({
-  //   mutationFn: (data: ICreateHouseMain) => BoardApi.postCreateHouseMain(data),
-  //   onSuccess: async () => {
-  //     await queryClient.invalidateQueries({ queryKey: ['house-main'] });
-  //   },
-  // });
+  const deleteCommentMutation = useMutation({
+    mutationFn: (commentId: number) => CommentApi.deleteCommentMutation(commentId),
+  });
 
   // const postBoardLikeMutation = useMutation({
   //   mutationFn: async ({ postId, liked }: { postId: number; liked: boolean }) => {
@@ -64,8 +65,11 @@ export default function useBoardMutation() {
     getBoardByIdMutation,
     getCommentsByPostIdMutation,
     postBoardMutation,
-    deleteLikeMutation,
     postLikeMutation,
     postBoardViewMutation,
+    postCommentMutation,
+    patchCommentMutation,
+    deleteLikeMutation,
+    deleteCommentMutation,
   };
 }
