@@ -38,7 +38,8 @@ export class AxiosConfig {
 
   constructor() {
     this._axiosInstance = axios.create({
-      baseURL: `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}`,
+      //baseURL: `http://localhost:8080`,
+      baseURL: `https://www.staywithme.kr/api`,
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
       //지도 배열 파라미터의 경우
@@ -84,13 +85,13 @@ export class AxiosConfig {
         const originalRequest = error.config;
         const store = getDefaultStore();
 
-        //인증 필요한 요청등
-        const isAuthRequired = ['/api/mypage/**'].some((path) => originalRequest.url?.includes(path));
+        // //인증 필요한 요청등
+        // const isAuthRequired = ['/api/mypage/**'].some((path) => originalRequest.url?.includes(path));
 
-        if (!isAuthRequired && error.response?.status === 401) {
-          // 인증 필요 없는 요청에서의 401은 무시
-          return Promise.reject(error);
-        }
+        // if (!isAuthRequired && error.response?.status === 401) {
+        //   // 인증 필요 없는 요청에서의 401은 무시
+        //   return Promise.reject(error);
+        // }
 
         if (error.response?.status === 302) {
           const { redirect } = error.response.data;
@@ -104,7 +105,8 @@ export class AxiosConfig {
 
           try {
             const refreshResponse = await axios.post(
-              `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/user/refresh`,
+              // `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/user/refresh`,
+              `http://localhost:8080/user/refresh`,
               {},
               { withCredentials: true },
             );
