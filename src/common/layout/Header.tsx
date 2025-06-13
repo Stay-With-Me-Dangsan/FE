@@ -78,7 +78,11 @@ export const Header = () => {
     }
   } else if (depth_1 === 'board' && depth_2 === 'detail') {
     showBackButton = true;
-    title = decodeURIComponent(depth_3);
+    title = '';
+    centerTitle = true;
+  } else if (depth_1 === 'house' && depth_2 === 'detail') {
+    showBackButton = true;
+    title = '';
     centerTitle = true;
   } else {
     switch (depth_1) {

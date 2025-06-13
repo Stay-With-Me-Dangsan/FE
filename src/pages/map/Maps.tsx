@@ -174,7 +174,7 @@ export const Maps = () => {
         setLongitude={setLongitude}
         mapRef={mapRef}
       />
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 overflow-auto touch-auto">
         <Map
           latitude={latitude}
           longitude={longitude}
@@ -191,6 +191,9 @@ export const Maps = () => {
           isOpened={isOpened}
           onZoomChanged={onMapZoomChangedHandler}
           onMyLocation={handleMyLocation}
+          draggable
+          scrollwheel
+          disableDoubleClickZoom
         />
       </div>
       {isOpened && selectedCluster && <MapList selectedClusterHouses={selectedCluster.houses} />}

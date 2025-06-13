@@ -44,7 +44,7 @@ export const MapList = ({ selectedClusterHouses }: MapListProps) => {
     if (liked) {
       deleteLikeMutation.mutate(houseDetailId, {
         // onSuccess: () => {
-        //  refetch();
+        // refetch();
         // },
       });
     } else {
@@ -68,58 +68,63 @@ export const MapList = ({ selectedClusterHouses }: MapListProps) => {
       </h2>
 
       {houses.map((house) => (
-        <div key={house.houseDetailId} className="border-b py-2 flex gap-4">
-          <div className="w-full flex" onClick={() => navigate(`/house/detail/${house.houseDetailId}`)}>
-            <div className="mr-5 relative w-22">
-              {/* <img src={house.houseFilePath} alt="room" width={164} className="object-cover" /> */}
-              <img src={house.houseFilePath} alt="room" width={164} className="object-cover" />
-              <div className="absolute top-2 right-2 bg-white bg-opacity-70 px-2 py-1 rounded text-sm font-bold shadow">
-                <img src={heart} alt="room" onClick={() => handleLike(house.houseDetailId)} className="object-cover" />
+        <div key={house.houseDetailId} className="border-b py-4 flex flex-col md:flex-row gap-4">
+          {/* 이미지 영역 */}
+          <div
+            className="relative w-full md:w-1/3 cursor-pointer"
+            onClick={() => navigate(`/house/detail/${house.houseDetailId}`)}>
+            <img src={house.houseFilePath} alt="room" className="object-cover w-full h-40 md:h-44 rounded" />
+            <div className="absolute top-2 right-2 bg-white bg-opacity-70 px-2 py-1 rounded text-sm font-bold shadow">
+              <img
+                src={heart}
+                alt="찜"
+                className="w-5 h-5"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleLike(house.houseDetailId);
+                }}
+              />
+            </div>
+          </div>
+
+          {/* 텍스트 영역 */}
+          <div className="w-full md:w-2/3 flex flex-col justify-between">
+            <div className="mb-2">
+              <div className="text-sm text-gray-600 font-semibold">{house.propertyType}</div>
+              <div className="flex flex-wrap gap-1 mt-1">
+                {house.houseKeyword?.map((kw, idx) => (
+                  <span key={idx} className="text-xs sm:text-sm text-purple-500 font-bold">
+                    #{kw}
+                  </span>
+                ))}
+              </div>
+              <div className="flex flex-wrap items-center gap-2 mt-2 text-sm font-bold text-gray-800">
+                <p>{house.houseDetailAddress}</p>
+                <span>|</span>
+                <p>{house.maintenance}㎡</p>
+                <span>|</span>
+                <p>{house.floor}층</p>
+                <span>|</span>
+                <p>{house.management}</p>
               </div>
             </div>
-            <div className="inline-grid">
-              <div className="text-sm text-500 font-bold mb-1">{house.propertyType}</div>
 
-              {house.houseKeyword?.map((kw, idx) => (
-                <span key={idx} className="text-sm text-purple-500 font-bold mb-1">
-                  #{kw}
-                </span>
-              ))}
-
-              <div className="flex gap-5">
-                <p className="font-bold">{house.houseDetailAddress}</p>
-                <p>|</p>
-                <p className="font-bold">{house.maintenance}㎡</p>
-                <p>|</p>
-                <p className="font-bold">{house.floor}층</p>
-                <p>|</p>
-                <p className="font-bold">{house.management}</p>
+            <div className="flex flex-wrap gap-4 mt-3 text-xs sm:text-sm text-gray-600">
+              <div className="flex items-center gap-1">
+                <img src={animal} alt="반려동물 불가능" className="w-5 h-5" />
+                <span>애완동물 불가능</span>
               </div>
-
-              <div className="flex gap-6 mt-4 text-sm text-gray-600">
-                {/* 반려동물 불가 */}
-                <div className="flex items-center gap-1">
-                  <img src={animal} alt="반려동물 불가능" className="w-5 h-5" />
-                  <span>애완동물 불가능</span>
-                </div>
-
-                {/* 즉시 입주 */}
-                <div className="flex items-center gap-1">
-                  <img src={what} alt="즉시 입주 가능" className="w-5 h-5" />
-                  <span>즉시 입주 가능</span>
-                </div>
-
-                {/* 동향 */}
-                <div className="flex items-center gap-1">
-                  <img src={sun} alt="동향" className="w-5 h-5" />
-                  <span>동향 (안방 주실 기준)</span>
-                </div>
-
-                {/* 주소 */}
-                <div className="flex items-center gap-1">
-                  <img src={space} alt="위치" className="w-5 h-5" />
-                  <span>{house.houseDetailAddress}</span>
-                </div>
+              <div className="flex items-center gap-1">
+                <img src={what} alt="즉시 입주" className="w-5 h-5" />
+                <span>즉시 입주 가능</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <img src={sun} alt="동향" className="w-5 h-5" />
+                <span>동향 (안방 기준)</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <img src={space} alt="위치" className="w-5 h-5" />
+                <span>{house.houseDetailAddress}</span>
               </div>
             </div>
           </div>

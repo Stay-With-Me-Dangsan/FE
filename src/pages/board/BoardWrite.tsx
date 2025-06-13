@@ -14,7 +14,7 @@ import boardApi from '../../api-url/board/board.api';
 import person from '../../asset/images/person.png';
 
 const categories = [
-  { label: '자유게시판', value: '자유게시판' },
+  { label: '', value: '자유게시판' },
   { label: '정보게시판', value: '정보게시판' },
   { label: '질문게시판', value: '질문게시판' },
   { label: '호스트게시판', value: '호스트게시판' },

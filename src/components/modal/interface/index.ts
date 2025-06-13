@@ -1,8 +1,8 @@
 export interface IModalProps {
   title?: string; // optional
   children: React.ReactNode;
-  onConfirm: () => void;
-  onCancel: () => void;
+  onConfirm?: () => void;
+  onCancel?: () => void;
 }
 
 export interface ICommonCodeModalProps {

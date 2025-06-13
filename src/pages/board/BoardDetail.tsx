@@ -48,6 +48,8 @@ export const BoardDetail = () => {
   const { mutate: recordView, isError: recordError } = postBoardViewMutation;
   const [viewRecorded, setViewRecorded] = useState(false);
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+
   useEffect(() => {
     if (postId > 0) {
       recordView(postId, {

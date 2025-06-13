@@ -17,14 +17,17 @@ interface IProps {
   zoomLevel: number;
   setZoomLevel: (level: number) => void;
   mapRef: React.MutableRefObject<kakao.maps.Map | null>;
-  filterCondition: IHouseFilterCondition;
+  filterCondition?: IHouseFilterCondition;
   clusteredHouses: ClusterWithHouses[];
-  selectedCluster: ClusterWithHouses | null;
-  setSelectedCluster: (cluster: ClusterWithHouses) => void;
-  isOpened: boolean;
-  setIsOpened: (open: boolean) => void;
-  onZoomChanged: (map: kakao.maps.Map) => void;
-  onMyLocation: () => void;
+  selectedCluster?: ClusterWithHouses | null;
+  setSelectedCluster?: (cluster: ClusterWithHouses) => void | null;
+  isOpened?: boolean;
+  setIsOpened?: (open: boolean) => void;
+  onZoomChanged?: (map: kakao.maps.Map) => void;
+  onMyLocation?: () => void;
+  draggable: boolean;
+  scrollwheel: boolean;
+  disableDoubleClickZoom: boolean;
 }
 
 export const Map = ({
@@ -43,15 +46,18 @@ export const Map = ({
   setIsOpened,
   onZoomChanged,
   onMyLocation,
+  draggable,
+  scrollwheel,
+  disableDoubleClickZoom,
 }: IProps) => {
   const [selectedClusterHouses, setSelectedClusterHouses] = useState<IHouseDetailDto[]>([]);
 
   const handleClusterClick = (cluster: ClusterWithHouses) => {
-    setSelectedCluster(cluster);
+    setSelectedCluster?.(cluster);
 
     setSelectedClusterHouses(cluster.houses);
 
-    setIsOpened(true);
+    setIsOpened?.(true);
   };
 
   return (
@@ -61,7 +67,11 @@ export const Map = ({
         level={zoomLevel}
         ref={mapRef}
         className="w-full h-full"
-        onZoomChanged={onZoomChanged}>
+        onZoomChanged={onZoomChanged}
+        draggable={draggable}
+        scrollwheel={scrollwheel}
+        disableDoubleClickZoom={disableDoubleClickZoom}
+        isPanto={true}>
         {clusteredHouses
           .filter((cluster) => cluster.lat !== undefined && cluster.lng !== undefined && cluster.count !== undefined)
           .map((cluster) => (
@@ -76,15 +86,15 @@ export const Map = ({
       </KakaoMap>
 
       {/* 지도 버튼 */}
-      <div className="absolute right-4 top-20 flex flex-col gap-2 z-50">
+      <div className="absolute right-4 top-4 flex flex-col gap-2 z-50">
         <button onClick={onMyLocation}>
-          <img src={map_location} alt="현위치" className="w-8 h-8" />
+          <img src={map_location} alt="현위치" className="w-4 h-4" />
         </button>
         <button onClick={() => mapRef.current?.setLevel(zoomLevel - 1)}>
-          <img src={map_plus} alt="확대" className="w-8 h-8" />
+          <img src={map_plus} alt="확대" className="w-4 h-4" />
         </button>
         <button onClick={() => mapRef.current?.setLevel(zoomLevel + 1)}>
-          <img src={map_minus} alt="축소" className="w-8 h-8" />
+          <img src={map_minus} alt="축소" className="w-4 h-4" />
         </button>
       </div>
     </div>

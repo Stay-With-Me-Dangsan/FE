@@ -3,7 +3,7 @@ import { userIdAtom, roleAtom, decodeJwt } from '../../store/jwt';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState, useRef } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-
+import { useDeviceLayout } from '../../hooks/useDeviceLayout';
 import axios from 'axios';
 import RoomBookMark from '../../asset/images/RoomBookMark.png';
 import noMark from '../../asset/images/no_marked.png';
@@ -25,6 +25,7 @@ const categories = [
 ];
 
 export const Board = () => {
+  const { isMobile } = useDeviceLayout();
   const navigate = useNavigate();
   const [category, setCategory] = useState('자유게시판');
   const [userId] = useAtom(userIdAtom);
@@ -100,7 +101,7 @@ export const Board = () => {
   return (
     <div className="h-full">
       {/* 탭 카테고리 */}
-      <div className="flex gap-20 pb-2">
+      <div className={`${isMobile ? 'gap-2' : 'gap-20'} flex pb-2`}>
         {categories.map((tab) => (
           <button
             key={tab.value}

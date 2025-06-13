@@ -4,6 +4,8 @@ import { useParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useHouseDetailQuery } from '../../hooks/house/query';
 import { useHouseMutation } from '../../hooks/house/mutation/useHouseMutation';
+import { getTimeAgo } from '../../components/time/getTimeAgo';
+
 import { Alert } from '../../components/popup';
 import { useState } from 'react';
 import room from '../../asset/images/room1.png';
@@ -13,6 +15,7 @@ import mainten from '../../asset/images/house_detail_maintenance.png';
 import floor from '../../asset/images/house_detail_floor.png';
 import ele from '../../asset/images/house_detail_ele.png';
 import parking from '../../asset/images/house_detail_parking.png';
+import rightArrow from '../../asset/images/rightArrow.png';
 export const HouseDetail = () => {
   const params = useParams();
   const { id } = params;
@@ -31,8 +34,6 @@ export const HouseDetail = () => {
   const { data: house, isError: isHouseError, refetch } = useHouseDetailQuery(houseDetailId);
 
   const handleLike = (houseDetailId: number, liked?: boolean) => {
-    console.log('userId:', userId);
-    console.log('houseDetailId', houseDetailId);
     if (!userId) {
       showAlert('로그인이 필요합니다!');
       return;
@@ -46,7 +47,6 @@ export const HouseDetail = () => {
         },
       });
     } else {
-      console.log('좋아요!', houseDetailId);
       postLikeMutation.mutate(houseDetailId, {
         onSuccess: () => {
           // queryClient.invalidateQueries({ queryKey: ['house-detail', houseDetailId] });
@@ -89,58 +89,72 @@ export const HouseDetail = () => {
           <img src={noHeart} alt="로그인 필요" className="absolute top-2 right-2 w-12 h-12" />
         )}
       </div>
-      <div className="w-full mt-10 text-center">
-        <div className="mt-4">
-          <div className="text-gray-500">관리비 {house.management}</div>
-          <div className="float-right text-gray-500">{house.size}</div>
+      {/* 주소 및 관리비, 사이즈 */}
+      <div className="w-full mt-6 px-4 text-center">
+        <div className="flex text-center text-xl text-gray-500 font-bold mb-2">
+          <div>관리비 {house.management} 원</div>
+          <div>{getTimeAgo(house.createdAt)}</div>
         </div>
-        <div className="mt-4">
-          <div className="text-2xl font-bold text-purple-500">{house.houseDetailAddress}</div>
-        </div>
+        <div className="text-xl sm:text-2xl font-bold text-purple-500">{house.houseDetailAddress}</div>
 
-        <div className="mt-10">
+        {/* 키워드 태그 */}
+        <div className="mt-6 flex flex-wrap justify-center gap-2">
           {house.houseKeyword?.map((kw, idx) => (
-            <span key={idx} className="text-blue-300 border border-blue-300 rounded p-2">
+            <span key={idx} className="text-sm sm:text-base text-blue-500 border border-blue-300 rounded px-3 py-1">
               #{kw}
             </span>
           ))}
         </div>
       </div>
+
+      {/* 구분선 */}
       <div className="w-full h-3 mt-10 bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]"></div>
-      <div className="w-full mt-10 text-center ">
-        <p>목동역 근처 채광 좋고 풀 옵션인 큰 원룸을 소개합니다.</p>
+
+      {/* 설명 */}
+      <div className="w-full mt-10 text-center px-4">
+        <p className="text-sm sm:text-base">목동역 근처 채광 좋고 풀 옵션인 큰 원룸을 소개합니다.</p>
       </div>
+
       <div className="w-full h-1 mt-10 bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]"></div>
 
-      <div className="w-full mt-10 text-center ">
-        <div className="w-full flex items-center justify-center gap-20 mt-4 text-sm text-gray-600">
-          <div className="flex flex-col items-center gap-2">
-            <img src={mainten} alt="면적" className="w-14 h-14" />
-            <p className="text-center font-bold text-xl">전용 {house.maintenance} ㎡</p>
+      {/* 주요 정보 */}
+      <div className="w-full mt-10">
+        <div className="flex justify-center gap-x-6 gap-y-8 text-sm text-gray-700">
+          <div className="flex flex-col items-center gap-2 w-1/2 sm:w-auto">
+            <img src={mainten} alt="면적" className="w-12 h-12 sm:w-14 sm:h-14" />
+            <p className="text-center font-bold text-base sm:text-xl">전용 {house.maintenance} ㎡</p>
           </div>
 
-          <div className="flex flex-col items-center gap-2">
-            <img src={floor} alt="층수" className="w-14 h-14" />
-            <p className="text-center font-bold text-xl">{house.floor} 층</p>
+          <div className="flex flex-col items-center gap-2 w-1/2 sm:w-auto">
+            <img src={floor} alt="층수" className="w-12 h-12 sm:w-14 sm:h-14" />
+            <p className="text-center font-bold text-base sm:text-xl">{house.floor} 층</p>
           </div>
 
-          <div className="flex flex-col items-center gap-2">
-            <img src={ele} alt="엘리베이터" className="w-14 h-14" />
-            <p className="text-center font-bold text-xl">엘리베이터 {house.elevator}</p>
+          <div className="flex flex-col items-center gap-2 w-1/2 sm:w-auto">
+            <img src={ele} alt="엘리베이터" className="w-12 h-12 sm:w-14 sm:h-14" />
+            <p className="text-center font-bold text-base sm:text-xl">엘리베이터 {house.elevator}</p>
           </div>
 
-          <div className="flex flex-col items-center gap-2">
-            <img src={parking} alt="주차" className="w-14 h-14" />
-            <p className="text-center font-bold text-xl">주차 {house.parking}</p>
+          <div className="flex flex-col items-center gap-2 w-1/2 sm:w-auto">
+            <img src={parking} alt="주차" className="w-12 h-12 sm:w-14 sm:h-14" />
+            <p className="text-center font-bold text-base sm:text-xl">주차 {house.parking}</p>
           </div>
-          <div className="">더보기 </div>
+
+          <div className="flex flex-col items-center gap- w-1/2 sm:w-auto">
+            <img src={rightArrow} alt="더보기" />
+          </div>
         </div>
       </div>
 
+      {/* 구분선 */}
       <div className="w-full h-3 mt-10 bg-gradient-to-r from-[#FFFFFF] via-[#F5F5F5] to-[#F1F1F1]"></div>
-      <div className="w-full mt-10 text-center ">
-        <h1 className="text-2xl font-bold">실거주자 리뷰</h1>
+
+      {/* 실거주자 리뷰 */}
+      <div className="w-full mt-10 text-center px-4">
+        <h1 className="text-xl sm:text-2xl font-bold">실거주자 리뷰</h1>
       </div>
+
+      {alertMessage && <Alert message={alertMessage} onClose={closeAlert} />}
     </div>
   );
 };

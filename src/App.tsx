@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './App.css';
 import { Router } from './router/Router';
-import { Modal } from './components/modal';
+import {} from './components/modal';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useAtom } from 'jotai';
 import { jwtStore } from './store';
