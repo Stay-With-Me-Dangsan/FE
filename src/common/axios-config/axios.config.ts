@@ -38,7 +38,6 @@ export class AxiosConfig {
 
   constructor() {
     this._axiosInstance = axios.create({
-      //baseURL: `http://localhost:8080`,
       baseURL: `https://www.staywithme.kr/api`,
       headers: { 'Content-Type': 'application/json' },
       withCredentials: true,
