@@ -104,8 +104,7 @@ export class AxiosConfig {
 
           try {
             const refreshResponse = await axios.post(
-              // `${process.env.REACT_APP_API_URL}/${process.env.REACT_APP_API_PREFIX}/user/refresh`,
-              `http://localhost:8080/user/refresh`,
+               `https://www.staywithme.kr/api/user/refresh`,
               {},
               { withCredentials: true },
             );
