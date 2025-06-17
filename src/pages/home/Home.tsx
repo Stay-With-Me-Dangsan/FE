@@ -1,8 +1,10 @@
-import { useSetAtom } from 'jotai';
+import { useAtom, useSetAtom } from 'jotai';
+import { userIdAtom, roleAtom, decodeJwt } from '../../store/jwt';
+import { useNavigate } from 'react-router-dom';
 import { modalStore } from '../../store/modal';
 import { Modal } from '../../components/modal';
 import React, { useRef, useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Alert } from '../../components/popup';
 import { useChattingSocket } from '../../hooks/socket';
 import { Map } from '../map/components';
 import ClusterCircle from '../map/components/ClusterCircle';
@@ -11,6 +13,9 @@ import { IHouseFilterCondition, IHouseDetailDto } from '../../types/dto/house';
 import { useHouseMutation } from '../../hooks/house/mutation';
 
 export const Home = () => {
+  const navigate = useNavigate();
+  const [userId] = useAtom(userIdAtom);
+
   const [latitude, setLatitude] = useState(37.5665);
   const [longitude, setLongitude] = useState(126.978);
   const mapRef = useRef<kakao.maps.Map | null>(null);
@@ -40,7 +45,16 @@ export const Home = () => {
   } as const;
 
   type RegionKey = keyof typeof REGION_DATA;
-  const navigate = useNavigate();
+
+  const [alertMessage, setAlertMessage] = useState<string | null>(null);
+
+  const showAlert = (message: string) => {
+    setAlertMessage(message);
+  };
+  const closeAlert = () => {
+    setAlertMessage(null);
+  };
+
   const [showModal, setShowModal] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState<RegionKey | null>(null);
   const [selectedDistrict, setSelectedDistrict] = useState<string | null>(null);
@@ -64,6 +78,23 @@ export const Home = () => {
 
   const handleDistrictClick = (district: string) => {
     setSelectedDistrict(district);
+  };
+
+  const moveCommunity = (selectedDistrict: string) => {
+    const district = selectedDistrict;
+    const token = localStorage.getItem('accessToken');
+    const decoded = decodeJwt(token);
+    const userId = decoded?.userId;
+
+    if (userId === null || userId === undefined) {
+      showAlert('로그인이 필요합니다!');
+      // navigate('/auth');
+      return;
+    }
+
+    // 예: /community/12345/강남구
+    showAlert({ selectedDistrict } + '채팅방으로 이동합니다');
+    navigate(`/community/${district}/${userId}`);
   };
 
   // 밀집 지역으로 클러스터 위치
@@ -146,8 +177,8 @@ export const Home = () => {
               <button
                 className="bg-purple-500 text-white w-full py-2 rounded mt-4"
                 onClick={() => {
-                  alert(`${selectedDistrict} 채팅방으로 이동!`);
-                  closeModal(); // 모달 닫기
+                  moveCommunity(selectedDistrict); // ✅ district 넘기기
+                  closeModal();
                 }}>
                 {selectedDistrict} 채팅방 들어가기
               </button>
@@ -158,7 +189,9 @@ export const Home = () => {
 
       <div className="flex flex-col gap-10 mt-10">
         <h1 className="text-xl font-bold">Best 후기</h1>
+        <div className="h-40 px-4 py-2 bg-gray-200 rounded text-center">준비중</div>
       </div>
+      {alertMessage && <Alert message={alertMessage} onClose={closeAlert} />}
     </div>
   );
 };

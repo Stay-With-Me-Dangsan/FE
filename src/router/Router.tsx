@@ -5,6 +5,7 @@ import { Layout } from '../common/layout';
 import { Home } from '../pages/home';
 import { Maps, HouseDetail } from '../pages/map';
 import { Board, BoardDetail, BoardWrite } from '../pages/board';
+import { Community } from '../pages/community';
 import {
   MyPage,
   MyPageNL,
@@ -46,6 +47,7 @@ export const Router = () => {
           <Route path="/board" element={<Board />} />
           <Route path="/board/write" element={<BoardWrite />} />
           <Route path="/board/detail/:boardType/:id" element={<BoardDetail />} />
+          <Route path="/community/:district/:userId" element={<Community />} />
           <Route path="/mypageNl" element={<MyPageNL />} />
         </Route>
         <Route

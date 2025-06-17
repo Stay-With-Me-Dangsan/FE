@@ -8,7 +8,7 @@ export const useHouseDetailQuery = (houseDetailId: number) => {
     enabled: houseDetailId !== null,
     queryFn: async () => {
       const res = await HouseApi.getHouseDetail(houseDetailId);
-      console.log('res: ', res);
+      console.log('res1: ', res);
       return res.data.data.result as IHouseDetailDto;
     },
   });

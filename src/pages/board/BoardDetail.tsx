@@ -45,14 +45,14 @@ export const BoardDetail = () => {
     patchCommentMutation,
     deleteCommentMutation,
   } = useBoardMutation();
-  const { mutate: recordView, isError: recordError } = postBoardViewMutation;
+
   const [viewRecorded, setViewRecorded] = useState(false);
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   useEffect(() => {
-    if (postId > 0) {
-      recordView(postId, {
+    if (postId && postId > 0) {
+      postBoardViewMutation.mutate(postId, {
         onSuccess: () => {
           setViewRecorded(true);
         },
@@ -61,7 +61,7 @@ export const BoardDetail = () => {
         },
       });
     }
-  }, [postId, recordView]);
+  }, [postId]);
 
   const { data: board, isLoading: isBoardLoading, isError: isBoardError, refetch } = useGetBoardDetailQuery(postId);
 
@@ -91,7 +91,9 @@ export const BoardDetail = () => {
   const handleComment = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!userId) {
+    console.log(userId);
+
+    if (userId === null) {
       showAlert('로그인이 필요합니다!');
       return;
     }

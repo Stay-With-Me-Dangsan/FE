@@ -91,9 +91,9 @@ export const HouseDetail = () => {
       </div>
       {/* 주소 및 관리비, 사이즈 */}
       <div className="w-full mt-6 px-4 text-center">
-        <div className="flex text-center text-xl text-gray-500 font-bold mb-2">
-          <div>관리비 {house.management} 원</div>
-          <div>{getTimeAgo(house.createdAt)}</div>
+        <div className="flex justify-between items-center mb-2 text-xl text-gray-500 font-bold">
+          <div className="flex-1 text-center">관리비 {house.management} 원</div>
+          <div className="text-right w-40">{getTimeAgo(house.createdAt)}</div>
         </div>
         <div className="text-xl sm:text-2xl font-bold text-purple-500">{house.houseDetailAddress}</div>
 
